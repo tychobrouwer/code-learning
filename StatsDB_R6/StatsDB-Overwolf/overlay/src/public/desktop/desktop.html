@@ -1,0 +1,146 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="author" content="DS-Cloav, DS-Jocular">
+
+    <link rel="preload" href="../css/main.css" as="style" />
+    <link rel="stylesheet" href="../css/main.css" />
+
+    <title>StatsDB - Desktop page</title>
+</head>
+<body>
+    <header id="header" class="app-header md-whiteframe-3dp">
+        <img class="header-img" src="../../img/header_icon.png" />
+        <h1>StatsDB</h1>
+        <a id="shortcut-text" class="shortcut-text-lobby" href="overwolf://settings/hotkeys"></a>
+        <div class="window-controls-group">
+            <button class="icon window-control" id="settingsButton">
+                <svg>
+                    <use xlink:href="/img/header_icons.svg#window-control_settings" />
+                </svg>
+            </button>
+            <button class="icon window-control" id="minimizeButton">
+                <svg>
+                    <use xlink:href="/img/header_icons.svg#window-control_minimize" />
+                </svg>
+            </button>
+            <button class="icon window-control window-control-close" id="closeButton">
+                <svg>
+                    <use xlink:href="/img/header_icons.svg#window-control_close" />
+                </svg>
+            </button>
+        </div>
+    </header>
+    <main id="in-desktop" class="main-container">
+        <div class="body-top">
+            <div class="text">
+                <h1>Welcome to the StatsDB overlay!</h1>
+                <h4>Start Rainbow Six Siege to enable the overlay.</h4>
+            </div>
+            <div class="text" id="overwolf-status">
+
+            </div>
+            <div class="text">
+                <h4 id="internet-status">You must have an internet connection to use the overlay</h4>
+            </div>
+        </div>
+        <div class="body-center">
+            <div id="gameHistory">
+                <p>Game History</p>
+            </div>
+            <div id="website">
+                <p>Search player</p>
+            </div>
+            <!-- <div id="daily-weekly">
+                <p>Daily/Weekly</p>
+            </div>
+            <div id="changelog">
+                <p>Changelog</p>
+            </div> -->
+        </div>
+        <div class="body-bottom">
+            <div class="left-body">
+                <div id="ad-400x300" class="ad-400x300 ad-desktop"></div>
+            </div>
+            <div class="right-body">
+                <div class="website button-div">
+                    <a href="https://r6db.net/" target="_blank">
+                        <svg>
+                            <use xlink:href="/img/socialmedia_icons.svg#r6db" id="r6db-logo-small"></use>
+                        </svg>
+                    </a>
+                </div>
+                <div class="discord button-div">
+                    <a href="https://discord.gg/AhdsnNH" target="_blank">
+                        <svg>
+                            <use xlink:href="/img/socialmedia_icons.svg#discord"></use>
+                        </svg>
+                    </a>
+                </div>
+                <div class="twitter button-div">
+                    <a href="https://twitter.com/r6dbnet" target="_blank">
+                        <svg>
+                            <use xlink:href="/img/socialmedia_icons.svg#twitter"></use>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </main>
+    <div id="exitMinimizeModal" class="modal md-whiteframe-24dp">
+        <div class="modal-frame md-whiteframe-1dp">
+            <div class="modal-content">
+                <h3>Exit the app?</h3>
+                <p>
+                    Exiting the app will close all the app windows and terminate the app process.
+                    <br />
+                    <br />
+                    Are you sure?
+                </p>
+                <span class="buttonBar">
+                    <button id="cancel" class="modalButton md-whiteframe-2dp">
+                        Cancel
+                    </button>
+                    <button id="exit" class="modalButton md-whiteframe-2dp">
+                        Exit
+                    </button>
+                </span>
+            </div>
+        </div>
+    </div>
+    <script src="https://content.overwolf.com/libs/ads/latest/owads.min.js" async onload="onOwAdReady()"></script>
+    <script>
+            function onOwAdReady() {
+                setTimeout(() => {
+                    if (!owAd) {
+                        console.error("Couldn't load owads.min.js!");
+                    }
+
+                    overwolf.windows.onStateChanged.removeListener(onWindowStateChanged);
+                    overwolf.windows.onStateChanged.addListener(onWindowStateChanged);
+                }, 500);
+
+                const owAd = new OwAd(document.getElementById("ad-400x300"), {
+                    size: {
+                        width: 400,
+                        height: 300
+                    }
+                });
+
+                function onWindowStateChanged(state) {
+                    if (state && owAd) {
+                        if (state.window_state === "minimized") {
+                            owAd.removeAd();
+                        } else if (
+                            state.window_previous_state === "minimized" &&
+                            state.window_state === "normal"
+                        ) {
+                            owAd.refreshAd();
+                        }
+                    }
+                }
+            }
+    </script>
+</body>
+</html>

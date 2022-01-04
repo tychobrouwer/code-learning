@@ -1,0 +1,14 @@
+#header {
+    grid-column-start: 1;
+    grid-column-end: 3;
+    display: inline-grid;
+    justify-items: center;
+    align-items: center;
+    border-bottom: 2px solid var(--very-dark-gray);
+    background: var(--dark-gray);
+
+    h1 {
+        text-transform: uppercase;
+        transform: scaleX(0.9);
+    }
+}

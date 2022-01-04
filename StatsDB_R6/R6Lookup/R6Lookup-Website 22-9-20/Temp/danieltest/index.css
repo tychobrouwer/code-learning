@@ -1,0 +1,39 @@
+.row-main {
+  display: none;
+}
+.row-account {
+  display: none;
+}
+.row-information {
+  display: none;
+}
+.row-data {
+  display: none;
+}
+
+.row1 .button {
+  margin-right: 10px;
+  border-color: black;
+  border-width: thin;
+  border-style: solid;
+}
+.row2 .button2 {
+  margin-right: 10px;
+  border-color: black;
+  border-width: thin;
+  border-style: solid;
+}
+
+.row1 .active {
+  border-bottom-color: orange;
+  border-bottom-width: 3px;
+}
+
+.row2 .active {
+  display: block;
+  border-bottom-color: orange;
+  border-bottom-width: 3px;
+}
+.row-content .active {
+    display: block;
+}

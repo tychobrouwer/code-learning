@@ -1,0 +1,59 @@
+@mixin btnSimple {
+    cursor: pointer;
+    color: var(--sec-text-color);
+    fill: var(--sec-text-color);
+    transition: var(--normal-transition);
+
+    p {
+        text-transform: uppercase;
+        -webkit-transform: scale(1, 0.9);
+        -ms-transform: scale(1, 0.9);
+        transform: scale(1, 0.9);
+    }
+
+    &:hover {
+        fill: var(--main-text-color);
+        color: var(--main-text-color);
+        transition: var(--normal-transition);
+    }
+}
+
+@mixin btnSimpleActive {
+    fill: var(--main-text-color);
+    color: var(--main-text-color);
+    transition: var(--normal-transition);
+}
+
+@mixin btnWBorder {
+    border: 2px solid var(--main-text-color);
+    color: var(--main-text-color);
+    cursor: pointer;
+    text-transform: uppercase;
+    -webkit-transform: scale(1, 0.9);
+    -ms-transform: scale(1, 0.9);
+    transform: scale(1, 0.9);
+    transition: var(--normal-transition);
+    
+    p {
+        text-align: center;
+        font-weight: bold;
+    }
+
+    &:hover {
+        color: transparent;
+        background: var(--main-text-color);
+        transition: var(--normal-transition);
+
+        p {
+            background: url(../images/background.png) no-repeat center center fixed;
+            background-clip: text;
+            -webkit-background-clip: text;    
+        }
+    }
+}
+
+@mixin btnWBorderActive {
+    color: var(--main-text-color);
+    background: var(--main-text-color);
+    transition: var(--normal-transition);
+}

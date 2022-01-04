@@ -1,0 +1,17 @@
+#footer {
+    position: fixed;
+    bottom: 0;
+    height: 36px;
+    width: 100%;
+    background: var(--overlay-color);
+
+    .footer-text {
+        text-align: center;
+        margin: 5px 0;
+
+        a {
+            color: var(--accent-color);
+            text-decoration: none;
+        }
+    }
+}

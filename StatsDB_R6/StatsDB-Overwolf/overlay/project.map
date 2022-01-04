@@ -1,0 +1,85 @@
+application
+|-- Match
+|   |-- public async playerJoin ( resolve: players )
+|   |   |-- private async playerSearch ( resolve: void )
+|   |   |   |-- private async fetch ( resolve: api data )
+|   |   |   |
+|   |   |   |-- private sendPlayerPing
+|   |   |
+|   |   |-- private addPlayer
+|   |
+|   |-- public async playerLeave ( resolve: void )
+|   |
+|   |-- public printDetailedPlayer
+|   |   |
+|   |   |-- private rankOffset
+|   |
+|   |-- public storeMatchData
+|   |   |-- private storeDaily
+|   |   |
+|   |   |-- private storeWeekly
+|   |   |
+|   |   |-- private storeMatch
+|
+|-- PlayerCompare
+|   |-- public async calculateTeamStats ( resolve: void )
+|   |   |-- private calculateAvg
+|   |   |
+|   |   |-- private teamWinningOdds
+|
+|-- Controllers
+|   |-- setShortcutText
+|   |
+|   |-- getOverwolfStatus
+|   |
+|   |-- getInternetStatus
+|   |
+|   |-- setTableTab
+|   |
+|   |-- showDetailedPlayer
+|   |
+|   |-- (show customized table)
+|
+|-- Database
+|   |-- public async createIDB  ( resolve: database result )
+|   |
+|   |-- public async storeToIDB ( resolve: database result )
+|   |
+|   |-- public async readFromIDB ( resolve: database result )
+|   |
+|   |-- public async initAllIDB ( resolve: database results )
+|   |   |-- public async storeToIDB ( resolve: database1 result )
+|   |   |
+|   |   |-- public async storeToIDB ( resolve: database2 result )
+|   |
+|   |-- public displayDailyWeekly
+|   |
+|   |-- (removeTillXEntries, use IDBKeyRange)
+|
+|-- InGame
+|   |-- public static instance
+|   |
+|   |-- public run
+|   |
+|   |-- private onInfoUpdates
+|   |
+|   |-- private onNewEvents
+|   |
+|   |-- private setThisValue
+|   |
+|   |-- private setDetailedOnClick
+|   |
+|   |-- private setHotkeyText
+|   |
+|   |-- private setTableTabDefault
+|   |
+|   |-- private setTableTabSelector
+|   |
+|   |-- private setKeyListener
+|   |
+|   |-- private setDetailedBackBtn
+|   |
+|   |-- private setToggleHotkeyBehavior
+|   |
+|   |-- private logLine
+|   |

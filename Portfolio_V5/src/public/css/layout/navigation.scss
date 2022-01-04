@@ -1,0 +1,32 @@
+/* MAIN NAV */
+#navBar {
+    background: $base-color;
+    height: 100vh;
+    width: 60px;
+    position: fixed;
+    top: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    z-index: 3;
+
+    .logo {
+        background: $dark-background-color;
+        padding: 18px 0;
+        text-transform: uppercase;
+        color: $white-text-color;
+        text-align: center;
+
+        h1 {
+            line-height: .9em;
+        }
+
+        h2 {
+            font-size: 11px;
+        }
+    }
+
+    a {
+        text-decoration: none;
+    }
+}

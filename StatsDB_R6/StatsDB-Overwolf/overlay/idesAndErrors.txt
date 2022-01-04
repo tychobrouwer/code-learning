@@ -1,0 +1,28 @@
+
+-----------------Things to add before update!-----------------
+
+If you get 5 kills it will display ACE in blue for that round.
+
+The person who killed you will have a RED star next the the name in rounds.
+
+The person with the higest K/D that round will be displayed with blue on the right side.
+
+Nemesis to display in game history.
+
+Round W/L?
+
+//Kills per round.
+
+If you quit before the game ended match outcome will display Quit in RED.
+
+Headshot kills are missing.
+
+If gamemode is ranked/unranked the scoreboard should not use the last roster, the names should always be the same.
+
+-----------------Errors!-----------------
+
+The database did not save my first round when I joined the game and was spectating.
+
+The database did not save my secound round when I did play. The round exist but only names where saved.
+
+MAKE SURE THAT YOU RUN THE ROSTER AT THE END OF THE ROUND AND SAVE IT TO THE DATABASE! NOT AFTER THE GAME.

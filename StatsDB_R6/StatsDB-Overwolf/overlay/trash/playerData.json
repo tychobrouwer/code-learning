@@ -1,0 +1,56 @@
+{
+    "playerData" : {
+        "yearly" : {
+            "2015" : {
+                "kills" : 0,
+                "deaths" : 0,
+                "wins" : 0,
+                "losses" : 0
+            }
+        },
+        "monthly" : {
+            "1" : {
+                "kills" : 0,
+                "deaths" : 0,
+                "wins" : 0,
+                "losses" : 0
+            }
+        }
+    }
+}
+
+
+{
+    "games" : {
+        "0c0ea3df-97ea-4d3a-b1f6-f8e34042251f" : {
+            "rounds" : {
+                "1" : {
+                    "kills" : 0,
+                    "died" : false,
+                    "killer" : "nameHere",
+                    "defuserPlanted" : false,
+                    "killfeed" : "stringHere"
+                },
+                "2" : {
+                    "kills" : 0,
+                    "died" : false,
+                    "killer" : "nameHere",
+                    "defuserPlanted" : false,
+                    "killfeed" : "stringHere"
+                }
+            },
+            "lobby" : {
+                "scoreboard" : {
+                    "userName1" : {
+                        "kills" : 0,
+                        "deaths" : 0
+                    },
+                    "userName2" : {
+                        "kills" : 0,
+                        "deaths" : 0
+                    }
+                }
+            }
+        }
+    }
+}

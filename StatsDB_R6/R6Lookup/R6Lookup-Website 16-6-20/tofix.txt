@@ -1,0 +1,51 @@
+Alex comments {
+
+    Take a look at banned status. Working better but now 100%.
+
+    Fav opperator per season. Need to look at what values we can get from api
+
+    Get stats per match. Need to take a closer look at what we can get.
+
+    Alias history with date. Need to use database to get this to work.
+
+}
+
+Daniel comments {
+
+    Add reportsystem for hackers. Playerpage.
+    //              Put on ice for now.             //
+
+    Add karma system aka upvote or downvote. Playerpage.
+    //              Put on ice for now.             //
+
+}
+
+Luk comments {
+
+
+
+}
+
+Tycho comments {
+
+    Make seasons tab.
+
+    Make weapons tab.
+
+    Finish mobile player page.
+
+    Make about mobile page.
+
+    Make customizable banner for supporters.
+
+}
+
+FIXED {
+
+    Add sorting with Attacker and defenders. Operator page.
+
+    Fix the about page. https://www.r6lookup.com/about
+
+    Fix spaces in seach input field "$noSpaces = str_replace(' ', '', $string);".
+
+}

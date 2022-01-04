@@ -1,0 +1,22 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    user-select: none;
+}
+
+html {
+    overflow: hidden;
+    font-family: Sinkin Sans;
+    font-weight: normal;
+    font-style: normal;
+    background: rgba(var(--base-color), 1);
+    z-index: -1;
+}
+
+main {
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+}

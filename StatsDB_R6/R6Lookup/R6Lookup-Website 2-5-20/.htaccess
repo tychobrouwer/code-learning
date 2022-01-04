@@ -1,0 +1,25 @@
+# redirect error pages
+RewriteEngine On
+ErrorDocument 400 https://www.r6lookup.com/error/400.html
+ErrorDocument 401 https://www.r6lookup.com/error/400.html
+ErrorDocument 403 https://www.r6lookup.com/error/400.html
+ErrorDocument 404 https://www.r6lookup.com/error/404.html
+ErrorDocument 500 https://www.r6lookup.com/error/400.html
+ErrorDocument 502 https://www.r6lookup.com/error/400.html
+ErrorDocument 504 https://www.r6lookup.com/error/400.html
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # rewrite "https://www.r6lookup.com/player/92a50c74-e277-48b2-bbba-709a00e2d054/uplay" to "player.php?id=id&platform=username&submit=submit"
+    RewriteRule ^player/(.+)/(.+)$ player.php?id=$1&platform=$2&submit=submit
+
+    #rewrite "https://www.r6lookup.com/about.php" to "https://www.r6lookup.com/about"
+    RewriteRule ^about$ about.php
+
+    #rewrite https://www.r6lookup.com/customize/" . $_SESSION['name'] to https://www.r6lookup.com/customize.php
+    RewriteRule ^customize customize.php
+
+    #rewrite https://www.r6lookup.com/login" to https://www.r6lookup.com/loginpage.php
+    RewriteRule ^login$ loginpage.php
+</IfModule>

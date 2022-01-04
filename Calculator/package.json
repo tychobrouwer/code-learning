@@ -1,0 +1,19 @@
+{
+  "name": "calculator",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build:sass": "node-sass dist/public/main.scss dist/css/main.css --output-style compressed",
+    "watch:sass": "nodemon -e scss -x \"npm run build:sass\""
+  },
+  "author": "Tycho Brouwer",
+  "license": "ISC",
+  "devDependencies": {
+    "electron": "^14.0.0",
+    "node-sass": "^6.0.1",
+    "nodemon": "^2.0.12"
+  }
+}

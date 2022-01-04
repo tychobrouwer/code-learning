@@ -1,0 +1,226 @@
+$primary-color: #191919;
+$darker-color: #161616;
+$darkest-color: #121212;
+$lighter-color: #666;
+$secundary-color: #ff8800;
+$text-color: #d3d3d3;
+$background-color: #1c1c1c;
+$windows-color: #00a2ed;
+$psn-color: #006fcd;
+$xbl-color: #0e7a0d;
+
+* {
+	box-sizing: border-box;
+	margin: 0;
+	padding: 0;
+}
+
+img {
+	width: 100%;
+}
+
+a {
+	text-decoration: none;
+}
+
+ul {
+	list-style: none;
+}
+
+.hide {
+	display: none;
+}
+
+body {
+	font-family: 'Overpass', sans-serif;
+	background: $background-color url(../img/background.jpg) no-repeat center
+		center;
+	background-attachment: fixed;
+	background-size: cover;
+	height: 100vh;
+
+	.header-nav {
+		padding: 8px 8px 0px 8px;
+		background-color: $primary-color;
+		.main-nav {
+			font-size: 16px;
+
+			.search,
+			.github {
+				float: right;
+			}
+
+			a {
+				display: inline-block;
+				color: $text-color;
+				height: 50px;
+				padding: 0px 8px;
+				line-height: 52px;
+
+				&:hover {
+					background-color: lighten(
+						$color: $primary-color,
+						$amount: 4
+					);
+					border-bottom: 1px solid $secundary-color;
+				}
+			}
+		}
+	}
+
+	.main-page {
+		max-width: 1200px;
+		margin: 0px auto;
+		.rainbowsix-logo {
+			margin-top: 15vh;
+			margin-bottom: 5vh;
+			height: 220px;
+			background: url(../img/rainbowsix-logo.png) no-repeat center center;
+			background-size: 400px 200px;
+		}
+		.container-left {
+			display: inline-block;
+			width: 67%;
+			margin-right: -4px;
+			margin-bottom: -4px;
+			vertical-align: top;
+			padding: 0px 7px;
+			.searchbox {
+				background-color: $primary-color;
+				height: 60px;
+				width: 100%;
+				margin-bottom: 10px;
+				overflow: hidden;
+				border-top: 1px solid $secundary-color;
+				form {
+					table {
+						width: 100%;
+						border-collapse: collapse;
+						.platformbox {
+							height: 60px;
+							width: 40px;
+							text-align: center;
+							color: $text-color;
+							.radio {
+								display: inline-block;
+								cursor: pointer;
+
+								input {
+									display: none;
+									&:checked + span.uplay {
+										background-color: $windows-color;
+										color: $text-color;
+										box-shadow: inset 0px 0px 10px 5px
+											rgba($color: #000, $alpha: 0.5);
+									}
+									&:checked + span.psn {
+										background-color: $psn-color;
+										color: $text-color;
+										box-shadow: inset 0px 0px 10px 5px
+											rgba($color: #000, $alpha: 0.5);
+									}
+									&:checked + span.xbl {
+										background-color: $xbl-color;
+										color: $text-color;
+										box-shadow: inset 0px 0px 10px 5px
+											rgba($color: #000, $alpha: 0.5);
+									}
+								}
+
+								span {
+									height: 60px;
+									width: 40px;
+									padding-top: 19px;
+								}
+							}
+						}
+						.search-player-input {
+							background-color: transparent;
+							width: 100%;
+							border: none;
+							height: 60px;
+							padding: 4px 10px 0px 16px;
+							color: #ccc;
+							font-size: 20px;
+						}
+					}
+				}
+			}
+			.results {
+				width: 100%;
+				margin-bottom: 10px;
+				overflow: hidden;
+				border-top: 1px solid $secundary-color;
+				.h2-results {
+					background-color: $primary-color;
+					h2 {
+						height: 40px;
+						width: 100%;
+						color: $text-color;
+						font-size: 16px;
+						font-weight: normal;
+						padding-top: 10px;
+						padding-left: 16px;
+					}
+				}
+				.players {
+					a {
+						text-decoration: none;
+						color: $text-color;
+						.playerstats {
+							padding: 10px;
+							cursor: pointer;
+							display: flex;
+							transition: ease 0.2s;
+							&:nth-child(odd) {
+								background: rgba(
+									$color: $darker-color,
+									$alpha: 0.99
+								);
+							}
+							&:nth-child(even) {
+								background: rgba(
+									$color: $primary-color,
+									$alpha: 0.99
+								);
+							}
+							&:hover {
+								background-color: $darkest-color;
+							}
+							.rank-logo {
+								width: 40px;
+								height: 40px;
+								margin-right: 7px;
+							}
+							.stats {
+								margin-left: 7px;
+								.prev-stats {
+									font-size: 14px;
+									display: flex;
+									.level {
+										padding-right: 8px;
+									}
+									p {
+										min-width: 70px;
+										.aternate-text {
+											color: #666;
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		.container-right {
+			padding: 0px 7px;
+			display: inline-block;
+			height: 200px;
+			width: 33%;
+			vertical-align: top;
+			margin-right: -4px;
+			margin-bottom: -4px;
+		}
+	}
+}

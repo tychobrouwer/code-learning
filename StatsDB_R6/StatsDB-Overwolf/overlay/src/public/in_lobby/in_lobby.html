@@ -1,0 +1,193 @@
+﻿<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="author" content="DS-Cloav, DS-Jocular">
+
+    <link rel="preload" href="../css/main.css" as="style" />
+    <link rel="stylesheet" href="../css/main.css" />
+
+    <title>StatsDB - In-Lobby page</title>
+</head>
+<body>
+    <header id="header" class="app-header md-whiteframe-3dp">
+        <img class="header-img" src="../../img/header_icon.png" />
+        <h1>StatsDB</h1>
+        <a id="shortcut-text" class="shortcut-text-lobby" href="overwolf://settings/hotkeys"></a>
+        <button class="icon window-control window-control-lobby" id="settingsButton">
+            <svg>
+                <use xlink:href="/img/header_icons.svg#window-control_settings" />
+            </svg>
+        </button>
+        <button class="icon window-control window-control-lobby" id="minimizeButton">
+            <svg>
+                <use xlink:href="/img/header_icons.svg#window-control_minimize" />
+            </svg>
+        </button>
+        <button class="icon window-control window-control-lobby window-control-close" id="closeButton">
+            <svg>
+                <use xlink:href="/img/header_icons.svg#window-control_close" />
+            </svg>
+        </button>
+    </header>
+    <main id="in-lobby" class="main-container">
+        <div class="nav-bar">
+            <button class="overview-btn nav-btn active">
+                Overview
+            </button>
+            <button class="daily-weekly-btn nav-btn">
+                Daily/Weekly
+            </button>
+        </div>
+        <div class="nav-body overview-nav body-lobby" id="overview">
+            <h1>In-lobby</h1>
+            <div class="text" id="overwolf-status">
+
+            </div>
+            <div class="text" id="internet-status">
+                <h4 class="announcement">You must have an internet connection to use the overlay</h4>
+            </div>
+            <div class="body-center">
+                <div id="gameHistory">
+                    <p>Game History</p>
+                </div>
+                <div id="website">
+                    <p>Search player</p>
+                </div>
+                <!-- <div id="changelog">
+                    <p>Changelog</p>
+                </div> -->
+            </div>
+            <div id="searching">
+                <h2>Searching for game</h2>
+                <h3 id="match-making-text"></h3>
+                <div class="lds-ellipsis">
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                </div>
+            </div>
+        </div>
+        <div class="nav-body daily-weekly-nav" id="daily-weekly">
+            <div class="nav-bar">
+                <button type="button" id="general" class="daily-weekly-nav-btn sub-nav-btn active">General</button>
+                <button type="button" id="ranked" class="daily-weekly-nav-btn sub-nav-btn">Ranked</button>
+                <button type="button" id="casual" class="daily-weekly-nav-btn sub-nav-btn">Casual</button>
+                <button type="button" id="unranked" class="daily-weekly-nav-btn sub-nav-btn">Unranked</button>
+            </div>
+            <div class="daily-weekly-div">
+                <div class="circular-chart-div circular-chart-div-left" id="daily">
+                    <h3>Daily</h3>
+                    <div class="circular-chart kd-chart">
+                        <svg viewBox="0 0 36 36" class="circular-chart-svg">
+                            <path class="circle-bg" d="M18 2.0845
+                                        a 15.9155 15.9155 0 0 1 0 31.831
+                                        a 15.9155 15.9155 0 0 1 0 -31.831" />
+                            <path id="kd-circle-daily" class="circle" stroke-dasharray="30, 100" d="M18 2.0845
+                                        a 15.9155 15.9155 0 0 1 0 31.831
+                                        a 15.9155 15.9155 0 0 1 0 -31.831" />
+                            <text x="18" y="17" id="kd-circle-daily-text" class="percentage">30%</text>
+                            <text x="18" y="25" class="percentage-text">K/D</text>
+                        </svg>
+                    </div>
+                    <div class="circular-chart wl-chart">
+                        <svg viewBox="0 0 36 36" class="circular-chart-svg">
+                            <path class="circle-bg" d="M18 2.0845
+                                        a 15.9155 15.9155 0 0 1 0 31.831
+                                        a 15.9155 15.9155 0 0 1 0 -31.831" />
+                            <path id="wl-circle-daily" class="circle" stroke-dasharray="30, 100" d="M18 2.0845
+                                        a 15.9155 15.9155 0 0 1 0 31.831
+                                        a 15.9155 15.9155 0 0 1 0 -31.831" />
+                            <text x="18" y="17" id="wl-circle-daily-text" class="percentage">30%</text>
+                            <text x="18" y="25" class="percentage-text">W/L</text>
+                        </svg>
+                    </div>
+                </div>
+                <div class="circular-chart-div circular-chart-div-right" id="weekly">
+                    <h3>Weekly</h3>
+                    <div class="circular-chart kd-chart">
+                        <svg viewBox="0 0 36 36" class="circular-chart-svg">
+                            <path class="circle-bg" d="M18 2.0845
+                                        a 15.9155 15.9155 0 0 1 0 31.831
+                                        a 15.9155 15.9155 0 0 1 0 -31.831" />
+                            <path id="kd-circle-weekly" class="circle" stroke-dasharray="30, 100" d="M18 2.0845
+                                        a 15.9155 15.9155 0 0 1 0 31.831
+                                        a 15.9155 15.9155 0 0 1 0 -31.831" />
+                            <text x="18" y="17" id="kd-circle-weekly-text" class="percentage">30%</text>
+                            <text x="18" y="25" class="percentage-text">K/D</text>
+                        </svg>
+                    </div>
+                    <div class="circular-chart wl-chart">
+                        <svg viewBox="0 0 36 36" class="circular-chart-svg">
+                            <path class="circle-bg" d="M18 2.0845
+                                        a 15.9155 15.9155 0 0 1 0 31.831
+                                        a 15.9155 15.9155 0 0 1 0 -31.831" />
+                            <path id="wl-circle-weekly" class="circle" stroke-dasharray="30, 100" d="M18 2.0845
+                                        a 15.9155 15.9155 0 0 1 0 31.831
+                                        a 15.9155 15.9155 0 0 1 0 -31.831" />
+                            <text x="18" y="17" id="wl-circle-weekly-text" class="percentage">30%</text>
+                            <text x="18" y="25" class="percentage-text">W/L</text>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="ad-400x300" class="ad-400x300 ad-lobby"></div>
+    </main>
+    <div id="exitMinimizeModal" class="modal md-whiteframe-24dp">
+        <div class="modal-frame md-whiteframe-1dp">
+            <div class="modal-content">
+                <h3>Exit the app?</h3>
+                <p>
+                    Exiting the app will close all the app windows and terminate the app process.
+                    <br />
+                    <br />
+                    Are you sure?
+                </p>
+                <span class="buttonBar">
+                    <button id="cancel" class="modalButton md-whiteframe-2dp">
+                        Cancel
+                    </button>
+                    <button id="exit" class="modalButton md-whiteframe-2dp">
+                        Exit
+                    </button>
+                </span>
+            </div>
+        </div>
+    </div>
+    <script src="https://content.overwolf.com/libs/ads/latest/owads.min.js" async onload="onOwAdReady()"></script>
+    <script>
+        function onOwAdReady() {
+            setTimeout(() => {
+                if (!owAd) {
+                    console.error("Couldn't load owads.min.js!");
+                }
+
+                overwolf.windows.onStateChanged.removeListener(onWindowStateChanged);
+                overwolf.windows.onStateChanged.addListener(onWindowStateChanged);
+            }, 500);
+
+            const owAd = new OwAd(document.getElementById("ad-400x300"), {
+                size: {
+                    width: 400,
+                    height: 300
+                }
+            });
+
+            function onWindowStateChanged(state) {
+                if (state && owAd) {
+                    if (state.window_state === "minimized") {
+                        owAd.removeAd();
+                    } else if (
+                        state.window_previous_state === "minimized" &&
+                        state.window_state === "normal"
+                    ) {
+                        owAd.refreshAd();
+                    }
+                }
+            }
+        }
+    </script>
+</body>
+</html>

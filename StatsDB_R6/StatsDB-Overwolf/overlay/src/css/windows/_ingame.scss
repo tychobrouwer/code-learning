@@ -1,0 +1,379 @@
+#in-match {
+    height: 100%;
+
+    .body {
+        padding: 10px 0 10px 10px;
+        display: flex;
+        height: calc(100% - 40px);
+
+        .body-center {
+            width: calc(100% - 420px);
+            padding: 10px;
+
+            .nav-bar {
+                width: 100%;
+                display: flex;
+                margin: 0 auto;
+                background: var(--sec-bg-color);
+
+                .nav-btn {
+                    width: inherit;
+                    height: 40px;
+                    padding: 0;
+                    background: none;
+                    color: var(--main-text-color);
+                    border: 2px solid transparent;
+                }
+
+                .active {
+                    transition: ease-in-out 0.1s;
+                    border-bottom: 2px solid var(--accent-color) !important;
+                    background-color: var(--darker-btn-color);
+                }
+            }
+        }
+
+        .body-right {
+            width: 420px;
+            padding: 10px;
+
+            #gameHistory {
+                padding: 10px;
+                background: var(--darker-btn-color);
+                border-radius: 6px;
+                text-align: center;
+                margin: 0 10px;
+            }
+
+            h3 {
+                text-align: center;
+                font-size: 32px;
+                margin: 10px 0;
+            }
+
+            .body-right-div {
+                background: var(--sec-bg-color);
+                padding: 10px 0;
+                margin: 0 10px;
+                height: 320px;
+                width: 400px;
+            }
+
+            .body-right-top {
+                margin: 10px;
+                padding-top: 0;
+                padding-bottom: 20px;
+
+                .circular-chart-div {
+                    margin: 0 auto;
+                }
+
+                .daily-weekly-div {
+                    display: flex;
+                }
+
+                .nav-bar {
+                    display: flex;
+
+                    .sec-nav-btn {
+                        width: 50%;
+                        height: 20px;
+                        padding: 0;
+                        background: none;
+                        color: var(--main-text-color);
+                        border: 2px solid transparent;
+                        margin: 0px 0px 5px 0px;
+                    }
+
+                    .active {
+                        transition: ease-in-out 0.1s;
+                        border-bottom: 2px solid var(--accent-color) !important;
+                        background-color: var(--darker-btn-color);
+                    }
+                }
+            }
+
+            #teamOdds {
+                height: 50px;
+                text-align: center;
+                width: 400px;
+                margin: 0 10px 10px;
+                background: var(--sec-bg-color);
+
+                .container {
+                    margin: 10px 0 0 -5px;
+                    display: inline-flex;
+
+                    div {
+                        margin: auto 0;
+                    }
+
+                    .team-stat {
+                        width: 80px;
+                        height: 30px;
+                        line-height: 32px;
+                    }
+
+                    .teamVSText {
+                        padding: 0 10px 0 0;
+                    }
+
+                    .aggro {
+                        font-family: "Aggro";
+                        font-size: 18px;
+                        padding: 0 10px;
+                    }
+
+                    .blueStat {
+                        background: #0672c9;
+                    }
+
+                    .orangeStat {
+                        background: #d8620b;
+                    }
+                }
+            }
+
+            .body-right-bottom {
+                height: auto;
+                padding: 0;
+
+                .logo-banner {
+                    display: flex;
+                    height: 40px;
+
+                    img {
+                        height: 40px;
+                    }
+                }
+            }
+        }
+
+        #detailed-body {
+            display: none;
+            padding: 50px 10px 30px 0px;
+
+            .stats-row-top {
+                float: right;
+
+                button {
+                    border: none;
+                    border-radius: 0;
+                    padding: 8px 30px;
+                    text-transform: uppercase;
+                    font-weight: bold;
+                    color: var(--main-bg-color);
+                    background: var(--main-text-color);
+                }
+            }
+
+            .stats-row-title {
+                display: flex;
+                align-items: center;
+
+                img {
+                    height: 80px;
+                    margin-right: 30px;
+                }
+
+                h1 {
+                    font-size: 48px;
+                }
+            }
+
+            .body-left-detailed {
+                float: left;
+                width: 180px;
+                height: 100%;
+                margin: 0px 15px 0 5px;
+
+                .box {
+                    height: 50px;
+                    margin: 0px 0px 5px 0px;
+
+                    &:last-child {
+                        margin-bottom: 0px;
+                    }
+                }
+
+                .box-right {
+                    float: left;
+                    margin: 7px 0px 0px 0px;
+
+                    .seasonKD {
+                        margin: 0px 0px 0px 5px;
+                    }
+
+                    h4 {
+                        font-size: 15px;
+                    }
+
+                    h3 {
+                        font-size: 13px;
+                        color: var(--sec-text-color);
+                        font-weight: 400;
+                        float: left;
+                    }
+                }
+
+                .box-left {
+                    float: left;
+                    width: 45px;
+
+                    img {
+                        height: 45px;
+                        width: 45px;
+                    }
+                }
+            }
+
+            .stats {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                grid-column-gap: 40px;
+                text-align: center;
+
+                .stat-cat {
+                    margin: 10px 0;
+
+                    .stats-row-headline {
+                        width: 100%;
+                        font-weight: 600;
+                        height: 30px;
+                        background: var(--main-bg-color);
+                        padding: 9px 0;
+                        font-size: 15px;
+                    }
+
+                    .stats-row {
+                        background: var(--sec-bg-color);
+                        display: flex;
+                        flex-wrap: wrap;
+                        min-height: 140px;
+                        align-items: center;
+
+                        .stats-row-placeholder {
+                            padding: 10px 0;
+                            width: 75px;
+
+                            h3 {
+                                font-size: 13px;
+                            }
+                        }
+
+                        .overall-row-placeholder {
+                            padding: 10px;
+                            width: 25%;
+                            box-sizing: border-box;
+                        }
+
+                        .general-row-placeholder {
+                            width: 12.5%;
+                            box-sizing: border-box;
+                        }
+
+                        .season-rank-row-placeholder {
+                            width: -webkit-fill-available;
+
+                            .season-rank {
+                                display: inline-flex;
+                                margin: 0 auto;
+
+                                .season-previous-img {
+                                    width: 60px;
+                                    height: 60px;
+
+                                    img {
+                                        width: 60px;
+                                        height: 60px;
+                                    }
+                                }
+
+                                .season-rank-div {
+                                    width: 150px;
+
+                                    .season-max-mmr-div {
+                                        font-size: 13px;
+
+                                        span {
+                                            font-size: 11px;
+                                            color: var(--sec-text-color);
+                                        }
+                                    }
+
+                                    .season-current-rank {
+                                        top: 27%;
+                                        transform: translateY(-50%);
+                                        position: relative;
+                                        border-radius: 6px;
+                                        border: 2px solid rgba(178, 178, 178, 0.4);
+
+                                        #season-rank-bar {
+                                            position: absolute;
+                                            height: 19px;
+                                            z-index: -10;
+                                            background: #0F9B10;
+                                            border-radius: 4px;
+                                        }
+                                    }
+                                }
+
+                                .season-next-img {
+                                    width: 60px;
+                                    height: 60px;
+
+                                    img {
+                                        width: 60px;
+                                        height: 60px;
+                                    }
+                                }
+
+                                .season-max-rank {
+                                    margin-left: 20px;
+
+                                    .season-max-img {
+                                        margin: 10px 5px 0;
+                                        display: flex;
+
+                                        img {
+                                            width: 50px;
+                                            height: 50px;
+                                        }
+                                    }
+
+                                    .season-max-rank-text {
+                                        p {
+                                            width: 86px;
+                                            margin-left: -13px;
+                                            margin-top: -63px;
+                                            font-weight: 600;
+                                            font-size: 13px;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                .stat-cat-general {
+                    grid-column-start: 1;
+                    grid-column-end: 3;
+                }
+            }
+        }
+    }
+}
+
+.shortcut-text-game {
+    color: var(--sec-text-color);
+    margin: auto auto auto 30px;
+    font-size: 11px;
+    text-align: right;
+    text-decoration: none;
+
+    &:hover {
+        color: var(--accent-color);
+        transition: ease-in-out 0.1s;
+    }
+}

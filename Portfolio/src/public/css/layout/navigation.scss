@@ -1,0 +1,56 @@
+#nav {
+    font-size: 14px;
+    border-right: 2px solid var(--very-dark-gray);
+    background: var(--dark-gray);
+
+    svg {
+        fill: var(--main-text);
+        stroke: var(--main-text);
+    }
+
+    #navTitle {
+        display: grid;
+        justify-content: center;
+        padding: 5px 0;
+        font-size: 18px;
+        margin-top: 30px;
+    }
+
+    #navContainer {
+        padding-left: 6px;
+
+        .navPage.active {
+            background: var(--gray);
+        }
+
+        .navPage {
+            cursor: pointer;
+
+            &:hover {
+                transition: .15s ease-in-out;
+                background: var(--hover-grey);
+            }
+        }
+
+        .navObject {
+            .navTitle {
+                display: flex;
+                padding: 3px 0 1px;
+
+                .navArrow {
+                    padding: 0 6px;
+                }
+
+                .navName {
+                    padding-left: 8px;
+                }
+            }
+
+            .navDropDownDiv {
+                .navDropDown {
+                    margin: 2px 0 2px 30px;
+                }
+            }
+        }
+    }
+}

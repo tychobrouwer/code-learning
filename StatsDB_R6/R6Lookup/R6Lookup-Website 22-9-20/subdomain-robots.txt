@@ -1,0 +1,4 @@
+Sitemap: https://test.r6lookup.com/sitemap.xml
+
+User-agent: *
+Disallow: /

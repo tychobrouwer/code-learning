@@ -1,0 +1,9 @@
+ErrorDocument 400 /errors/400.html
+ErrorDocument 404 /errors/400.html
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # rewrite "https://www.r6lookup.com/player/DS-Cloav/uplay" to "player.php?username=username&platform=username&submit=submit"
+    RewriteRule ^player/(.+)/(.+)$ player.php?username=$1&platform=$2&submit=submit
+</IfModule>

@@ -1,0 +1,359 @@
+﻿<!DOCTYPE html>
+<html lang="en" dir="ltr">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="author" content="DS-Cloav, DS-Jocular">
+
+        <link rel="preload" href="../css/main.css" as="style" />
+        <link rel="stylesheet" href="../css/main.css" />
+
+        <title>StatsDB - In-Game page</title>
+    </head>
+    <body class="in-game">
+        <header id="header" class="app-header md-whiteframe-3dp">
+            <img class="header-img" src="/img/header_icon.png" />
+            <h1>StatsDB</h1>
+            <a id="shortcut-text" class="shortcut-text-game" href="overwolf://settings/hotkeys"></a>
+            <button class="icon window-control" id="minimizeButton">
+                <svg>
+                    <use xlink:href="/img/header_icons.svg#window-control_minimize" />
+                </svg>
+            </button>
+            <button class="icon window-control window-control-close" id="closeButton">
+                <svg>
+                    <use xlink:href="/img/header_icons.svg#window-control_close" />
+                </svg>
+            </button>
+        </header>
+        <main id="in-match">
+            <div class="body">
+                <div class="body-center" id="table-body">
+                    <div class="nav-bar md-whiteframe-1dp">
+                        <button id="season-btn" class="nav-btn">
+                            Season
+                        </button>
+                        <button id="ranked-btn" class="nav-btn">
+                            Ranked
+                        </button>
+                        <button id="casual-btn" class="nav-btn">
+                            Casual
+                        </button>
+                        <button id="live-btn" class="nav-btn">
+                            Live Scoreboard
+                        </button>
+                        <button id="website-btn" class="nav-btn">
+                            Search player
+                        </button>
+                    </div>
+                    <div class="teams-div" id="website-iframe">
+
+                    </div>
+                    <div class="teams-div" id="live-frame">
+                        <div id="team-blue-live" class="team-div md-whiteframe-1dp">
+                            <div id="team-blue-thead-live" class="team-thead">
+                                <div class="th-username">Username</div>
+                                <div>Rating</div>
+                                <div>Entry K-D</div>
+                                <div>Trades</div>
+                                <div>1vX</div>
+                                <div>KPR</div>
+                                <div>SRV</div>
+                                <div>KOST</div>
+                                <div>Kills</div>
+                                <div>Deaths</div>
+                                <div>Score</div>
+                            </div>
+                            <div id="team-blue-tbody-live">
+
+                            </div>
+                        </div>
+                        <div id="team-compare-div-live" class="compare-div md-whiteframe-1dp">
+                            <div class="teamCompareStat">
+                                <div class="teamVSText">MMR:</div>
+                                <div id="teamBlueMmr-live" class="team-stat blueStat team-div md-whiteframe-2dp"></div>
+                                <div class="teamVSText aggro">VS</div>
+                                <div id="teamOrangeMmr-live" class="team-stat orangeStat team-div md-whiteframe-2dp"></div>
+                            </div>
+                            <div class="teamCompareStat">
+                                <div class="teamVSText">KD:</div>
+                                <div id="teamBlueKd-live" class="team-stat blueStat team-div md-whiteframe-2dp"></div>
+                                <div class="teamVSText aggro">VS</div>
+                                <div id="teamOrangeKd-live" class="team-stat orangeStat team-div md-whiteframe-2dp"></div>
+                            </div>
+                            <div class="teamCompareStat">
+                                <div class="teamVSText">WL:</div>
+                                <div id="teamBlueWl-live" class="team-stat blueStat team-div md-whiteframe-2dp"></div>
+                                <div class="teamVSText aggro">VS</div>
+                                <div id="teamOrangeWl-live" class="team-stat orangeStat team-div md-whiteframe-2dp"></div>
+                            </div>
+                            <div class="teamCompareStat">
+                                <div class="teamVSText">MP:</div>
+                                <div id="teamBlueGamesPlayed-live" class="team-stat blueStat team-div md-whiteframe-2dp"></div>
+                                <div class="teamVSText aggro">VS</div>
+                                <div id="teamOrangeGamesPlayed-live" class="team-stat orangeStat team-div md-whiteframe-2dp"></div>
+                            </div>
+                        </div>
+                        <div id="team-orange-live" class="team-div md-whiteframe-1dp">
+                            <div id="team-orange-thead-live" class="team-thead">
+                                <div class="th-username">Username</div>
+                                <div>Rating</div>
+                                <div>Entry K-D</div>
+                                <div>Trades</div>
+                                <div>1vX</div>
+                                <div>KPR</div>
+                                <div>SRV</div>
+                                <div>KOST</div>
+                                <div>Kills</div>
+                                <div>Deaths</div>
+                                <div>Score</div>
+                            </div>
+                            <div id="team-orange-tbody-live">
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="teams-div" id="table-content">
+                        <div id="team-blue" class="team-div md-whiteframe-1dp">
+                            <div id="team-blue-thead" class="team-thead">
+                                <div class="th-username">Username</div>
+                                <div class="value-0"></div>
+                                <div class="value-1"></div>
+                                <div class="value-2"></div>
+                                <div class="value-3"></div>
+                                <div class="value-4"></div>
+                                <div class="value-5"></div>
+                                <div class="value-6"></div>
+                                <div class="value-7"></div>
+                                <div class="value-8"></div>
+                            </div>
+                            <div id="team-blue-tbody">
+
+                            </div>
+                        </div>
+                        <div id="team-compare-div" class="compare-div md-whiteframe-1dp">
+                            <div class="teamCompareStat">
+                                <div class="teamVSText">MMR:</div>
+                                <div id="teamBlueMmr" class="team-stat blueStat team-div md-whiteframe-2dp"></div>
+                                <div class="teamVSText aggro">VS</div>
+                                <div id="teamOrangeMmr" class="team-stat orangeStat team-div md-whiteframe-2dp"></div>
+                            </div>
+                            <div class="teamCompareStat">
+                                <div class="teamVSText">KD:</div>
+                                <div id="teamBlueKd" class="team-stat blueStat team-div md-whiteframe-2dp"></div>
+                                <div class="teamVSText aggro">VS</div>
+                                <div id="teamOrangeKd" class="team-stat orangeStat team-div md-whiteframe-2dp"></div>
+                            </div>
+                            <div class="teamCompareStat">
+                                <div class="teamVSText">WL:</div>
+                                <div id="teamBlueWl" class="team-stat blueStat team-div md-whiteframe-2dp"></div>
+                                <div class="teamVSText aggro">VS</div>
+                                <div id="teamOrangeWl" class="team-stat orangeStat team-div md-whiteframe-2dp"></div>
+                            </div>
+                            <div class="teamCompareStat">
+                                <div class="teamVSText">MP:</div>
+                                <div id="teamBlueGamesPlayed" class="team-stat blueStat team-div md-whiteframe-2dp"></div>
+                                <div class="teamVSText aggro">VS</div>
+                                <div id="teamOrangeGamesPlayed" class="team-stat orangeStat team-div md-whiteframe-2dp"></div>
+                            </div>
+                        </div>
+                        <div id="team-orange" class="team-div md-whiteframe-1dp">
+                            <div id="team-orange-thead" class="team-thead">
+                                <div class="th-username">Username</div>
+                                <div class="value-0"></div>
+                                <div class="value-1"></div>
+                                <div class="value-2"></div>
+                                <div class="value-3"></div>
+                                <div class="value-4"></div>
+                                <div class="value-5"></div>
+                                <div class="value-6"></div>
+                                <div class="value-7"></div>
+                                <div class="value-8"></div>
+                            </div>
+                            <div id="team-orange-tbody">
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="detailed-body" class="body-center-detailed body-center">
+                    <div class="body-left-detailed" id="seasonsStats">
+
+                    </div>
+                    <div class="stats-row-top">
+                        <button id="detailed-back-btn">Go back</button>
+                    </div>
+                    <div class="stats-row-title">
+                        <img id="detailedStats-profileImg" src="" alt="profileImg">
+                        <div class="div-player">
+                            <h1 id="detailedStats-name"></h1>
+                            <p>level: <span id="detailedStats-level"></span></p>
+                        </div>
+                    </div>
+                    <div class="stats">
+                        <div class="stat-cat md-whiteframe-1dp" id="detailedSeasonal">
+
+                        </div>
+                        <div class="stat-cat md-whiteframe-1dp" id="detailedRanked">
+
+                        </div>
+                        <div class="stat-cat md-whiteframe-1dp" id="detailedCasual">
+
+                        </div>
+                        <div class="stat-cat md-whiteframe-1dp" id="detailedPlayer">
+
+                        </div>
+                        <div class="stat-cat stat-cat-general md-whiteframe-1dp" id="detailedGeneral">
+
+                        </div>
+                    </div>
+                </div>
+                <div class="body-right">
+                    <div id="gameHistory">
+                        <p>Game History</p>
+                    </div>
+                    <div id="right-div-top" class="body-right-div body-right-top md-whiteframe-1dp">
+                        <div class="nav-bar">
+                            <button type="button" id="general" class="sec-nav-btn active">General</button>
+                            <button type="button" id="ranked" class="sec-nav-btn">Ranked</button>
+                            <button type="button" id="casual" class="sec-nav-btn">Casual</button>
+                            <button type="button" id="unranked" class="sec-nav-btn">Unranked</button>
+                        </div>
+                        <div class="daily-weekly-div">
+                            <div class="circular-chart-div circular-chart-div-left" id="daily">
+                                <h3>Daily</h3>
+                                <div class="circular-chart kd-chart">
+                                    <svg viewBox="0 0 36 36" class="circular-chart-svg">
+                                        <path class="circle-bg" d="M18 2.0845
+                                                    a 15.9155 15.9155 0 0 1 0 31.831
+                                                    a 15.9155 15.9155 0 0 1 0 -31.831" />
+                                        <path id="kd-circle-daily" class="circle" stroke-dasharray="30, 100" d="M18 2.0845
+                                                    a 15.9155 15.9155 0 0 1 0 31.831
+                                                    a 15.9155 15.9155 0 0 1 0 -31.831" />
+                                        <text x="18" y="17" id="kd-circle-daily-text" class="percentage">30%</text>
+                                        <text x="18" y="25" class="percentage-text">K/D</text>
+                                    </svg>
+                                </div>
+                                <div class="circular-chart wl-chart">
+                                    <svg viewBox="0 0 36 36" class="circular-chart-svg">
+                                        <path class="circle-bg" d="M18 2.0845
+                                                    a 15.9155 15.9155 0 0 1 0 31.831
+                                                    a 15.9155 15.9155 0 0 1 0 -31.831" />
+                                        <path id="wl-circle-daily" class="circle" stroke-dasharray="30, 100" d="M18 2.0845
+                                                    a 15.9155 15.9155 0 0 1 0 31.831
+                                                    a 15.9155 15.9155 0 0 1 0 -31.831" />
+                                        <text x="18" y="17" id="wl-circle-daily-text" class="percentage">30%</text>
+                                        <text x="18" y="25" class="percentage-text">W/L</text>
+                                    </svg>
+                                </div>
+                            </div>
+                            <div class="circular-chart-div circular-chart-div-right" id="weekly">
+                                <h3>Weekly</h3>
+                                <div class="circular-chart kd-chart">
+                                    <svg viewBox="0 0 36 36" class="circular-chart-svg">
+                                        <path class="circle-bg" d="M18 2.0845
+                                                    a 15.9155 15.9155 0 0 1 0 31.831
+                                                    a 15.9155 15.9155 0 0 1 0 -31.831" />
+                                        <path id="kd-circle-weekly" class="circle" stroke-dasharray="30, 100" d="M18 2.0845
+                                                    a 15.9155 15.9155 0 0 1 0 31.831
+                                                    a 15.9155 15.9155 0 0 1 0 -31.831" />
+                                        <text x="18" y="17" id="kd-circle-weekly-text" class="percentage">30%</text>
+                                        <text x="18" y="25" class="percentage-text">K/D</text>
+                                    </svg>
+                                </div>
+                                <div class="circular-chart wl-chart">
+                                    <svg viewBox="0 0 36 36" class="circular-chart-svg">
+                                        <path class="circle-bg" d="M18 2.0845
+                                                    a 15.9155 15.9155 0 0 1 0 31.831
+                                                    a 15.9155 15.9155 0 0 1 0 -31.831" />
+                                        <path id="wl-circle-weekly" class="circle" stroke-dasharray="30, 100" d="M18 2.0845
+                                                    a 15.9155 15.9155 0 0 1 0 31.831
+                                                    a 15.9155 15.9155 0 0 1 0 -31.831" />
+                                        <text x="18" y="17" id="wl-circle-weekly-text" class="percentage">30%</text>
+                                        <text x="18" y="25" class="percentage-text">W/L</text>
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="teamOdds" class="md-whiteframe-1dp">
+                        <div class="container">
+                            <div class="teamVSText">Team odds:</div>
+                            <div id="oddsBlue" class="team-stat blueStat team-div md-whiteframe-2dp"></div>
+                            <div class="teamVSText aggro">VS</div>
+                            <div id="oddsOrange" class="team-stat orangeStat team-div md-whiteframe-2dp"></div>
+                        </div>
+                    </div>
+                    <div class="body-right-div body-right-bottom ad-div md-whiteframe-1dp">
+                        <div id="ad-400x300" class="ad-400x300">
+
+                        </div>
+                        <div class="logo-banner">
+                            <img src="../../img/banner.webp" alt="R6Lookup">
+                            <img src="../../img/banner.webp" alt="R6Lookup">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <footer id="footer" class="md-whiteframe-3dp">
+                    <p class="footer-text">If you encounter any problems or find yourself missing any function, contact us via
+                        <a href="https://discord.gg/AhdsnNH" target="_blank">Discord</a>.
+                    </p>
+            </footer>
+        </main>
+        <div id="exitMinimizeModal" class="modal md-whiteframe-24dp">
+            <div class="modal-frame md-whiteframe-1dp">
+                <div class="modal-content">
+                    <h3>Exit the app?</h3>
+                    <p>
+                        Exiting the app will close all the app windows and terminate the app process.
+                        <br />
+                        <br />
+                        Are you sure?
+                    </p>
+                    <span class="buttonBar">
+                        <button id="cancel" class="modalButton md-whiteframe-2dp">
+                            Cancel
+                        </button>
+                        <button id="exit" class="modalButton md-whiteframe-2dp">
+                            Exit
+                        </button>
+                    </span>
+                </div>
+            </div>
+        </div>
+        <script src="https://api.statsdb.net/authscript?overlay"></script>
+        <script src="https://content.overwolf.com/libs/ads/latest/owads.min.js" async onload="onOwAdReady()"></script>
+        <script>
+            function onOwAdReady() {
+                setTimeout(() => {
+                    if (!owAd) {
+                        console.error("Couldn't load owads.min.js!");
+                    }
+
+                    overwolf.windows.onStateChanged.removeListener(onWindowStateChanged);
+                    overwolf.windows.onStateChanged.addListener(onWindowStateChanged);
+                }, 500);
+
+                const owAd = new OwAd(document.getElementById("ad-400x300"), {
+                    size: {
+                        width: 400,
+                        height: 300
+                    }
+                });
+
+                function onWindowStateChanged(state) {
+                    if (state && owAd) {
+                        if (state.window_state === "minimized") {
+                            owAd.removeAd();
+                        } else if (
+                            state.window_previous_state === "minimized" &&
+                            state.window_state === "normal"
+                        ) {
+                            owAd.refreshAd();
+                        }
+                    }
+                }
+            }
+        </script>
+    </body>
+</html>

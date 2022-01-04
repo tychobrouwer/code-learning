@@ -1,0 +1,161 @@
+* {
+    margin: 0px;
+    padding: 0px;
+    box-sizing: border-box;
+    user-select: none;
+    font-family: Arial, sans-serif;
+}
+
+html {
+    background: #121212;
+    color: #fff;
+}
+
+#index {
+    height: 100vh;
+
+
+    #header {
+        width: 90vw;
+        margin: auto;
+
+        #title {
+            padding: 20px 0;
+    
+            h1 {
+                margin: auto;
+                width: fit-content;
+    
+                text-transform: capitalize;
+            }
+        }
+
+        #sizeDiv {
+            display: flex;
+
+            .inputDiv:last-child {
+                margin-left: 60px;
+            }
+        }
+
+        .listItem {
+            margin-bottom: 10px;
+        }
+
+        .inputDiv {
+            display: flex;
+            margin-bottom: 10px;
+
+            .inputLabel {
+                width: 80px;
+                font-size: 16px;
+                margin-top: 6px;
+            }
+
+            .field-container {
+                position: relative;
+                height: 30px;
+                width: 100px;
+
+                border: 1px solid #777;
+                padding-left: 12px;
+            }
+              
+            input[type="number"].field-input {
+                display: block;
+                width: 100%;
+                box-sizing: border-box;
+                
+                margin-top: 6px;
+                bottom: 0px;
+                border: none;
+                outline: none;
+
+                color: #fff;
+                font-size: 16px;
+                background: transparent;
+            }
+        }
+
+        #runDiv {
+            input[type="checkbox"]:not(:checked), 
+            input[type="checkbox"]:checked {
+                position: absolute;
+                left: -9999%;
+            }
+
+            input[type="checkbox"] + label {
+                display: inline-block;
+                width: 100px;
+                padding: 10px;
+                margin-top: 10px;
+
+                cursor: pointer;
+                color: black;
+                text-align: center;
+                font-size: 16px;
+                background-color: white;
+            }
+
+            input[type="checkbox"]:checked + label {
+                color: white;
+                background-color: red;
+            }
+        }
+    }
+
+    #game {
+        #scoreDiv {
+            position: fixed;
+            left: 70vw;
+
+            p {
+                width: 110px;
+
+                span {
+                    float: right;
+                }
+            }
+        }
+
+        #gameDiv {
+            display: grid;
+            position: absolute;
+            bottom: 5vw;
+    
+            border: #777 2px solid;
+    
+            .grid-item {
+                border: #777 0.3px solid;
+            }    
+        }
+
+        #deathScreen {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            opacity: 0;
+
+            p {
+                font-size: 70px;
+                color: red;
+                text-align: center;
+                text-transform: capitalize;
+
+                
+            }
+
+            &.active {
+                animation: blinker 0.7s cubic-bezier(1, 0.04, 1, 1) infinite;
+            }
+        }
+    }
+}
+
+@keyframes blinker {
+    50% {
+        opacity: 1;
+    }
+}
+  

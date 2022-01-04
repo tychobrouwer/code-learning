@@ -1,0 +1,40 @@
+:root {
+  --main-text-color: #f3f3f3;
+  --main-background-color: #121212;
+}
+
+body {
+  background: var(--main-background-color);
+  color: var(--main-text-color);
+  font-family: 'Lato', sans-serif;
+  height: 100vh;
+}
+
+#root {
+  height: inherit;
+}
+
+.banner-box {
+  width: 70%;
+  max-width: 900px;
+  min-height: 40vh;
+  margin: 25vh auto;
+  background: rgba(0, 0, 0, 0.5);
+  text-transform: uppercase;
+  text-align: center;
+  display: grid;
+}
+
+.banner-content {
+  margin: auto;
+}
+
+.banner-title {
+  margin: auto 80px 0;
+  font-size: 5rem;
+}
+
+.banner-description {
+  padding: 20px 0 auto;
+  font-size: 1.5rem;
+}

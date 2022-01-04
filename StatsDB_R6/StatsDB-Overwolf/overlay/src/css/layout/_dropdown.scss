@@ -1,0 +1,57 @@
+.custom-select {
+    position: relative;
+    margin: 0 auto;
+
+    .custom-select__trigger {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        .arrow {
+            position: relative;
+
+            &::before {
+                transform: rotate(45deg);
+            }
+
+            &::after {
+                transform: rotate(-45deg);
+            }
+
+            &::before, &::after {
+                content: "";
+                position: absolute;
+                bottom: 0px;
+                width: 0.1rem;
+                height: 100%;
+                transition: ease-in-out 0.1s;
+            }
+        }
+    }
+
+    .custom-options {
+        z-index: 2;
+        position: absolute;
+        transition: ease-in-out 0.1s;
+        opacity: 0;
+        visibility: hidden;
+        width: inherit;
+
+        .custom-option {
+            position: relative;
+            display: none;
+            text-align: center;
+            transition: ease-in-out 0.1s;
+        }
+    }
+
+    &.open .custom-options {
+        opacity: 1;
+        visibility: visible;
+
+        .custom-option {
+            display: block;
+        }
+    }
+}

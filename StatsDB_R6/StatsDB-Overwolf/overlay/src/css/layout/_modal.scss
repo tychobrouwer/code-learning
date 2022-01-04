@@ -1,0 +1,52 @@
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 2000;
+    left: 0;
+    top: 32px;
+    width: 100%;
+    height: inherit;
+    overflow: auto;
+
+    .modal-frame {
+        background: var(--overlay-color);
+        margin: 10% auto;
+        width: 320px;
+        color: var(--main-text-color);
+        box-sizing: border-box;
+        border-radius: 5px;
+
+        .modal-content {
+            background: var(--sec-bg-color);
+            padding: 45px;
+            border-radius: 5px;
+
+            h3 {
+                margin: 0px;
+                font-size: 25px;
+            }
+
+            .buttonBar {
+                margin-top: 15px;
+                display: flex;
+                justify-content: space-between;
+                width: 100%;
+
+                .modalButton {
+                    cursor: pointer;
+                    border-radius: 5px;
+                    padding: 5px 16px;
+                    color: var(--main-text-color);
+                    background: var(--darker-btn-color);
+                    border: none;
+                    width: 45%;
+
+                    &:hover {
+                        background: var(--darker-btn-hover-color);
+                        transition: 0.1s ease-in-out;
+                    }
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,24 @@
+{
+  "compilerOptions": {
+    "target": "es6",
+    "module": "none",
+    "sourceMap": true,
+    "outDir": "./dist",
+    "removeComments": true,
+    "strict": true,
+    "noImplicitAny": false,
+    "strictNullChecks": false,
+    "esModuleInterop": true,
+    "types": [
+      "@overwolf/types",
+      "node"
+    ],
+    "rootDirs": [
+      "./src"
+    ]
+  },
+  "exclude": [
+    "node_modules",
+    "trash"
+  ]
+}

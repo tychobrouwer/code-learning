@@ -1,0 +1,40 @@
+{
+    "name": "portfolio_tycho_brouwer",
+    "version": "0.0.1",
+    "description": "Het portfolio van Tycho Brouwer",
+    "main": "index.js",
+    "scripts": {
+        "build": "npm run build-ts && npm run lint",
+        "build-prod": "npm run build-sass && npm run build-ts-prod && npm run copy-static-assets",
+        "build-sass": "node-sass src/public/css/main.scss dist/css/main.css --output-style compressed",
+        "build-ts": "webpack --mode development --config webpack.config.dev.js",
+        "build-ts-prod": "webpack --mode production --config webpack.config.prod.js",
+        "dev": "webpack --watch --mode development --config webpack.config.dev.js",
+        "copy-static-assets": "ts-node copyStaticAssets.ts",
+        "lint": "tsc --noEmit && eslint \"**/*.{js,ts}\" --quiet --fix"
+    },
+    "keywords": [],
+    "author": "Tycho Brouwer",
+    "license": "ISC",
+    "devDependencies": {
+        "@types/jquery": "^3.5.3",
+        "@types/node": "^14.11.8",
+        "@types/shelljs": "^0.8.8",
+        "@typescript-eslint/eslint-plugin": "^4.4.1",
+        "@typescript-eslint/parser": "^4.4.1",
+        "eslint": "^7.11.0",
+        "eslint-config-google": "^0.14.0",
+        "file-system": "^2.2.2",
+        "html-webpack-plugin": "^3.2.0",
+        "node-sass": "^4.14.1",
+        "shelljs": "^0.8.4",
+        "ts-loader": "^6.2.1",
+        "ts-node": "^9.0.0",
+        "typescript": "^3.7.5",
+        "webpack": "^4.44.2",
+        "webpack-cli": "^3.3.10"
+    },
+    "dependencies": {
+        "jquery": "^3.5.1"
+    }
+}

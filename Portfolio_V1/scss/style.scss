@@ -1,0 +1,294 @@
+@import "grid";
+@import "config";
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+li {
+  list-style: none;
+}
+
+a {
+  text-decoration: none;
+}
+
+img {
+  width: 100%;
+}
+
+/* site */
+.site {
+  margin: auto;
+  position: absolute;
+  color: $dark-color;
+  line-height: 1.6;
+  font-family: Arial, Helvetica, sans-serif;
+  list-style: none;
+  height: 100vh;
+}
+
+body {
+  padding: 0;
+  margin: 0;
+  background-color: $light-color;
+}
+
+/* masthead */
+.masthead {
+  padding: 20px 0;
+  text-align: center;
+  color: #fff;
+  z-index: 1;
+
+  h1 {
+    font-size: 40px;
+  }
+
+  h3 {
+    font-size: 19px;
+  }
+}
+
+.header-background {
+  background-color: $header-background-color;
+}
+
+/* technasium logo */
+.tech-logo {
+  height: 100px;
+  width: auto;
+  align-self: center;
+  justify-self: right;
+}
+
+/* navbar */
+.navbar-background {
+  background: $dark-color;
+}
+
+.navbar {
+  ul {
+    display: flex;
+    justify-content: flex-end;
+    margin: 0 auto;
+    padding: 0;
+
+    li {
+      position: relative;
+      align-items: center;
+      justify-self: center;
+      font-size: 16px;
+      padding: 5px 0;
+      transition: 0.3s;
+      box-sizing: border-box;
+      border-right: 1px solid rgba(244, 244, 244, 0.1);
+
+      a,
+      .projecten-dropdown,
+      .competenties-dropdown {
+        padding: 0 30px;
+        color: #fff;
+      }
+
+      .projecten-dropdown:hover,
+      .competenties-dropdown:hover {
+        cursor: default;
+      }
+
+      ul {
+        position: absolute;
+        top: 32px;
+        left: 0;
+        background: $dark-color;
+        width: 200px;
+        display: block;
+        transition: 0.3s;
+        opacity: 0;
+        visibility: hidden;
+
+        li {
+          border-right: none;
+          border-bottom: 1px solid rgba(244, 244, 244, 0.1);
+        }
+      }
+    }
+
+    li:hover {
+      background: $secondary-color;
+
+      ul {
+        opacity: 1;
+        visibility: visible;
+      }
+    }
+
+    li:last-child {
+      border-right: none;
+    }
+  }
+}
+
+/* personal information */
+.pers-info {
+  text-align: right;
+  line-height: 1.7;
+  margin: 50px 0 0 50px;
+  padding: 20px;
+  border: 2px solid $dark-color;
+  border-radius: 10px;
+
+  h3 {
+    padding-bottom: 3px;
+  }
+
+  ul {
+    margin: 5px 0;
+  }
+}
+
+/* showcase */
+.showcase {
+  margin: 50px 50px 0px 0px;
+
+  p {
+    font-size: 16px;
+    line-height: 1.4;
+  }
+}
+
+/* discription p1 */
+.discription-p1,
+.discription-p4,
+.discription-p5 {
+  margin: 50px 50px 50px 0px;
+
+  p {
+    font-size: 16px;
+    line-height: 1.4;
+  }
+
+  .list-p {
+    list-style: circle;
+    margin-left: 20px;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 1.4;
+  }
+}
+
+.discription-p2,
+.discription-p3 {
+  margin: 50px 0px 50px 0px;
+
+  p {
+    font-size: 16px;
+    line-height: 1.4;
+  }
+
+  .list-p {
+    list-style: circle;
+    margin-left: 20px;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 1.4;
+  }
+}
+
+/* images */
+.project1-img {
+  margin: 50px 0 50px 50px;
+
+  img {
+    margin: 10px;
+    border-radius: 10px;
+  }
+}
+
+.project2-img {
+  display: flex;
+  img {
+    margin: 10px;
+    border-radius: 10px;
+  }
+
+  img:first-child {
+    margin-left: 0;
+  }
+
+  img:last-child {
+    margin-right: 0;
+  }
+
+  margin-bottom: 50px;
+}
+
+.discription-picture {
+  display: flex;
+
+  img {
+    width: 50%;
+    margin: 0 50px 50px 0;
+    border-radius: 10px;
+  }
+
+  p {
+    font-size: 16px;
+    line-height: 1.4;
+  }
+}
+
+.p3-text1,
+.p3-text3 {
+  display: flex;
+  img {
+    margin: 0 50px 0 0;
+    border-radius: 10px;
+    height: 200px;
+    width: auto;
+  }
+  .project3_img1 {
+    height: auto;
+  }
+}
+
+.p3-text2 {
+  display: flex;
+  margin: 50px 0;
+
+  img {
+    margin: 0 0 0 50px;
+    border-radius: 10px;
+    height: 200px;
+    width: auto;
+  }
+}
+
+.p3-text4 {
+  display: flex;
+  margin: 50px 0;
+
+  img {
+    margin: 0 0 0 50px;
+    border-radius: 10px;
+    height: 400px;
+    width: auto;
+  }
+  img:last-child {
+    margin: 0 0 0 30px;
+  }
+}
+
+/* footer */
+.footer-background {
+  background-color: $footer-background-color;
+}
+
+.main-footer {
+  text-align: right;
+  color: #fff;
+  z-index: 1;
+  padding: 20px 0 40px 0;
+}

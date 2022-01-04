@@ -1,0 +1,131 @@
+* {
+	box-sizing: border-box;
+}
+
+body {
+	background: #f4f4f4;
+	color: #fff;
+	margin: 0;
+	padding: 0;
+	font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+	line-height: 1.5;
+}
+
+img {
+	height: 100%;
+}
+
+a {
+	text-decoration: none;
+}
+
+// MAIN HEADER //
+// FORTES LOGO HEADER //
+#main-header {
+	background: #e8e8e8;
+}
+.fortes-logo-header {
+	display: flex;
+	justify-content: center;
+	img {
+		height: 15vh;
+		margin-top: 30px;
+	}
+}
+// NAVBAR //
+.main-navbar {
+	margin: 0 0;
+	padding: 30px 0;
+	display: flex;
+	justify-content: center;
+	border-bottom: 1px solid rgba(#000, 0.25);
+	ul {
+		list-style: none;
+		margin: 0;
+		width: 80%;
+		padding: 0;
+		display: flex;
+		justify-content: center;
+		border-top: 1px solid rgba(#000, 0.25);
+		border-bottom: 1px solid rgba(#000, 0.25);
+		li {
+			text-decoration: none;
+			margin: 15px 5px;
+			border-radius: 5px;
+			padding: 10px 20px;
+			a {
+				margin: 0;
+				color: #333;
+			}
+			&:hover {
+				background: #1a76ff;
+				a {
+					color: #fff;
+				}
+				transition: 0.5s;
+			}
+		}
+		li:first-child {
+			background: #1a76ff;
+			a {
+				color: #fff;
+			}
+		}
+	}
+}
+// TALENTENSTROMEN SHOWCASE //
+.sc-talentenstromen-wrap {
+	width: 90%;
+	max-width: 1000px;
+	margin: 0 auto;
+	padding: 30px 0;
+	display: flex;
+	a {
+		border: 1px solid rgba(#000, 0.25);
+		height: 100%;
+		margin: 0 auto;
+		width: 30%;
+		img {
+			width: 100%;
+		}
+		p {
+			margin: auto 10px;
+		}
+	}
+}
+// SHOWCASE SLIDESHOW //
+.sc-slideshow {
+	overflow-y: hidden;
+	position: relative;
+	width: 90%;
+	max-width: 1000px;
+	max-height: 500px;
+	margin: 0 auto 30px auto;
+	img {
+		vertical-align: middle;
+		align-self: center;
+	}
+}
+
+sc-slide {
+	max-height: 500px;
+}
+
+.sc-slideshow-btn-wrapper {
+	position: absolute;
+	display: flex;
+	left: 50%;
+	transform: translateX(-50%);
+	bottom: 10px;
+	& > .sc-slideshow-btn {
+		width: 70px;
+		height: 15px;
+		border: 2px solid #fff;
+		margin: 10px;
+		border-radius: 10px;
+		&:hover {
+			background: #fff;
+			transition: 0.2s;
+		}
+	}
+}

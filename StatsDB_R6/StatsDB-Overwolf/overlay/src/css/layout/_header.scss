@@ -1,0 +1,56 @@
+.app-header {
+    display: flex;
+    background: var(--overlay-color);
+    height: 32px;
+
+    .header-img {
+        height: 20px;
+        width: 20px;
+        margin: auto 7px;
+    }
+
+    h1 {
+        color: var(--sec-text-color);
+        font-size: 13px;
+        font-weight: normal;
+        font-style: normal;
+        margin: auto 0;
+    }
+
+    .window-controls-group {
+        z-index: 1001;
+        margin-left: auto;
+        display: flex;
+    }
+
+    .window-control {
+        background-color: transparent;
+        color: var(--main-text-color);
+        border: none;
+        position: relative;
+        width: 38px;
+        height: 32px;
+        transition: 0.1s;
+        padding: 0;
+
+        &:hover {
+            background: var(--darkest-hover-color);
+            transition: 0.1s ease-in-out;
+        }
+
+        &:first {
+            margin-left: auto;
+        }
+
+        svg {
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+        }
+    }
+
+    .window-control-close:hover {
+        background: var(--close-button);
+        transition: 0.1s ease-in-out;
+    }
+}

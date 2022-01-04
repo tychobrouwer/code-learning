@@ -1,0 +1,14 @@
+/* COLORS */
+$base-color: rgb(18, 18, 18);
+$overlay-color: rgb(255, 255, 255);
+$dark-blue: rgb(17, 17, 25);
+$accent-color: rgb(170, 255, 210);
+
+$background-color: rgba($base-color, 0.96);
+$dark-background-color: rgba(0, 0, 0, 0.99);
+$main-text-color: rgba($accent-color, 0.87);
+$sec-text-color: rgba($overlay-color, 0.46);
+$white-text-color: rgba($overlay-color, 0.87);
+
+/* MISCELLANEOUS */
+$normal-transition: all .4s ease-in-out;

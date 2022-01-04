@@ -1,0 +1,79 @@
+Assets links {
+
+    JPG with transparant background {
+        https://www.zamzar.com/
+    }
+
+    Really useful (outdated link, code after definitions) {
+        https://ubistatic-a.akamaihd.net/0058/prod/assets/data/statistics.definitions.eb165e13.json
+    }
+
+    https://game-rainbow6.ubi.com/assets/data/seasons.6aada152.json
+    https://game-rainbow6.ubi.com/assets/data/ranks.f6cbd78b.json
+    https://game-rainbow6.ubi.com/assets/data/operators.269788a7.json
+    https://game-rainbow6.ubi.com/assets/data/weapons.8a9b3d9e.json
+    https://game-rainbow6.ubi.com/assets/data/rewards.d9549559.json
+
+    https://r6unhash.tk/ (Texts for all language)
+}
+
+Links {
+    https://github.com/billy-yoyo/RainbowSixSiege-Python-API/blob/master/r6sapi/auth.py
+    https://github.com/danielwerg/r6api.js
+}
+
+Alex comments {
+
+    Take a look at banned status. Working better but now 100%.
+
+    Fav opperator per season. Need to look at what values we can get from api
+
+    Get stats per match. Need to take a closer look at what we can get.
+
+    Alias history with date. Need to use database to get this to work.
+
+}
+
+Daniel comments {
+
+    Add reportsystem for hackers. Playerpage.
+    //              Put on ice for now.             //
+
+    Add karma system aka upvote or downvote. Playerpage.
+    //              Put on ice for now.             //
+
+}
+
+Luk comments {
+
+
+
+}
+
+Tycho comments {
+
+    Make weapons mobile tab.
+
+    Finish mobile operator page.
+
+    Finish mobile seasons page.
+
+    Make customizable banner for supporters.
+
+}
+
+FIXED {
+
+    Add sorting with Attacker and defenders. Operator page.
+
+    Fix the about page. https://www.r6lookup.com/about.
+
+    Fix spaces in seach input field "$noSpaces = str_replace(' ', '', $string);".
+
+    Make seasons tab.
+
+    Make about mobile page.
+
+    Make most played operator.
+
+}

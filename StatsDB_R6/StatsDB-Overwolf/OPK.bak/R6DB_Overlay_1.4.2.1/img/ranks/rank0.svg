@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 500 500">
+    <g id="Compound">
+        <g id="Rank_x5F_Copper_x5F_4_5_">
+            <g id="League_x5F_Copper">
+                <g>
+                    <path fill="none" stroke="#C8C8C8" stroke-width="10" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" d="      M391.62,152.97c5.5,0,10-4.5,10-10l0-22.81c0-5.5-4.5-10-10-10H108.38c-5.5,0-10,4.5-10,10l0,22.81c0,5.5,4.5,10,10,10H391.62z" />
+                </g>
+                <polygon fill="none" points="279.66,48.84 249.08,79.42 218.5,48.84 76.79,48.84 76.79,171.5 421.37,171.5 421.37,48.84    " />
+                <polygon fill="#231F20" points="115,375.03 250,452.97 385,375.03 385,144.5 115,144.5    " />
+                <line fill="none" stroke="#C8C8C8" stroke-width="10" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" x1="176.39" y1="194.63" x2="324.02" y2="342.26" />
+                <line fill="none" stroke="#C8C8C8" stroke-width="10" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" x1="176.39" y1="95.47" x2="324.02" y2="243.11" />
+            </g>
+        </g>
+    </g>
+</svg>

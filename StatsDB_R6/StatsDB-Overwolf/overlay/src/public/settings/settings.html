@@ -1,0 +1,336 @@
+﻿<!DOCTYPE html>
+<html lang="en" dir="ltr">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="author" content="DS-Cloav, DS-Jocular">
+
+        <link rel="preload" href="../css/main.css" as="style" />
+        <link rel="stylesheet" href="../css/main.css" />
+
+        <title>StatsDB - Settings page</title>
+    </head>
+    <body>
+        <header id="header" class="app-header md-whiteframe-3dp">
+            <img class="header-img" src="../../img/header_icon.png" />
+            <h1>StatsDB</h1>
+            <button class="icon window-control window-control-settings window-control-close" id="closeWindowButton">
+                <svg>
+                    <use xlink:href="/img/header_icons.svg#window-control_close" />
+                </svg>
+            </button>
+        </header>
+        <main id="settings" class="main-container">
+            <div class="setting-title settings-row1">
+                <p>Change displayed stats</p>
+            </div>
+            <div class="setting settings-row1-sub">
+                <div class="settings-sec-row setting-div">
+                    <p>Column 1</p>
+                    <div class="custom-select selectorValues settingOptions">
+                        <div class="custom-select__trigger"><span>Kills</span>
+                            <div class="arrow"></div>
+                        </div>
+                        <div class="custom-options">
+                            <span id="Empty0" index="0" settingId="setting-valueTable" class="custom-option" value="Empty">Empty</span>
+                            <span id="LVL0" index="0" settingId="setting-valueTable" class="custom-option" value="LVL">LVL</span>
+                            <span id="Kills0" index="0" settingId="setting-valueTable" class="custom-option" value="Kills">Kills</span>
+                            <span id="Deaths0" index="0" settingId="setting-valueTable" class="custom-option" value="Deaths">Deaths</span>
+                            <span id="K-D0" index="0" settingId="setting-valueTable" class="custom-option" value="K/D">K/D</span>
+                            <span id="Wins0" index="0" settingId="setting-valueTable" class="custom-option" value="Wins">Wins</span>
+                            <span id="Losses0" index="0" settingId="setting-valueTable" class="custom-option" value="Losses">Losses</span>
+                            <span id="W-L0" index="0" settingId="setting-valueTable" class="custom-option" value="W/L">W/L</span>
+                            <span id="Max-MMR0" index="0" settingId="setting-valueTable" class="custom-option" value="Max MMR">Max MMR</span>
+                            <span id="HS-K0" index="0" settingId="setting-valueTable" class="custom-option" value="HS/K">HS/K</span>
+                            <span id="PEN-K0" index="0" settingId="setting-valueTable" class="custom-option" value="PEN/K">PEN/K</span>
+                            <span id="Games-played0" index="0" settingId="setting-valueTable" class="custom-option" value="Games played">Games played</span>
+                            <span id="MMR-change0" index="0" settingId="setting-valueTable" class="custom-option" value="MMR change">MMR change</span>
+                            <span id="Alpha-%0" index="0" settingId="setting-valueTable" class="custom-option" value="Alpha %">Alpha %</span>
+                        </div>
+                    </div>
+                    <p>Column 2</p>
+                    <div class="custom-select selectorValues settingOptions">
+                        <div class="custom-select__trigger"><span>Kills</span>
+                            <div class="arrow"></div>
+                        </div>
+                        <div class="custom-options">
+                            <span id="Empty1" index="1" settingId="setting-valueTable" class="custom-option" value="Empty">Empty</span>
+                            <span id="LVL1" index="1" settingId="setting-valueTable" class="custom-option" value="LVL">LVL</span>
+                            <span id="Kills1" index="1" settingId="setting-valueTable" class="custom-option" value="Kills">Kills</span>
+                            <span id="Deaths1" index="1" settingId="setting-valueTable" class="custom-option" value="Deaths">Deaths</span>
+                            <span id="K-D1" index="1" settingId="setting-valueTable" class="custom-option" value="K/D">K/D</span>
+                            <span id="Wins1" index="1" settingId="setting-valueTable" class="custom-option" value="Wins">Wins</span>
+                            <span id="Losses1" index="1" settingId="setting-valueTable" class="custom-option" value="Losses">Losses</span>
+                            <span id="W-L1" index="1" settingId="setting-valueTable" class="custom-option" value="W/L">W/L</span>
+                            <span id="Max-MMR1" index="1" settingId="setting-valueTable" class="custom-option" value="Max MMR">Max MMR</span>
+                            <span id="HS-K1" index="1" settingId="setting-valueTable" class="custom-option" value="HS/K">HS/K</span>
+                            <span id="PEN-K1" index="1" settingId="setting-valueTable" class="custom-option" value="PEN/K">PEN/K</span>
+                            <span id="Games-played1" index="1" settingId="setting-valueTable" class="custom-option" value="Games played">Games played</span>
+                            <span id="MMR-change1" index="1" settingId="setting-valueTable" class="custom-option" value="MMR change">MMR change</span>
+                            <span id="Alpha-%1" index="1" settingId="setting-valueTable" class="custom-option" value="Alpha %">Alpha %</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="settings-sec-row setting-div">
+                    <p>Column 3</p>
+                    <div class="custom-select selectorValues settingOptions">
+                        <div class="custom-select__trigger"><span>Kills</span>
+                            <div class="arrow"></div>
+                        </div>
+                        <div class="custom-options">
+                            <span id="Empty2" index="2" settingId="setting-valueTable" class="custom-option" value="Empty">Empty</span>
+                            <span id="LVL2" index="2" settingId="setting-valueTable" class="custom-option" value="LVL">LVL</span>
+                            <span id="Kills2" index="2" settingId="setting-valueTable" class="custom-option" value="Kills">Kills</span>
+                            <span id="Deaths2" index="2" settingId="setting-valueTable" class="custom-option" value="Deaths">Deaths</span>
+                            <span id="K-D2" index="2" settingId="setting-valueTable" class="custom-option" value="K/D">K/D</span>
+                            <span id="Wins2" index="2" settingId="setting-valueTable" class="custom-option" value="Wins">Wins</span>
+                            <span id="Losses2" index="2" settingId="setting-valueTable" class="custom-option" value="Losses">Losses</span>
+                            <span id="W-L2" index="2" settingId="setting-valueTable" class="custom-option" value="W/L">W/L</span>
+                            <span id="Max-MMR2" index="2" settingId="setting-valueTable" class="custom-option" value="Max MMR">Max MMR</span>
+                            <span id="HS-K2" index="2" settingId="setting-valueTable" class="custom-option" value="HS/K">HS/K</span>
+                            <span id="PEN-K2" index="2" settingId="setting-valueTable" class="custom-option" value="PEN/K">PEN/K</span>
+                            <span id="Games-played2" index="2" settingId="setting-valueTable" class="custom-option" value="Games played">Games played</span>
+                            <span id="MMR-change2" index="2" settingId="setting-valueTable" class="custom-option" value="MMR change">MMR change</span>
+                            <span id="Alpha-%2" index="2" settingId="setting-valueTable" class="custom-option" value="Alpha %">Alpha %</span>
+                        </div>
+                    </div>
+                    <p>Column 4</p>
+                    <div class="custom-select selectorValues settingOptions">
+                        <div class="custom-select__trigger"><span>Kills</span>
+                            <div class="arrow"></div>
+                        </div>
+                        <div class="custom-options">
+                            <span id="Empty3" index="3" settingId="setting-valueTable" class="custom-option" value="Empty">Empty</span>
+                            <span id="LVL3" index="3" settingId="setting-valueTable" class="custom-option" value="LVL">LVL</span>
+                            <span id="Kills3" index="3" settingId="setting-valueTable" class="custom-option" value="Kills">Kills</span>
+                            <span id="Deaths3" index="3" settingId="setting-valueTable" class="custom-option" value="Deaths">Deaths</span>
+                            <span id="K-D3" index="3" settingId="setting-valueTable" class="custom-option" value="K/D">K/D</span>
+                            <span id="Wins3" index="3" settingId="setting-valueTable" class="custom-option" value="Wins">Wins</span>
+                            <span id="Losses3" index="3" settingId="setting-valueTable" class="custom-option" value="Losses">Losses</span>
+                            <span id="W-L3" index="3" settingId="setting-valueTable" class="custom-option" value="W/L">W/L</span>
+                            <span id="Max-MMR3" index="3" settingId="setting-valueTable" class="custom-option" value="Max MMR">Max MMR</span>
+                            <span id="HS-K3" index="3" settingId="setting-valueTable" class="custom-option" value="HS/K">HS/K</span>
+                            <span id="PEN-K3" index="3" settingId="setting-valueTable" class="custom-option" value="PEN/K">PEN/K</span>
+                            <span id="Games-played3" index="3" settingId="setting-valueTable" class="custom-option" value="Games played">Games played</span>
+                            <span id="MMR-change3" index="3" settingId="setting-valueTable" class="custom-option" value="MMR change">MMR change</span>
+                            <span id="Alpha-%3" index="3" settingId="setting-valueTable" class="custom-option" value="Alpha %">Alpha %</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="settings-sec-row setting-div">
+                    <p>Column 5</p>
+                    <div class="custom-select selectorValues settingOptions">
+                        <div class="custom-select__trigger"><span>Kills</span>
+                            <div class="arrow"></div>
+                        </div>
+                        <div class="custom-options">
+                            <span id="Empty4" index="4" settingId="setting-valueTable" class="custom-option" value="Empty">Empty</span>
+                            <span id="LVL4" index="4" settingId="setting-valueTable" class="custom-option" value="LVL">LVL</span>
+                            <span id="Kills4" index="4" settingId="setting-valueTable" class="custom-option" value="Kills">Kills</span>
+                            <span id="Deaths4" index="4" settingId="setting-valueTable" class="custom-option" value="Deaths">Deaths</span>
+                            <span id="K-D4" index="4" settingId="setting-valueTable" class="custom-option" value="K/D">K/D</span>
+                            <span id="Wins4" index="4" settingId="setting-valueTable" class="custom-option" value="Wins">Wins</span>
+                            <span id="Losses4" index="4" settingId="setting-valueTable" class="custom-option" value="Losses">Losses</span>
+                            <span id="W-L4" index="4" settingId="setting-valueTable" class="custom-option" value="W/L">W/L</span>
+                            <span id="Max-MMR4" index="4" settingId="setting-valueTable" class="custom-option" value="Max MMR">Max MMR</span>
+                            <span id="HS-K4" index="4" settingId="setting-valueTable" class="custom-option" value="HS/K">HS/K</span>
+                            <span id="PEN-K4" index="4" settingId="setting-valueTable" class="custom-option" value="PEN/K">PEN/K</span>
+                            <span id="Games-played4" index="4" settingId="setting-valueTable" class="custom-option" value="Games played">Games played</span>
+                            <span id="MMR-change4" index="4" settingId="setting-valueTable" class="custom-option" value="MMR change">MMR change</span>
+                            <span id="Alpha-%4" index="4" settingId="setting-valueTable" class="custom-option" value="Alpha %">Alpha %</span>
+                        </div>
+                    </div>
+                    <p>Column 6</p>
+                    <div class="custom-select selectorValues settingOptions">
+                        <div class="custom-select__trigger"><span>Kills</span>
+                            <div class="arrow"></div>
+                        </div>
+                        <div class="custom-options">
+                            <span id="Empty5" index="5" settingId="setting-valueTable" class="custom-option" value="Empty">Empty</span>
+                            <span id="LVL5" index="5" settingId="setting-valueTable" class="custom-option" value="LVL">LVL</span>
+                            <span id="Kills5" index="5" settingId="setting-valueTable" class="custom-option" value="Kills">Kills</span>
+                            <span id="Deaths5" index="5" settingId="setting-valueTable" class="custom-option" value="Deaths">Deaths</span>
+                            <span id="K-D5" index="5" settingId="setting-valueTable" class="custom-option" value="K/D">K/D</span>
+                            <span id="Wins5" index="5" settingId="setting-valueTable" class="custom-option" value="Wins">Wins</span>
+                            <span id="Losses5" index="5" settingId="setting-valueTable" class="custom-option" value="Losses">Losses</span>
+                            <span id="W-L5" index="5" settingId="setting-valueTable" class="custom-option" value="W/L">W/L</span>
+                            <span id="Max-MMR5" index="5" settingId="setting-valueTable" class="custom-option" value="Max MMR">Max MMR</span>
+                            <span id="HS-K5" index="5" settingId="setting-valueTable" class="custom-option" value="HS/K">HS/K</span>
+                            <span id="PEN-K5" index="5" settingId="setting-valueTable" class="custom-option" value="PEN/K">PEN/K</span>
+                            <span id="Games-played5" index="5" settingId="setting-valueTable" class="custom-option" value="Games played">Games played</span>
+                            <span id="MMR-change5" index="5" settingId="setting-valueTable" class="custom-option" value="MMR change">MMR change</span>
+                            <span id="Alpha-%5" index="5" settingId="setting-valueTable" class="custom-option" value="Alpha %">Alpha %</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="settings-sec-row setting-div">
+                    <p>Column 7</p>
+                    <div class="custom-select selectorValues settingOptions">
+                        <div class="custom-select__trigger"><span>Kills</span>
+                            <div class="arrow"></div>
+                        </div>
+                        <div class="custom-options">
+                            <span id="Empty6" index="6" settingId="setting-valueTable" class="custom-option" value="Empty">Empty</span>
+                            <span id="LVL6" index="6" settingId="setting-valueTable" class="custom-option" value="LVL">LVL</span>
+                            <span id="Kills6" index="6" settingId="setting-valueTable" class="custom-option" value="Kills">Kills</span>
+                            <span id="Deaths6" index="6" settingId="setting-valueTable" class="custom-option" value="Deaths">Deaths</span>
+                            <span id="K-D6" index="6" settingId="setting-valueTable" class="custom-option" value="K/D">K/D</span>
+                            <span id="Wins6" index="6" settingId="setting-valueTable" class="custom-option" value="Wins">Wins</span>
+                            <span id="Losses6" index="6" settingId="setting-valueTable" class="custom-option" value="Losses">Losses</span>
+                            <span id="W-L6" index="6" settingId="setting-valueTable" class="custom-option" value="W/L">W/L</span>
+                            <span id="Max-MMR6" index="6" settingId="setting-valueTable" class="custom-option" value="Max MMR">Max MMR</span>
+                            <span id="HS-K6" index="6" settingId="setting-valueTable" class="custom-option" value="HS/K">HS/K</span>
+                            <span id="PEN-K6" index="6" settingId="setting-valueTable" class="custom-option" value="PEN/K">PEN/K</span>
+                            <span id="Games-played6" index="6" settingId="setting-valueTable" class="custom-option" value="Games played">Games played</span>
+                            <span id="MMR-change6" index="6" settingId="setting-valueTable" class="custom-option" value="MMR change">MMR change</span>
+                            <span id="Alpha-%6" index="6" settingId="setting-valueTable" class="custom-option" value="Alpha %">Alpha %</span>
+                        </div>
+                    </div>
+                    <p>Column 8</p>
+                    <div class="custom-select selectorValues settingOptions">
+                        <div class="custom-select__trigger"><span>Kills</span>
+                            <div class="arrow"></div>
+                        </div>
+                        <div class="custom-options">
+                            <span id="Empty7" index="7" settingId="setting-valueTable" class="custom-option" value="Empty">Empty</span>
+                            <span id="LVL7" index="7" settingId="setting-valueTable" class="custom-option" value="LVL">LVL</span>
+                            <span id="Kills7" index="7" settingId="setting-valueTable" class="custom-option" value="Kills">Kills</span>
+                            <span id="Deaths7" index="7" settingId="setting-valueTable" class="custom-option" value="Deaths">Deaths</span>
+                            <span id="K-D7" index="7" settingId="setting-valueTable" class="custom-option" value="K/D">K/D</span>
+                            <span id="Wins7" index="7" settingId="setting-valueTable" class="custom-option" value="Wins">Wins</span>
+                            <span id="Losses7" index="7" settingId="setting-valueTable" class="custom-option" value="Losses">Losses</span>
+                            <span id="W-L7" index="7" settingId="setting-valueTable" class="custom-option" value="W/L">W/L</span>
+                            <span id="Max-MMR7" index="7" settingId="setting-valueTable" class="custom-option" value="Max MMR">Max MMR</span>
+                            <span id="HS-K7" index="7" settingId="setting-valueTable" class="custom-option" value="HS/K">HS/K</span>
+                            <span id="PEN-K7" index="7" settingId="setting-valueTable" class="custom-option" value="PEN/K">PEN/K</span>
+                            <span id="Games-played7" index="7" settingId="setting-valueTable" class="custom-option" value="Games played">Games played</span>
+                            <span id="MMR-change7" index="7" settingId="setting-valueTable" class="custom-option" value="MMR change">MMR change</span>
+                            <span id="Alpha-%7" index="7" settingId="setting-valueTable" class="custom-option" value="Alpha %">Alpha %</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="settings-sec-row setting-div">
+                    <p>Column 9</p>
+                    <div class="custom-select selectorValues settingOptions">
+                        <div class="custom-select__trigger"><span>Kills</span>
+                            <div class="arrow"></div>
+                        </div>
+                        <div class="custom-options">
+                            <span id="Empty8" index="8" settingId="setting-valueTable" class="custom-option" value="Empty">Empty</span>
+                            <span id="LVL8" index="8" settingId="setting-valueTable" class="custom-option" value="LVL">LVL</span>
+                            <span id="Kills8" index="8" settingId="setting-valueTable" class="custom-option" value="Kills">Kills</span>
+                            <span id="Deaths8" index="8" settingId="setting-valueTable" class="custom-option" value="Deaths">Deaths</span>
+                            <span id="K-D8" index="8" settingId="setting-valueTable" class="custom-option" value="K/D">K/D</span>
+                            <span id="Wins8" index="8" settingId="setting-valueTable" class="custom-option" value="Wins">Wins</span>
+                            <span id="Losses8" index="8" settingId="setting-valueTable" class="custom-option" value="Losses">Losses</span>
+                            <span id="W-L8" index="8" settingId="setting-valueTable" class="custom-option" value="W/L">W/L</span>
+                            <span id="Max-MMR8" index="8" settingId="setting-valueTable" class="custom-option" value="Max MMR">Max MMR</span>
+                            <span id="HS-K8" index="8" settingId="setting-valueTable" class="custom-option" value="HS/K">HS/K</span>
+                            <span id="PEN-K8" index="8" settingId="setting-valueTable" class="custom-option" value="PEN/K">PEN/K</span>
+                            <span id="Games-played8" index="8" settingId="setting-valueTable" class="custom-option" value="Games played">Games played</span>
+                            <span id="MMR-change8" index="8" settingId="setting-valueTable" class="custom-option" value="MMR change">MMR change</span>
+                            <span id="Alpha-%8" index="8" settingId="setting-valueTable" class="custom-option" value="Alpha %">Alpha %</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="setting settings-row2">
+                <div class="setting-div">
+                    <p>Default table</p>
+                    <div class="custom-select settingOptions">
+                        <div class="custom-select__trigger"><span>Season</span>
+                            <div class="arrow"></div>
+                        </div>
+                        <div id="setting-dtable" class="custom-options">
+                            <span settingId="setting-dtable" class="custom-option" value="0">Season</span>
+                            <span settingId="setting-dtable" class="custom-option" value="1">Ranked</span>
+                            <span settingId="setting-dtable" class="custom-option" value="2">Casual</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="setting-div">
+                    <p>Capitalize name</p>
+                    <div class="custom-select settingOptions">
+                        <div class="custom-select__trigger"><span>No</span>
+                            <div class="arrow"></div>
+                        </div>
+                        <div id="setting-dallCaps" class="custom-options">
+                            <span settingId="setting-dallCaps" class="custom-option" value="0">No</span>
+                            <span settingId="setting-dallCaps" class="custom-option" value="1">Yes</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="setting-div">
+                    <p>Multi monitor<span class="beta">BETA</span></p>
+                    <div class="custom-select settingOptions">
+                        <div class="custom-select__trigger"><span>No</span>
+                            <div class="arrow"></div>
+                        </div>
+                        <div id="setting-ddisplay" class="custom-options">
+                            <span settingId="setting-ddisplay" class="custom-option" value="0">No</span>
+                            <span settingId="setting-ddisplay" class="custom-option" value="1">Yes</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="setting-div">
+                    <p>Open overlay automatic</p>
+                    <div class="custom-select settingOptions">
+                        <div class="custom-select__trigger"><span>No</span>
+                            <div class="arrow"></div>
+                        </div>
+                        <div id="setting-dmaximize" class="custom-options">
+                            <span settingId="setting-dmaximize" class="custom-option" value="0">No</span>
+                            <span settingId="setting-dmaximize" class="custom-option" value="1">Yes</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="setting-div">
+                    <p>Theme</p>
+                    <div class="custom-select settingOptions">
+                        <div class="custom-select__trigger"><span>Dark</span>
+                            <div class="arrow"></div>
+                        </div>
+                        <div id="setting-dtheme" class="custom-options">
+                            <span settingId="setting-dtheme" class="custom-option" value="0">Dark</span>
+                            <span settingId="setting-dtheme" class="custom-option" value="1">Light</span>
+                            <span settingId="setting-dtheme" class="custom-option" value="2">Neutral</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="setting-div">
+                    <p>Default monitor</p>
+                    <div class="custom-select settingOptions">
+                        <div class="custom-select__trigger"><span id="setting-dmonitors-default"></span>
+                            <div class="arrow"></div>
+                        </div>
+                        <div id="setting-dmonitors" class="custom-options">
+
+                        </div>
+                    </div>
+                </div>
+                <div class="setting-div">
+                    <p>Default daily/weekly</p>
+                    <div class="custom-select settingOptions">
+                        <div class="custom-select__trigger"><span>General</span>
+                            <div class="arrow"></div>
+                        </div>
+                        <div id="setting-dcircle" class="custom-options">
+                            <span settingId="setting-dcircle" class="custom-option" value="general">General</span>
+                            <span settingId="setting-dcircle" class="custom-option" value="ranked">Ranked</span>
+                            <span settingId="setting-dcircle" class="custom-option" value="casual">Casual</span>
+                            <span settingId="setting-dcircle" class="custom-option" value="unranked">Unranked</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="setting-div">
+                    <p>Window size</p>
+                    <div class="custom-select settingOptions">
+                        <div id="setting-dslider" class="custom-slider">
+                            <div><span id="windowSize-slider-value"></span>x scaling</div>
+                            <input type="range" min="0.7" max="1.5" value="1" step="0.05" settingid="setting-dslider" id="windowSize-slider">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </body>
+</html>

@@ -1,0 +1,226 @@
+{
+    "manifest_version": 1,
+    "type": "WebApp",
+    "meta": {
+        "name": "StatsDB",
+        "author": "StatsDB",
+        "version": "1.4.2.1",
+        "minimum-overwolf-version": "0.155.83.11",
+        "minimum-gep-version": "0.162.0.0",
+        "description": "StatsDB Stats Tracker, stay one step ahead",
+        "dock_button_title": "StatsDB",
+        "icon": "icons/IconMouseOver.png",
+        "icon_gray": "icons/IconMouseNormal.png",
+        "launcher_icon": "icons/icon.ico",
+        "window_icon": "icons/TaskbarIcon.png"
+    },
+    "permissions": [
+        "Extensions",
+        "Streaming",
+        "Profile",
+        "Hotkeys",
+        "GameInfo",
+        "Tray",
+        "DesktopStreaming"
+    ],
+    "data": {
+        "start_window": "background",
+        "windows": {
+            "background": {
+                "file": "dist/background/background.html",
+                "is_background_page": true
+            },
+            "desktop": {
+                "file": "dist/desktop/desktop.html",
+                "desktop_only": true,
+                "show_in_taskbar": true,
+                "native_window": true,
+                "resizable": false,
+                "use_os_windowing": true,
+                "transparent": true,
+                "keep_window_location": true,
+                "block_top_window_navigation": true,
+                "popup_blocker": true,
+                "mute": true,
+                "size": {
+                    "width": 800,
+                    "height": 500
+                }
+            },
+            "in_game": {
+                "file": "dist/in_game/in_game.html",
+                "in_game_only": true,
+                "block_top_window_navigation": true,
+                "popup_blocker": true,
+                "ignore_keyboard_events": true,
+                "keep_window_location": true,
+                "mute": true,
+                "resizable": false,
+                "transparent": true,
+                "size": {
+                    "width": 1600,
+                    "height": 900
+                }
+            },
+            "in_lobby": {
+                "file": "dist/in_lobby/in_lobby.html",
+                "in_game_only": true,
+                "block_top_window_navigation": true,
+                "popup_blocker": true,
+                "ignore_keyboard_events": true,
+                "keep_window_location": true,
+                "mute": true,
+                "resizable": false,
+                "transparent": true,
+                "size": {
+                    "width": 420,
+                    "height": 700
+                }
+            },
+            "in_game_desktop_only": {
+                "file": "dist/in_game/in_game.html",
+                "desktop_only": true,
+                "native_window": true,
+                "show_in_taskbar": true,
+                "block_top_window_navigation": true,
+                "popup_blocker": true,
+                "keep_window_location": true,
+                "use_os_windowing": true,
+                "mute": true,
+                "resizable": false,
+                "transparent": true,
+                "disable_hardware_acceleration": true,
+                "size": {
+                    "width": 1600,
+                    "height": 900
+                }
+            },
+            "in_lobby_desktop_only": {
+                "file": "dist/in_lobby/in_lobby.html",
+                "desktop_only": true,
+                "native_window": true,
+                "show_in_taskbar": true,
+                "block_top_window_navigation": true,
+                "popup_blocker": true,
+                "keep_window_location": true,
+                "use_os_windowing": true,
+                "mute": true,
+                "resizable": false,
+                "transparent": true,
+                "disable_hardware_acceleration": true,
+                "size": {
+                    "width": 420,
+                    "height": 700
+                }
+            },
+            "settings_in_game": {
+                "file": "dist/settings/settings.html",
+                "in_game_only": true,
+                "block_top_window_navigation": true,
+                "popup_blocker": true,
+                "ignore_keyboard_events": true,
+                "keep_window_location": true,
+                "mute": true,
+                "resizable": false,
+                "transparent": true,
+                "size": {
+                    "width": 900,
+                    "height": 700
+                }
+            },
+            "settings_desktop": {
+                "file": "dist/settings/settings.html",
+                "desktop_only": true,
+                "native_window": true,
+                "show_in_taskbar": true,
+                "block_top_window_navigation": true,
+                "popup_blocker": true,
+                "keep_window_location": true,
+                "use_os_windowing": true,
+                "mute": true,
+                "resizable": false,
+                "transparent": true,
+                "size": {
+                    "width": 900,
+                    "height": 700
+                }
+            },
+            "statistics_in_game": {
+                "file": "dist/statistics/statistics.html",
+                "in_game_only": true,
+                "block_top_window_navigation": true,
+                "popup_blocker": true,
+                "ignore_keyboard_events": true,
+                "keep_window_location": true,
+                "mute": true,
+                "resizable": false,
+                "transparent": true,
+                "size": {
+                    "width": 1600,
+                    "height": 900
+                }
+            },
+            "statistics_desktop": {
+                "file": "dist/statistics/statistics.html",
+                "desktop_only": true,
+                "native_window": true,
+                "show_in_taskbar": true,
+                "block_top_window_navigation": true,
+                "popup_blocker": true,
+                "keep_window_location": true,
+                "use_os_windowing": true,
+                "mute": true,
+                "resizable": false,
+                "transparent": true,
+                "size": {
+                    "width": 1600,
+                    "height": 900
+                }
+            }
+        },
+        "game_targeting": {
+            "type": "dedicated",
+            "game_ids": [
+                10826
+            ]
+        },
+        "game_events": [
+            10826
+        ],
+        "launch_events": [{
+            "event": "GameLaunch",
+            "event_data": {
+                "game_ids": [
+                    10826
+                ]
+            },
+            "start_minimized": true
+        }],
+        "hotkeys": {
+            "showhide": {
+                "title": "Show/Hide R6Lookup",
+                "action-type": "toggle",
+                "default": "Ctrl+X"
+            }
+        },
+        "protocol_override_domains": {
+            "googlesyndication": "http"
+        },
+        "externally_connectable": {
+            "matches": [
+                "http://*.overwolf.com",
+                "https://*.overwolf.com",
+                "https://*.r6db.net",
+                "https://ubisoft-avatars.akamaized.net"
+            ]
+        },
+        "force_browser": "user",
+        "developer": {
+            "enable_auto_refresh": true,
+            "reload_delay": 500,
+            "filter": "*.json;*.html;*.js;*.css;*.png;*.jpg;*.webp;*.svg;*.ico"
+        },
+        "disable_cleanup": true,
+        "process_name": "StatsDB Overlay"
+    }
+}

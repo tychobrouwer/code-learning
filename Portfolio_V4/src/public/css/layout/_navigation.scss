@@ -1,0 +1,100 @@
+#mainNav {
+    position: fixed;
+    display: flex;
+    width: 100vh;
+    bottom: 0;
+    right: 100px;
+    line-height: 40px;
+    height: 40px;
+    -webkit-transform: rotate(90deg);
+    -ms-transform: rotate(90deg);
+    transform: rotate(90deg);
+    transform-origin: 100% 100%;
+    cursor: default;
+    margin: -60px 0;
+    z-index: 100;
+    font-weight: 500;
+
+    .navBtn {
+        display: flex;
+        @include btnSimple;
+
+        p {
+            padding: 0 10px;
+            font-size: 11px;
+        }
+    }
+
+    #navBtnHome {
+        -webkit-transform: rotate(-55deg);
+        -ms-transform: rotate(-55deg);
+        transform: rotate(-55deg);
+        margin: auto 0;
+
+        svg {
+            height: 30px;
+            width: 30px;
+        }
+    }
+
+    #navBtnWork {
+        margin-left: 20px;
+    }
+
+    .navProjects {
+        margin-left: 5vh;
+
+        .projectIndicator {
+            transition: var(--normal-transition);
+            cursor: pointer;
+            padding: 0;
+            width: 0;
+            visibility: collapse;
+            margin-top: 0;
+            display: flex;
+
+            .indicator {
+                transition: var(--normal-transition);
+                margin: auto 0;
+                height: 30px;
+                border-left: 2px solid var(--sec-text-color);
+            }
+
+            &.active {
+                transition: var(--normal-transition);
+                width: auto;
+                padding: 0 3px;
+                visibility: unset;
+            }
+
+            &.hoverIndicator {
+                padding: 0 4px;
+    
+                .indicator {
+                    transition: var(--normal-transition);
+                    height: 34px;
+                    margin: auto 1px;
+                    border-left: 4px solid var(--main-text-color);
+                }
+            }
+
+            &.activeIndicator {
+                transition: var(--normal-transition);
+                margin-top: -80px;
+    
+                .indicator {
+                    transition: var(--normal-transition);
+                    height: 160px;
+                    margin: 0 4px;
+                    border-left: 4px solid var(--main-text-color);
+                }
+            }
+        }
+    }
+
+    .activeBtn {
+        @include btnSimpleActive;
+    }
+}
+
+  

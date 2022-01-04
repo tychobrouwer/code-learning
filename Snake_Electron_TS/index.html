@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Snake</title>
+
+        <link rel="preload" href="./dist/index.css" as="style">
+        <link rel="stylesheet" type="text/css" href="./dist/index.css">
+
+        <script async src="./dist/index.js"></script>
+    </head>
+    <body id="index">
+        <div id="header">
+            <div id="title">
+                <h1>snake</h1>
+            </div>
+            <div id="sizeDiv" class="listItem">
+                <div class="inputDiv">
+                    <label class="inputLabel" for="inputWidth">width</label>
+                    <div class="field-container">
+                        <input class="field-input" id="inputWidth" value="20" name="inputName" type="number" min="1" max="25">
+                    </div>
+                </div>
+                <div class="inputDiv">
+                    <label class="inputLabel" for="inputHeight">height</label>
+                    <div class="field-container">
+                        <input class="field-input" id="inputHeight" value="20" name="inputName" type="number" min="1" max="25">
+                    </div>    
+                </div>    
+            </div>
+            <div class="inputDiv listItem">
+                <label class="inputLabel" for="inputSpeed">speed</label>
+                <div class="field-container">
+                    <input class="field-input" id="inputSpeed" value="10" name="inputName" type="number" min="5" max="25">
+                </div>
+            </div>
+            <div id="runDiv">
+                <input type="checkbox" id="runBtn" name="runBtn" value="runBtn">
+                <label for="runBtn" id="runLabel">run</label>            
+            </div>
+        </div>
+        <div id="game">
+            <div id="scoreDiv">
+                <p>Topscore:<span id="topscore"></span></p>
+                <p>Score:<span id="score"></span></p>
+            </div>
+            <div id="gameDiv">
+
+            </div>
+            <div id="deathScreen">
+                <p>you died</p>
+            </div>
+        </div>
+
+        <script src="./dist/renderer.js"></script>
+    </body>
+</html>

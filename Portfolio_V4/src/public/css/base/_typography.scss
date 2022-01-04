@@ -1,0 +1,39 @@
+@font-face {
+    font-family: 'Sinkin Sans';
+    src: local('Sinkin Sans Bold'), local('SinkinSans-Bold'),
+        url('../fonts/SinkinSans-700Bold.woff2') format('woff2'),
+        url('../fonts/SinkinSans-700Bold.woff') format('woff'),
+        url('../fonts/SinkinSans-700Bold.ttf') format('truetype');
+    font-weight: bold;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Sinkin Sans';
+    src: local('Sinkin Sans Regular'), local('SinkinSans-Regular'),
+        url('../fonts/SinkinSans-400Regular.woff2') format('woff2'),
+        url('../fonts/SinkinSans-400Regular.woff') format('woff'),
+        url('../fonts/SinkinSans-400Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Sinkin Sans';
+    src: local('Sinkin Sans Medium'), local('SinkinSans-Medium'),
+        url('../fonts/SinkinSans-500Medium.woff2') format('woff2'),
+        url('../fonts/SinkinSans-500Medium.woff') format('woff'),
+        url('../fonts/SinkinSans-500Medium.ttf') format('truetype');
+    font-weight: 500;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Ailerons';
+    src: local('Ailerons Regular'), local('Ailerons-Regular'),
+        url('../fonts/Ailerons-Regular.woff2') format('woff2'),
+        url('../fonts/Ailerons-Regular.woff') format('woff'),
+        url('../fonts/Ailerons-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}

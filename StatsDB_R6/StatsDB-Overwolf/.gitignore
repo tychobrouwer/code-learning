@@ -1,0 +1,5 @@
+/overlay/dist/
+/overlay/node_modules/
+/overlay/package-lock.json
+/overlay/.vs/
+/.vs/

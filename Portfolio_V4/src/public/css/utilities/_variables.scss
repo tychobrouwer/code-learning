@@ -1,0 +1,9 @@
+:root {
+    --base-color: 18, 18, 18;
+    --overlay-color: 255, 255, 255;
+    --dark-blue: 17, 17, 25;
+    --accent-color: 170, 255, 210;
+    --normal-transition: all .4s ease-in-out;
+    --main-text-color: rgba(var(--accent-color), 0.80);
+    --sec-text-color: rgba(var(--accent-color), 0.40);
+}

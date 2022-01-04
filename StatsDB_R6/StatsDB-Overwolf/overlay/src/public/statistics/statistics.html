@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="author" content="DS-Cloav, DS-Jocular">
+
+        <link rel="preload" href="../css/main.css" as="style" />
+        <link rel="stylesheet" href="../css/main.css" />
+
+        <title>StatsDB - Statistics page</title>
+    </head>
+    <body id="body">
+        <header id="header" class="app-header md-whiteframe-3dp">
+            <img class="header-img" src="../../img/header_icon.png" />
+            <h1>StatsDB</h1>
+            <button class="icon window-control window-control-settings window-control-close" id="closeWindowButton">
+                <svg>
+                    <use xlink:href="/img/header_icons.svg#window-control_close" />
+                </svg>
+            </button>
+        </header>
+        <main id="main" class="main-container"></main>
+        <script src="https://content.overwolf.com/libs/ads/latest/owads.min.js" async onload="onOwAdReady()"></script>
+        <script>
+            function onOwAdReady() {
+                var checkExist = setInterval(function() {
+                    if (document.getElementById('websiteIFrame')) {
+                        clearInterval(checkExist);
+                    } else if (document.getElementById('gameListContainer')) {
+                        clearInterval(checkExist);
+
+                        setTimeout(() => {
+                            if (!owAd) {
+                                console.error("Couldn't load owads.min.js!");
+                            }
+
+                            overwolf.windows.onStateChanged.removeListener(onWindowStateChanged);
+                            overwolf.windows.onStateChanged.addListener(onWindowStateChanged);
+                        }, 500);
+
+                        const owAd = new OwAd(document.getElementById("ad-400x300"), {
+                            size: {
+                                width: 400,
+                                height: 300
+                            }
+                        });
+
+                        function onWindowStateChanged(state) {
+                            if (state && owAd) {
+                                if (state.window_state === "minimized") {
+                                    owAd.removeAd();
+                                } else if (
+                                    state.window_previous_state === "minimized" &&
+                                    state.window_state === "normal"
+                                ) {
+                                    owAd.refreshAd();
+                                }
+                            }
+                        }
+                    }
+                }, 100);
+            }
+        </script>
+    </body>
+</html>

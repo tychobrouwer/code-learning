@@ -1,0 +1,7 @@
+Sitemap: https://www.r6lookup.com/sitemap.xml
+
+User-agent: Twitterbot
+Disallow:
+
+User-agent: *
+Disallow: /player/

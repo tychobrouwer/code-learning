@@ -1,0 +1,28 @@
+* {
+    margin: 0;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+}
+
+html {
+    color: $main-text-color;
+    font-size: 1em;
+    line-height: 1.4;
+}
+
+body {
+    display: block;
+    overflow: hidden;
+    background: $background-color;
+    color: $main-text-color;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}

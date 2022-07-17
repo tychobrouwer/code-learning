@@ -5,8 +5,8 @@
   "main": "./dist/main.js",
   "scripts": {
     "start": "electron-forge start",
-    "build:sass": "node-sass src/index.scss dist/index.css --output-style compressed",
-    "watch:sass": "nodemon -e scss -x \"npm run build:sass\"",
+    "build:sass": "sass src/index.scss dist/index.css --style compressed",
+    "watch:sass": "sass --watch src/index.scss dist/index.css --style compressed",
     "build:ts": "tsc",
     "watch:ts": "tsc -w",
     "package": "electron-forge package",
@@ -22,8 +22,8 @@
     "@electron-forge/maker-squirrel": "^6.0.0-beta.61",
     "@electron-forge/maker-zip": "^6.0.0-beta.61",
     "electron": "^16.0.5",
-    "node-sass": "^6.0.1",
     "nodemon": "^2.0.12",
+    "sass": "^1.53.0",
     "typescript": "^4.5.2"
   },
   "dependencies": {

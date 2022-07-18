@@ -38,23 +38,26 @@ var map = {
         return this.layers[layer][row * map.cols + col];
     }
 };
-function Camera(map, width, height) {
-    this.x = 0;
-    this.y = 0;
-    this.width = width;
-    this.height = height;
-    this.maxX = map.cols * map.tsize - width;
-    this.maxY = map.rows * map.tsize - height;
-}
-Camera.SPEED = 256; // pixels per second
-Camera.prototype.move = function (delta, dirx, diry) {
-    // move camera
-    this.x += dirx * Camera.SPEED * delta;
-    this.y += diry * Camera.SPEED * delta;
-    // clamp values
-    this.x = Math.max(0, Math.min(this.x, this.maxX));
-    this.y = Math.max(0, Math.min(this.y, this.maxY));
-};
+var Camera = /** @class */ (function () {
+    function Camera(map, width, height) {
+        this.x = 0;
+        this.y = 0;
+        this.width = width;
+        this.height = height;
+        this.maxX = map.cols * map.tsize - width;
+        this.maxY = map.rows * map.tsize - height;
+        this.SPEED = 256;
+    }
+    Camera.prototype.move = function (delta, dirx, diry) {
+        // move camera
+        this.x += dirx * this.SPEED * delta;
+        this.y += diry * this.SPEED * delta;
+        // clamp values
+        this.x = Math.max(0, Math.min(this.x, this.maxX));
+        this.y = Math.max(0, Math.min(this.y, this.maxY));
+    };
+    return Camera;
+}());
 var Keyboard = {
     LEFT: 37,
     RIGHT: 39,
@@ -89,31 +92,17 @@ var Keyboard = {
         return this._keys[keyCode];
     }
 };
-// class Loader {
-//   images: any;
-//   constructor() {
-//     this.images = {};
-//   }
-//   loadImage(key: string, source: string): HTMLImageElement {
-//     const img = new Image();
-//     img.src = source;
-//     this.images[key] = img;
-//     return img;
-//   }
-//   getImage(key: string): HTMLImageElement {
-//     return this.images[key];
-//   }
-// }
 var Game = /** @class */ (function () {
     function Game() {
         this._previousElapsed = 0;
+        this.camera = new Camera(map, 512, 512);
     }
     Game.prototype.run = function (context) {
         var _this = this;
         this.ctx = context;
         this.loadAssetMap('tiles', 'assets/tiles.png');
         this.init();
-        window.requestAnimationFrame(function () { return _this.tick; });
+        window.requestAnimationFrame(function () { return _this.tick(0); });
     };
     Game.prototype.loadAssetMap = function (key, source) {
         var img = new Image();
@@ -122,11 +111,10 @@ var Game = /** @class */ (function () {
     };
     Game.prototype.init = function () {
         Keyboard.listenForEvents([Keyboard.LEFT, Keyboard.RIGHT, Keyboard.UP, Keyboard.DOWN]);
-        this.camera = Camera(map, 512, 512);
     };
     Game.prototype.tick = function (elapsed) {
         var _this = this;
-        window.requestAnimationFrame(function () { return _this.tick; });
+        window.requestAnimationFrame(function () { return _this.tick(elapsed); });
         // clear previous frame
         this.ctx.clearRect(0, 0, 512, 512);
         var delta = (elapsed - this._previousElapsed) / 1000.0;

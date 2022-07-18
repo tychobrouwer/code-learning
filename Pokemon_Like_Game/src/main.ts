@@ -49,26 +49,36 @@ const map: MapType = {
   }
 }
 
-function Camera(map: MapType, width: number, height: number): void {
-  this.x = 0;
-  this.y = 0;
-  this.width = width;
-  this.height = height;
-  this.maxX = map.cols * map.tsize - width;
-  this.maxY = map.rows * map.tsize - height;
-}
 
-Camera.SPEED = 256; // pixels per second
+class Camera {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+  maxX: number;
+  maxY: number;
+  SPEED: number;
 
-Camera.prototype.move = function (delta: number, dirx: number, diry: number) {
+  constructor(map: MapType, width: number, height: number) {
+    this.x = 0;
+    this.y = 0;
+    this.width = width;
+    this.height = height;
+    this.maxX = map.cols * map.tsize - width;
+    this.maxY = map.rows * map.tsize - height;
+    this.SPEED = 256;
+  }
+
+  move(delta: number, dirx: number, diry: number) {
     // move camera
-    this.x += dirx * Camera.SPEED * delta;
-    this.y += diry * Camera.SPEED * delta;
+    this.x += dirx * this.SPEED * delta;
+    this.y += diry * this.SPEED * delta;
 
     // clamp values
     this.x = Math.max(0, Math.min(this.x, this.maxX));
     this.y = Math.max(0, Math.min(this.y, this.maxY));
-};
+  }
+}
 
 const Keyboard = {
   LEFT: 37,
@@ -113,35 +123,15 @@ const Keyboard = {
   }
 };
 
-// class Loader {
-//   images: any;
-
-//   constructor() {
-//     this.images = {};
-//   }
-
-//   loadImage(key: string, source: string): HTMLImageElement {
-//     const img = new Image();
-
-//     img.src = source;
-//     this.images[key] = img;
-
-//     return img;
-//   }
-
-//   getImage(key: string): HTMLImageElement {
-//     return this.images[key];
-//   }
-// }
-
 class Game {
   ctx: CanvasRenderingContext2D;
   _previousElapsed: number;
   tileAtlas: HTMLImageElement;
-  camera: any;
+  camera: Camera;
 
   constructor() {
     this._previousElapsed = 0;
+    this.camera = new Camera(map, 512, 512);
   }
 
   run(context: CanvasRenderingContext2D) {
@@ -150,7 +140,7 @@ class Game {
     this.loadAssetMap('tiles', 'assets/tiles.png');
     this.init();
 
-    window.requestAnimationFrame(() => this.tick);
+    window.requestAnimationFrame(() => this.tick(0));
   }
 
   loadAssetMap(key: string, source: string) {
@@ -162,12 +152,10 @@ class Game {
 
   init() {
     Keyboard.listenForEvents([Keyboard.LEFT, Keyboard.RIGHT, Keyboard.UP, Keyboard.DOWN]);
-
-    this.camera = Camera(map, 512, 512);
   }
 
   tick(elapsed: number) {
-    window.requestAnimationFrame(() => this.tick);
+    window.requestAnimationFrame(() => this.tick(elapsed));
 
     // clear previous frame
     this.ctx.clearRect(0, 0, 512, 512);

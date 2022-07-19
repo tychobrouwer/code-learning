@@ -29,5 +29,5 @@
 exports.__esModule = true;
 require("../dist/index.css");
 require("../dist/main.js");
-console.log('👋 This message is being logged by "renderer.js", included via webpack');
+// console.log('👋 This message is being logged by "renderer.js", included via webpack');
 //# sourceMappingURL=renderer.js.map

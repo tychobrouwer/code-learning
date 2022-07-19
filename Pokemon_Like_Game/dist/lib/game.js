@@ -5,7 +5,8 @@ var tiles_png_1 = require("../assets/tiles.png");
 var map_1 = require("./map");
 var keyboard_1 = require("./keyboard");
 var camera_1 = require("./camera");
-var character_1 = require("./character");
+var avatar_1 = require("./avatar");
+var pokemon_1 = require("./pokemon");
 var Game = /** @class */ (function () {
     function Game() {
         this._previousElapsed = 0;
@@ -13,9 +14,11 @@ var Game = /** @class */ (function () {
         this.diry = 0;
         this.direction = 0;
         this.animation = 0;
-        this.character = new character_1.Character(map_1.map, 200, 200);
+        this.tileX = 0;
+        this.tileY = 0;
+        this.avatar = new avatar_1.Avatar(map_1.map, 200, 200);
         this.camera = new camera_1.Camera(map_1.map, 384, 256);
-        this.camera.follow(this.character);
+        this.camera.follow(this.avatar);
     }
     Game.prototype.run = function (context) {
         var _this = this;
@@ -34,8 +37,9 @@ var Game = /** @class */ (function () {
     };
     Game.prototype.tick = function (elapsed) {
         var _this = this;
+        var _a;
         window.requestAnimationFrame(function () { return _this.tick(elapsed); });
-        this.ctx.clearRect(0, 0, 384, 256);
+        (_a = this.ctx) === null || _a === void 0 ? void 0 : _a.clearRect(0, 0, 384, 256);
         // let delta = (elapsed - this._previousElapsed) / 1000.0;
         // delta = Math.min(delta, 0.25); // maximum delta of 250 ms
         var delta = 0.01;
@@ -45,14 +49,16 @@ var Game = /** @class */ (function () {
         this.findPokemon();
     };
     Game.prototype.findPokemon = function () {
-        var tileX = Math.floor(this.character.x / map_1.map.tsize);
-        var tileY = Math.floor(this.character.y / map_1.map.tsize);
+        var tileX = Math.floor(this.avatar.x / map_1.map.tsize);
+        var tileY = Math.floor(this.avatar.y / map_1.map.tsize);
         if (tileX !== this.tileX || tileY !== this.tileY) {
             this.tileX = tileX;
             this.tileY = tileY;
             var tile = map_1.map.getTile(0, this.tileX, this.tileY);
-            if (tile === 2 && Math.random() < 0.05) {
-                console.log('Pokemon found!');
+            if (tile === 2 && Math.random() < 0.5) {
+                var foundPokemon = new pokemon_1.Pokemon(1, 'grassland');
+                var pokemon = foundPokemon.getPokemon();
+                console.log(pokemon.name + ' found!');
             }
         }
     };
@@ -71,22 +77,17 @@ var Game = /** @class */ (function () {
         else if (keyboard_1.keyboard.isDown(keyboard_1.keyboard.DOWN)) {
             this.diry = 1;
         }
-        this.character.move(delta, this.dirx, this.diry);
+        this.avatar.move(delta, this.dirx, this.diry);
         this.camera.update();
     };
     Game.prototype.render = function () {
         this._drawLayer(0);
-        this.direction = this.diry === 1 ? 0 : this.dirx === -1 ? 1 : this.diry === -1 ? 2 : this.dirx === 1 ? 3 : this.direction;
-        if (this.diry === 0 && this.dirx === 0) {
-            this.animation = 0;
-        }
-        var characterStart = this.direction * 84 + Math.floor(this.animation / 30) * 28;
-        this.animation = this.animation < 87 ? this.animation + 1 : 0;
-        this.ctx.drawImage(this.character.image, characterStart, 0, 28, 40, this.character.screenX - this.character.width / 2, this.character.screenY - this.character.height / 2, 28, 40);
+        this._drawPlayer(false);
         this._drawLayer(1);
-        this.ctx.drawImage(this.character.image, characterStart, 0, 28, 30, this.character.screenX - this.character.width / 2, this.character.screenY - this.character.height / 2, 28, 30);
+        this._drawPlayer(true);
     };
     Game.prototype._drawLayer = function (layer) {
+        var _a;
         var startCol = Math.floor(this.camera.x / map_1.map.tsize);
         var endCol = startCol + (this.camera.width / map_1.map.tsize);
         var startRow = Math.floor(this.camera.y / map_1.map.tsize);
@@ -98,11 +99,24 @@ var Game = /** @class */ (function () {
                 var tile = map_1.map.getTile(layer, c, r);
                 var x = (c - startCol) * map_1.map.tsize + offsetX;
                 var y = (r - startRow) * map_1.map.tsize + offsetY;
-                if (tile !== 0) {
-                    this.ctx.drawImage(this.tileAtlas, (tile - 1) % 16 * map_1.map.tsize, Math.floor((tile - 1) / 16) * map_1.map.tsize, map_1.map.tsize, map_1.map.tsize, Math.round(x), Math.round(y), map_1.map.tsize, map_1.map.tsize);
+                if (tile !== 0 && this.tileAtlas) {
+                    (_a = this.ctx) === null || _a === void 0 ? void 0 : _a.drawImage(this.tileAtlas, (tile - 1) % 16 * map_1.map.tsize, Math.floor((tile - 1) / 16) * map_1.map.tsize, map_1.map.tsize, map_1.map.tsize, Math.round(x), Math.round(y), map_1.map.tsize, map_1.map.tsize);
                 }
             }
         }
+    };
+    Game.prototype._drawPlayer = function (onlyDrawTop) {
+        var _a;
+        if (!onlyDrawTop) {
+            this.direction = this.diry === 1 ? 0 : this.dirx === -1 ? 1 : this.diry === -1 ? 2 : this.dirx === 1 ? 3 : this.direction;
+            if (this.diry === 0 && this.dirx === 0) {
+                this.animation = 0;
+            }
+            this.animation = this.animation < 87 ? this.animation + 1 : 0;
+        }
+        var pixelHeight = onlyDrawTop ? 30 : 40;
+        var characterStart = this.direction * 84 + Math.floor(this.animation / 30) * 28;
+        (_a = this.ctx) === null || _a === void 0 ? void 0 : _a.drawImage(this.avatar.image, characterStart, 0, 28, pixelHeight, this.avatar.screenX - this.avatar.width / 2, this.avatar.screenY - this.avatar.height / 2, 28, pixelHeight);
     };
     return Game;
 }());

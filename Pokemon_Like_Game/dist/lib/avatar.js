@@ -48,4 +48,4 @@ var Avatar = /** @class */ (function () {
     return Avatar;
 }());
 exports.Avatar = Avatar;
-//# sourceMappingURL=character.js.map
+//# sourceMappingURL=avatar.js.map

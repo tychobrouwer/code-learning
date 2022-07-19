@@ -60,7 +60,7 @@ export const map: MapType = {
     const col = Math.floor(x / this.tsize);
     const row = Math.floor(y / this.tsize);
 
-    return this.layers.reduce(function (res: boolean, layer: number, index: number) {
+    return this.layers.reduce(function (this: MapType, res: boolean, layer: number[], index: number) {
       const tile = this.getTile(index, col, row);
 
       const isSolid = tile === 10 || tile === 11 || tile === 12 || tile === 13;
@@ -71,7 +71,6 @@ export const map: MapType = {
         ((dirY === -1 || dirX === -1) && tile === 5) ||
         ((dirY === 1 || dirX === 1) && tile === 9) ||
         ((dirY === 1 || dirX === 1) && tile === 8);
-
 
       return res || isSolid || oneWay;
     }.bind(this), false);

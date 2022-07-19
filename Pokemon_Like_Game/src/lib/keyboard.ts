@@ -1,18 +1,23 @@
-import { Keyboard } from './types';
+import { Keyboard, Keys } from './types';
 
 export const keyboard: Keyboard = {
   LEFT: 'a',
   RIGHT: 'd',
   UP: 'w',
   DOWN: 's',
-  _keys: {},
+  _keys: {
+    a: false,
+    d: false,
+    w: false,
+    s: false,
+  },
 
   listenForEvents: function(keys: Array<string>) {
     window.addEventListener('keydown', this._onKeyDown.bind(this));
     window.addEventListener('keyup', this._onKeyUp.bind(this));
 
-    keys.forEach(function (key: string) {
-      this._keys[key] = false;
+    keys.forEach(function (this: Keyboard, keyCode: string) {
+      this._keys[keyCode as keyof Keys] = false;
     }.bind(this));
   },
 
@@ -21,7 +26,7 @@ export const keyboard: Keyboard = {
 
     if (keyCode in this._keys) {
       event.preventDefault();
-      this._keys[keyCode] = true;
+      this._keys[keyCode as keyof Keys] = true;
     }
   },
 
@@ -30,7 +35,7 @@ export const keyboard: Keyboard = {
 
     if (keyCode in this._keys) {
       event.preventDefault();
-      this._keys[keyCode] = false;
+      this._keys[keyCode as keyof Keys] = false;
     }
   },
 
@@ -39,6 +44,6 @@ export const keyboard: Keyboard = {
       throw new Error('Keycode ' + keyCode + ' is not being listened to');
     }
 
-    return this._keys[keyCode];
+    return this._keys[keyCode as keyof Keys];
   }
 };

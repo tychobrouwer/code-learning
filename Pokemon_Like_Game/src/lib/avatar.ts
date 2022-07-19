@@ -1,26 +1,27 @@
 import characterMap from '../assets/character.png';
 import { MapType } from './types';
 
-export class Character {
+export class Avatar {
   map: MapType;
   x: number;
   y: number;
-  width: number;
-  height: number;
+  width = 28;
+  height = 40;
   maxX: number;
   maxY: number;
-  SPEED: number;
-  screenX: number;
-  screenY: number;
+  SPEED = 64;
+  screenX = 0;
+  screenY = 0;
   image: HTMLImageElement;
 
   constructor(map: MapType, x: number, y: number) {
     this.map = map;
     this.x = x;
     this.y = y;
-    this.width = 28;
-    this.height = 40;
-    this.SPEED = 64;
+
+    this.maxX = this.map.cols * this.map.tsize;
+    this.maxY = this.map.rows * this.map.tsize;
+
 
     this.image = new Image();
     this.image.src = characterMap;
@@ -35,11 +36,9 @@ export class Character {
 
     this._collide(dirx, diry, x, y);
 
-    const maxX = this.map.cols * this.map.tsize;
-    const maxY = this.map.rows * this.map.tsize;
 
-    this.x = Math.max(0, Math.min(this.x, maxX));
-    this.y = Math.max(0, Math.min(this.y, maxY));
+    this.x = Math.max(0, Math.min(this.x, this.maxX));
+    this.y = Math.max(0, Math.min(this.y, this.maxY));
   }
 
   _collide(dirx: number, diry: number, x: number, y: number): void {

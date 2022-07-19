@@ -16,9 +16,16 @@ export type Keyboard = {
   RIGHT: string;
   UP: string;
   DOWN: string;
-  _keys: object
+  _keys: Keys;
   listenForEvents: (keys: Array<string>) => void;
   _onKeyDown: (event: KeyboardEvent) => void;
   _onKeyUp: (event: KeyboardEvent) => void;
   isDown: (keyCode: string) => boolean;
+}
+
+export type Keys = {
+  a: boolean;
+  d: boolean;
+  w: boolean;
+  s: boolean;
 }

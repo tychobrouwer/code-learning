@@ -16,19 +16,21 @@ var Camera = /** @class */ (function () {
         sprite.screenY = 0;
     };
     Camera.prototype.update = function () {
-        this.following.screenX = this.width / 2;
-        this.following.screenY = this.height / 2;
-        this.x = this.following.x - this.width / 2;
-        this.y = this.following.y - this.height / 2;
-        this.x = Math.max(0, Math.min(this.x, this.maxX));
-        this.y = Math.max(0, Math.min(this.y, this.maxY));
-        if (this.following.x < this.width / 2 ||
-            this.following.x > this.maxX + this.width / 2) {
-            this.following.screenX = this.following.x - this.x;
-        }
-        if (this.following.y < this.height / 2 ||
-            this.following.y > this.maxY + this.height / 2) {
-            this.following.screenY = this.following.y - this.y;
+        if (this.following) {
+            this.following.screenX = this.width / 2;
+            this.following.screenY = this.height / 2;
+            this.x = this.following.x - this.width / 2;
+            this.y = this.following.y - this.height / 2;
+            this.x = Math.max(0, Math.min(this.x, this.maxX));
+            this.y = Math.max(0, Math.min(this.y, this.maxY));
+            if (this.following.x < this.width / 2 ||
+                this.following.x > this.maxX + this.width / 2) {
+                this.following.screenX = this.following.x - this.x;
+            }
+            if (this.following.y < this.height / 2 ||
+                this.following.y > this.maxY + this.height / 2) {
+                this.following.screenY = this.following.y - this.y;
+            }
         }
     };
     return Camera;

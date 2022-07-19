@@ -6,12 +6,17 @@ exports.keyboard = {
     RIGHT: 'd',
     UP: 'w',
     DOWN: 's',
-    _keys: {},
+    _keys: {
+        a: false,
+        d: false,
+        w: false,
+        s: false
+    },
     listenForEvents: function (keys) {
         window.addEventListener('keydown', this._onKeyDown.bind(this));
         window.addEventListener('keyup', this._onKeyUp.bind(this));
-        keys.forEach(function (key) {
-            this._keys[key] = false;
+        keys.forEach(function (keyCode) {
+            this._keys[keyCode] = false;
         }.bind(this));
     },
     _onKeyDown: function (event) {

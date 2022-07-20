@@ -1,21 +1,21 @@
 "use strict";
+// import characterMap from '../assets/character.png';
 exports.__esModule = true;
 exports.Avatar = void 0;
-var character_png_1 = require("../assets/character.png");
 var Avatar = /** @class */ (function () {
-    function Avatar(map, x, y) {
-        this.width = 28;
-        this.height = 40;
+    function Avatar(loader, map, x, y) {
         this.SPEED = 64;
+        this.AVATAR_WIDTH = 28;
+        this.AVATAR_HEIGHT = 40;
         this.screenX = 0;
         this.screenY = 0;
+        this.loader = loader;
         this.map = map;
         this.x = x;
         this.y = y;
-        this.maxX = this.map.cols * this.map.tsize;
-        this.maxY = this.map.rows * this.map.tsize;
-        this.image = new Image();
-        this.image.src = character_png_1["default"];
+        this.maxX = this.map.COLS * this.map.TSIZE;
+        this.maxY = this.map.ROWS * this.map.TSIZE;
+        this.image = this.loader.getImage('avatar');
     }
     Avatar.prototype.move = function (delta, dirx, diry) {
         var x = this.x;
@@ -27,14 +27,18 @@ var Avatar = /** @class */ (function () {
         this.y = Math.max(0, Math.min(this.y, this.maxY));
     };
     Avatar.prototype._collide = function (dirx, diry, x, y) {
-        var left = this.x - this.width / 2;
-        var right = this.x + this.width / 2 - 1;
-        var top = this.y - this.height / 2;
-        var bottom = this.y + this.height / 2 - 1;
-        var collision = this.map.isSolidTileAtXY(left, top, dirx, diry) ||
-            this.map.isSolidTileAtXY(right, top, dirx, diry) ||
+        var left = this.x - this.AVATAR_WIDTH / 2;
+        var right = this.x + this.AVATAR_WIDTH / 2 - 1;
+        var bottom = this.y + this.AVATAR_HEIGHT / 2 - 1;
+        var middleY = (this.y + bottom) / 2;
+        var collision = this.map.isSolidTileAtXY(left, this.y, dirx, diry) ||
+            this.map.isSolidTileAtXY(right, this.y, dirx, diry) ||
+            this.map.isSolidTileAtXY(left, middleY, dirx, diry) ||
+            this.map.isSolidTileAtXY(right, middleY, dirx, diry) ||
             this.map.isSolidTileAtXY(right, bottom, dirx, diry) ||
-            this.map.isSolidTileAtXY(left, bottom, dirx, diry);
+            this.map.isSolidTileAtXY(left, bottom, dirx, diry) ||
+            this.map.isSolidTileAtXY(this.x, this.y, dirx, diry) ||
+            this.map.isSolidTileAtXY(this.x, bottom, dirx, diry);
         if (!collision) {
             return;
         }

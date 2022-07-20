@@ -1,10 +1,15 @@
 import { Game } from './lib/game'
 
 window.onload = function () {
-  const context = (document.getElementById('demo') as HTMLCanvasElement).getContext('2d');
-  const game = new Game;
+  const canvas = (document.getElementById('demo') as HTMLCanvasElement);
+  const context = canvas.getContext('2d');
 
   if (context) {
-    game.run(context);
+    const game = new Game(context);
+
+    // game.run(context);
+
+    canvas.height = game.GAME_HEIGHT;
+    canvas.width = game.GAME_WIDTH;
   }
 };

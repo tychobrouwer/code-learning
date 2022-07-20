@@ -5,6 +5,7 @@ export const keyboard: Keyboard = {
   RIGHT: 'd',
   UP: 'w',
   DOWN: 's',
+  
   _keys: {
     a: false,
     d: false,
@@ -12,7 +13,7 @@ export const keyboard: Keyboard = {
     s: false,
   },
 
-  listenForEvents: function(keys: Array<string>) {
+  listenForEvents: function(keys: string[]) {
     window.addEventListener('keydown', this._onKeyDown.bind(this));
     window.addEventListener('keyup', this._onKeyUp.bind(this));
 

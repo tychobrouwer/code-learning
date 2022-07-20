@@ -8,13 +8,13 @@ export class Camera {
   height: number;
   maxX: number;
   maxY: number;
-  following: Avatar | undefined;
+  following?: Avatar;
 
   constructor(map: MapType, width: number, height: number) {
     this.width = width;
     this.height = height;
-    this.maxX = map.cols * map.tsize - width;
-    this.maxY = map.rows * map.tsize - height;
+    this.maxX = map.COLS * map.TSIZE - width;
+    this.maxY = map.ROWS * map.TSIZE - height;
   }
 
   follow(sprite: Avatar) {

@@ -9,7 +9,7 @@ if (require('electron-squirrel-startup')) {
 var createWindow = function () {
     // Create the browser window.
     var mainWindow = new electron_1.BrowserWindow({
-        height: 600,
+        height: 750,
         width: 1200,
         webPreferences: {
             preload: MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY

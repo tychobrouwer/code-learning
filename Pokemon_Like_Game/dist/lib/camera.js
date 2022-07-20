@@ -7,8 +7,8 @@ var Camera = /** @class */ (function () {
         this.y = 0;
         this.width = width;
         this.height = height;
-        this.maxX = map.cols * map.tsize - width;
-        this.maxY = map.rows * map.tsize - height;
+        this.maxX = map.COLS * map.TSIZE - width;
+        this.maxY = map.ROWS * map.TSIZE - height;
     }
     Camera.prototype.follow = function (sprite) {
         this.following = sprite;

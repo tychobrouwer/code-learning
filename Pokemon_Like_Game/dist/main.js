@@ -2,10 +2,13 @@
 exports.__esModule = true;
 var game_1 = require("./lib/game");
 window.onload = function () {
-    var context = document.getElementById('demo').getContext('2d');
-    var game = new game_1.Game;
+    var canvas = document.getElementById('demo');
+    var context = canvas.getContext('2d');
     if (context) {
-        game.run(context);
+        var game = new game_1.Game(context);
+        // game.run(context);
+        canvas.height = game.GAME_HEIGHT;
+        canvas.width = game.GAME_WIDTH;
     }
 };
 //# sourceMappingURL=main.js.map

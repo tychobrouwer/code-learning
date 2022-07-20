@@ -2,9 +2,9 @@
 exports.__esModule = true;
 exports.map = void 0;
 exports.map = {
-    cols: 24,
-    rows: 21,
-    tsize: 32,
+    COLS: 24,
+    ROWS: 21,
+    TSIZE: 32,
     layers: [[
             10, 11, 10, 11, 10, 11, 10, 11, 10, 11, 1, 1, 1, 1, 12, 13, 12, 13, 12, 13, 12, 13, 12, 13,
             12, 13, 12, 13, 12, 13, 12, 13, 12, 13, 1, 1, 1, 1, 10, 11, 10, 11, 10, 11, 10, 11, 10, 11,
@@ -51,34 +51,39 @@ exports.map = {
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         ]],
     getTile: function (layer, col, row) {
-        return this.layers[layer][row * exports.map.cols + col];
+        return this.layers[layer][row * exports.map.COLS + col];
     },
     isSolidTileAtXY: function (x, y, dirX, dirY) {
-        var col = Math.floor(x / this.tsize);
-        var row = Math.floor(y / this.tsize);
+        var col = Math.floor(x / this.TSIZE);
+        var row = Math.floor(y / this.TSIZE);
         return this.layers.reduce(function (res, layer, index) {
             var tile = this.getTile(index, col, row);
             var isSolid = tile === 10 || tile === 11 || tile === 12 || tile === 13;
-            var oneWay = (dirY === -1 && (tile === 3 || tile === 4)) ||
-                ((dirY === -1 || dirX === 1 || dirX === -1) && tile === 7) ||
-                ((dirY === -1 || dirX === -1) && tile === 6) ||
-                ((dirY === -1 || dirX === -1) && tile === 5) ||
-                ((dirY === 1 || dirX === 1) && tile === 9) ||
-                ((dirY === 1 || dirX === 1) && tile === 8);
+            var oneWay = ((tile === 3) && (row * this.TSIZE + 16) < y && (dirY === -1 || dirX !== 0)) ||
+                (tile === 4 && (row * this.TSIZE + 16) < y && (dirY === -1 || dirX === -1)) ||
+                (tile === 7 && (row * this.TSIZE + 16) < y && (dirY === -1 || dirX === 1)) ||
+                (tile === 5 && (row * this.TSIZE + 16) < y && (col * this.TSIZE + 16) < x) ||
+                (tile === 8 && (row * this.TSIZE + 16) < y && (col * this.TSIZE + 16) > x) ||
+                (tile === 6 && (((row * this.TSIZE + 16) < y && (dirY === -1 || dirX !== 0)) ||
+                    ((col * this.TSIZE + 16) < x && (dirX === -1 || dirY !== 0)))) ||
+                (tile === 9 && ((((row * this.TSIZE + 16) < y && (dirY === -1 || dirX !== 0))) ||
+                    ((col * this.TSIZE + 16) > x && (dirX === 1 || dirY !== 0))));
             return res || isSolid || oneWay;
         }.bind(this), false);
     },
+    // collisionTileAtBox: function(leftBoundry: number, rightBoundry: number, topBoundry: number, bottomBoundry: number) {
+    // }
     getCol: function (x) {
-        return Math.floor(x / this.tsize);
+        return Math.floor(x / this.TSIZE);
     },
     getRow: function (y) {
-        return Math.floor(y / this.tsize);
+        return Math.floor(y / this.TSIZE);
     },
     getX: function (col) {
-        return col * this.tsize;
+        return col * this.TSIZE;
     },
     getY: function (row) {
-        return row * this.tsize;
+        return row * this.TSIZE;
     }
 };
 //# sourceMappingURL=map.js.map

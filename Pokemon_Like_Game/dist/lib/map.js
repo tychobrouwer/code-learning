@@ -1,5 +1,5 @@
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.map = void 0;
 exports.map = {
     COLS: 24,
@@ -54,12 +54,12 @@ exports.map = {
         return this.layers[layer][row * exports.map.COLS + col];
     },
     isSolidTileAtXY: function (x, y, dirX, dirY) {
-        var col = Math.floor(x / this.TSIZE);
-        var row = Math.floor(y / this.TSIZE);
+        const col = Math.floor(x / this.TSIZE);
+        const row = Math.floor(y / this.TSIZE);
         return this.layers.reduce(function (res, layer, index) {
-            var tile = this.getTile(index, col, row);
-            var isSolid = tile === 10 || tile === 11 || tile === 12 || tile === 13;
-            var oneWay = ((tile === 3) && (row * this.TSIZE + 16) < y && (dirY === -1 || dirX !== 0)) ||
+            const tile = this.getTile(index, col, row);
+            const isSolid = tile === 10 || tile === 11 || tile === 12 || tile === 13;
+            const oneWay = ((tile === 3) && (row * this.TSIZE + 16) < y && (dirY === -1 || dirX !== 0)) ||
                 (tile === 4 && (row * this.TSIZE + 16) < y && (dirY === -1 || dirX === -1)) ||
                 (tile === 7 && (row * this.TSIZE + 16) < y && (dirY === -1 || dirX === 1)) ||
                 (tile === 5 && (row * this.TSIZE + 16) < y && (col * this.TSIZE + 16) < x) ||

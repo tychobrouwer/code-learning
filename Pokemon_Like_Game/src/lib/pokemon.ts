@@ -112,6 +112,13 @@ const POKEMON_INDEX: pokemonIndexType = {
 export class PokemonBattle {
   loader: Loader;
 
+  ASSETS_BATTLE_HEIGHT = 1440;
+  ASSETS_BATTLE_WIDTH = 1440;
+  ASSETS_POKEMON_HEIGHT = 7360;
+  ASSETS_POKEMON_WIDTH = 1984;
+  ASSETS_FONT_HEIGHT = 52;
+  ASSETS_FONT_WIDTH = 470;
+
   GAME_WIDTH;
   GAME_HEIGHT;
 
@@ -119,9 +126,9 @@ export class PokemonBattle {
   environment: number;
   route: number;
   ctx: CanvasRenderingContext2D;
-  battleAssets?: HTMLImageElement;
-  pokemonGeneration1?: HTMLImageElement;
-  font?: HTMLImageElement;
+  battleAssets!: HTMLCanvasElement;
+  pokemonGeneration1!: HTMLCanvasElement;
+  font!: HTMLCanvasElement;
 
   constructor(context: CanvasRenderingContext2D, loader: Loader, GAME_WIDTH: number, GAME_HEIGHT: number, route: number, environment: number) {
     this.loader = loader;
@@ -147,9 +154,9 @@ export class PokemonBattle {
       }
     }
 
-    this.battleAssets = this.loader.getImage('battleAssets');
-    this.pokemonGeneration1 = this.loader.getImage('pokemonGeneration1');
-    this.font = this.loader.getImage('font');
+    this.battleAssets = this.loader.loadImageToCanvas('battleAssets', this.ASSETS_BATTLE_HEIGHT, this.ASSETS_BATTLE_WIDTH);
+    this.pokemonGeneration1 = this.loader.loadImageToCanvas('pokemonGeneration1', this.ASSETS_POKEMON_HEIGHT, this.ASSETS_POKEMON_WIDTH);
+    this.font = this.loader.loadImageToCanvas('font', this.ASSETS_POKEMON_HEIGHT, this.ASSETS_POKEMON_WIDTH);
     
     return candinates[items[Math.floor(Math.random() * items.length)]];
   }
@@ -174,12 +181,29 @@ export class PokemonBattle {
       return await Promise.resolve(battleResult);
   }
 
+  writeTextToBattleBox(text: string) {
+    return new Promise((resolve) => {
+      for (let i = 1; i < text.length + 1; i++) {
+        const textToDisplay =  text.slice(0, i);
+        setTimeout(() => {
+          this.drawText(textToDisplay, 32, 244);
+        }, 20 * i);
+      }
+
+      setTimeout(() => {
+        this.drawBattleBox();
+
+        resolve(true);
+      }, 20 * text.length + 1500);
+    });
+  }
+
   drawBattleScene() {
     if (this.battleAssets) {
       this.ctx.drawImage(
         this.battleAssets,
         this.environment % 3 * this.GAME_WIDTH,
-        Math.floor((this.environment) / 3) * 224,
+        ((0.5 + this.environment / 3) << 0) * 224,
         this.GAME_WIDTH,
         224,
         0,
@@ -216,7 +240,7 @@ export class PokemonBattle {
             this.ctx.drawImage(
               this.battleAssets,
               this.environment % 3 * 256,
-              Math.floor((this.environment) / 3) * 64 + 992,
+              ((0.5 + this.environment / 3) << 0) * 64 + 992,
               256,
               64,
               i - 256,
@@ -228,7 +252,7 @@ export class PokemonBattle {
             this.ctx.drawImage(
               this.battleAssets,
               this.environment % 3 * 256,
-              Math.floor((this.environment) / 3) * 64 + 992,
+              ((0.5 + this.environment / 3) << 0) * 64 + 992,
               256,
               64,
               this.GAME_WIDTH - i,
@@ -248,26 +272,8 @@ export class PokemonBattle {
     });
   }
 
-  writeTextToBattleBox(text: string) {
-    return new Promise((resolve) => {
-      for (let i = 1; i < text.length + 1; i++) {
-        const textToDisplay =  text.slice(0, i);
-        setTimeout(() => {
-          this.drawText(textToDisplay, 32, 244);
-        }, 20 * i);
-      }
-
-      setTimeout(() => {
-        this.drawBattleBox();
-
-        resolve(true);
-      }, 20 * text.length + 1500);
-    });
-  }
-
   drawText(text: string, posX: number, posY: number) {
     for (let i = 0; i < text.length; i++) {
-
       const positions = {
         posX: FONT_CHARACTERS.indexOf(text[i]) % 39 * 12,
         posY: Math.floor(FONT_CHARACTERS.indexOf(text[i]) / 39) * 26,

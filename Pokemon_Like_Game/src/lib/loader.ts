@@ -33,4 +33,20 @@ export class Loader {
       return this.images[key];
     }
   }
+
+  loadImageToCanvas(asset: string, assetHeight: number, assetWidth: number): HTMLCanvasElement {
+    const assetCanvas = document.createElement('canvas');
+
+    assetCanvas.height = assetHeight;
+    assetCanvas.width = assetWidth;
+
+    const tileAtlasCtx = assetCanvas.getContext('2d');
+    const tileAtlasPreloader = this.getImage(asset);
+
+    if (tileAtlasCtx && tileAtlasPreloader) {
+      tileAtlasCtx.drawImage(tileAtlasPreloader, 0, 0);
+    }
+    
+    return assetCanvas;
+  }
 }

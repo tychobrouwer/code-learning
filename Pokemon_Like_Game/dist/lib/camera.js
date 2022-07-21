@@ -1,8 +1,8 @@
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.Camera = void 0;
-var Camera = /** @class */ (function () {
-    function Camera(map, width, height) {
+class Camera {
+    constructor(map, width, height) {
         this.x = 0;
         this.y = 0;
         this.width = width;
@@ -10,12 +10,12 @@ var Camera = /** @class */ (function () {
         this.maxX = map.COLS * map.TSIZE - width;
         this.maxY = map.ROWS * map.TSIZE - height;
     }
-    Camera.prototype.follow = function (sprite) {
+    follow(sprite) {
         this.following = sprite;
         sprite.screenX = 0;
         sprite.screenY = 0;
-    };
-    Camera.prototype.update = function () {
+    }
+    update() {
         if (this.following) {
             this.following.screenX = this.width / 2;
             this.following.screenY = this.height / 2;
@@ -32,8 +32,7 @@ var Camera = /** @class */ (function () {
                 this.following.screenY = this.following.y - this.y;
             }
         }
-    };
-    return Camera;
-}());
+    }
+}
 exports.Camera = Camera;
 //# sourceMappingURL=camera.js.map

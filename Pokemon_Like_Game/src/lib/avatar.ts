@@ -4,9 +4,11 @@ import { MapType } from './types';
 import { Loader } from './loader' 
 
 export class Avatar {
-  SPEED = 64;
-  AVATAR_WIDTH = 28;
+  SPEED = 128;
   AVATAR_HEIGHT = 40;
+  AVATAR_WIDTH = 28;
+  ASSETS_AVATAR_HEIGHT = 256;
+  ASSETS_AVATAR_WIDTH = 512;
 
   map: MapType;
   loader: Loader;
@@ -17,18 +19,17 @@ export class Avatar {
   maxY: number;
   screenX = 0;
   screenY = 0;
-  image?: HTMLImageElement;
+  avatarAsset: HTMLCanvasElement;
 
-  constructor(loader: Loader, map: MapType, x: number, y: number) {
+  constructor(loader: Loader, map: MapType, startX: number, startY: number) {
     this.loader = loader;
-
     this.map = map;
-    this.x = x;
-    this.y = y;
+    this.x = startX;
+    this.y = startY;
+
     this.maxX = this.map.COLS * this.map.TSIZE;
     this.maxY = this.map.ROWS * this.map.TSIZE;
-
-    this.image = this.loader.getImage('avatar');
+    this.avatarAsset = this.loader.loadImageToCanvas('avatar', this.ASSETS_AVATAR_HEIGHT, this.ASSETS_AVATAR_WIDTH);
   }
 
   move(delta: number, dirx: number, diry: number) {

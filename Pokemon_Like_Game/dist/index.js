@@ -1,19 +1,19 @@
 "use strict";
-exports.__esModule = true;
-var electron_1 = require("electron");
+Object.defineProperty(exports, "__esModule", { value: true });
+const electron_1 = require("electron");
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {
     // eslint-disable-line global-require
     electron_1.app.quit();
 }
-var createWindow = function () {
+const createWindow = () => {
     // Create the browser window.
-    var mainWindow = new electron_1.BrowserWindow({
+    const mainWindow = new electron_1.BrowserWindow({
         height: 750,
         width: 1200,
         webPreferences: {
-            preload: MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY
-        }
+            preload: MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY,
+        },
     });
     mainWindow.setAutoHideMenuBar(true);
     mainWindow.setMenuBarVisibility(false);
@@ -29,12 +29,12 @@ electron_1.app.on('ready', createWindow);
 // Quit when all windows are closed, except on macOS. There, it's common
 // for applications and their menu bar to stay active until the user quits
 // explicitly with Cmd + Q.
-electron_1.app.on('window-all-closed', function () {
+electron_1.app.on('window-all-closed', () => {
     if (process.platform !== 'darwin') {
         electron_1.app.quit();
     }
 });
-electron_1.app.on('activate', function () {
+electron_1.app.on('activate', () => {
     // On OS X it's common to re-create a window in the app when the
     // dock icon is clicked and there are no other windows open.
     if (electron_1.BrowserWindow.getAllWindows().length === 0) {

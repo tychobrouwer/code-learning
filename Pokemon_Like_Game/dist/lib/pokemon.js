@@ -8,36 +8,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __generator = (this && this.__generator) || function (thisArg, body) {
-    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
-    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
-    function verb(n) { return function (v) { return step([n, v]); }; }
-    function step(op) {
-        if (f) throw new TypeError("Generator is already executing.");
-        while (_) try {
-            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
-            if (y = 0, t) op = [op[0] & 2, t.value];
-            switch (op[0]) {
-                case 0: case 1: t = op; break;
-                case 4: _.label++; return { value: op[1], done: false };
-                case 5: _.label++; y = op[1]; op = [0]; continue;
-                case 7: op = _.ops.pop(); _.trys.pop(); continue;
-                default:
-                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
-                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
-                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
-                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
-                    if (t[2]) _.ops.pop();
-                    _.trys.pop(); continue;
-            }
-            op = body.call(thisArg, _);
-        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
-        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
-    }
-};
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.PokemonBattle = void 0;
-var FONT_CHARACTERS = [
+const FONT_CHARACTERS = [
     'A',
     'B',
     'C',
@@ -116,7 +89,7 @@ var FONT_CHARACTERS = [
     '‘',
     '’',
 ];
-var POKEMON_INDEX = {
+const POKEMON_INDEX = {
     0: {
         0: {
             zigzagoon: {
@@ -143,8 +116,14 @@ var POKEMON_INDEX = {
         }
     }
 };
-var PokemonBattle = /** @class */ (function () {
-    function PokemonBattle(context, loader, GAME_WIDTH, GAME_HEIGHT, route, environment) {
+class PokemonBattle {
+    constructor(context, loader, GAME_WIDTH, GAME_HEIGHT, route, environment) {
+        this.ASSETS_BATTLE_HEIGHT = 1440;
+        this.ASSETS_BATTLE_WIDTH = 1440;
+        this.ASSETS_POKEMON_HEIGHT = 7360;
+        this.ASSETS_POKEMON_WIDTH = 1984;
+        this.ASSETS_FONT_HEIGHT = 52;
+        this.ASSETS_FONT_WIDTH = 470;
         this.loader = loader;
         this.GAME_WIDTH = GAME_WIDTH;
         this.GAME_HEIGHT = GAME_HEIGHT;
@@ -153,104 +132,82 @@ var PokemonBattle = /** @class */ (function () {
         this.ctx = context;
         this.pokemon = this.init();
     }
-    PokemonBattle.prototype.init = function () {
-        var candinates = POKEMON_INDEX[this.route][this.environment];
-        var items = [];
-        for (var _i = 0, _a = Object.keys(candinates); _i < _a.length; _i++) {
-            var pokemon = _a[_i];
-            for (var i = 1; i <= candinates[pokemon].encounterRate; i++) {
+    init() {
+        const candinates = POKEMON_INDEX[this.route][this.environment];
+        const items = [];
+        for (const pokemon of Object.keys(candinates)) {
+            for (let i = 1; i <= candinates[pokemon].encounterRate; i++) {
                 items.push(pokemon);
             }
         }
-        this.battleAssets = this.loader.getImage('battleAssets');
-        this.pokemonGeneration1 = this.loader.getImage('pokemonGeneration1');
-        this.font = this.loader.getImage('font');
+        this.battleAssets = this.loader.loadImageToCanvas('battleAssets', this.ASSETS_BATTLE_HEIGHT, this.ASSETS_BATTLE_WIDTH);
+        this.pokemonGeneration1 = this.loader.loadImageToCanvas('pokemonGeneration1', this.ASSETS_POKEMON_HEIGHT, this.ASSETS_POKEMON_WIDTH);
+        this.font = this.loader.loadImageToCanvas('font', this.ASSETS_POKEMON_HEIGHT, this.ASSETS_POKEMON_WIDTH);
         return candinates[items[Math.floor(Math.random() * items.length)]];
-    };
-    PokemonBattle.prototype.getPokemon = function () {
+    }
+    getPokemon() {
         return this.pokemon;
-    };
-    PokemonBattle.prototype.battle = function () {
-        return __awaiter(this, void 0, void 0, function () {
-            var playerPokemon, battleResult;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        playerPokemon = 'playerPokemon';
-                        this.drawBattleScene();
-                        this.drawBattleBox();
-                        return [4 /*yield*/, this.drawSlidePokemonIn()];
-                    case 1:
-                        _a.sent();
-                        return [4 /*yield*/, this.writeTextToBattleBox('Wild ' + this.pokemon.name.toUpperCase() + ' appeared!|')];
-                    case 2:
-                        _a.sent();
-                        return [4 /*yield*/, this.writeTextToBattleBox('GO! ' + playerPokemon + '!')];
-                    case 3:
-                        _a.sent();
-                        battleResult = true;
-                        return [4 /*yield*/, Promise.resolve(battleResult)];
-                    case 4: return [2 /*return*/, _a.sent()];
-                }
-            });
+    }
+    battle() {
+        return __awaiter(this, void 0, void 0, function* () {
+            const playerPokemon = 'playerPokemon';
+            this.drawBattleScene();
+            this.drawBattleBox();
+            yield this.drawSlidePokemonIn();
+            yield this.writeTextToBattleBox('Wild ' + this.pokemon.name.toUpperCase() + ' appeared!|');
+            yield this.writeTextToBattleBox('GO! ' + playerPokemon + '!');
+            const battleResult = true;
+            return yield Promise.resolve(battleResult);
         });
-    };
-    PokemonBattle.prototype.drawBattleScene = function () {
-        if (this.battleAssets) {
-            this.ctx.drawImage(this.battleAssets, this.environment % 3 * this.GAME_WIDTH, Math.floor((this.environment) / 3) * 224, this.GAME_WIDTH, 224, 0, 0, this.GAME_WIDTH, 224);
-        }
-    };
-    PokemonBattle.prototype.drawBattleBox = function () {
-        if (this.battleAssets) {
-            this.ctx.drawImage(this.battleAssets, 0, 896, this.GAME_WIDTH, 96, 0, 224, this.GAME_WIDTH, 96);
-        }
-    };
-    PokemonBattle.prototype.drawSlidePokemonIn = function () {
-        var _this = this;
-        return new Promise(function (resolve) {
-            var _loop_1 = function (i) {
-                setTimeout(function () {
-                    _this.drawBattleScene();
-                    if (_this.battleAssets) {
-                        _this.ctx.drawImage(_this.battleAssets, _this.environment % 3 * 256, Math.floor((_this.environment) / 3) * 64 + 992, 256, 64, i - 256, 96, 256, 64);
-                        _this.ctx.drawImage(_this.battleAssets, _this.environment % 3 * 256, Math.floor((_this.environment) / 3) * 64 + 992, 256, 64, _this.GAME_WIDTH - i, 200, 256, 64);
-                    }
-                    _this.drawBattleBox();
-                }, 2 * i);
-            };
-            for (var i = 0; i < _this.GAME_WIDTH + 1; i++) {
-                _loop_1(i);
-            }
-            setTimeout(function () {
-                resolve(true);
-            }, 2 * _this.GAME_WIDTH + 500);
-        });
-    };
-    PokemonBattle.prototype.writeTextToBattleBox = function (text) {
-        var _this = this;
-        return new Promise(function (resolve) {
-            var _loop_2 = function (i) {
-                var textToDisplay = text.slice(0, i);
-                setTimeout(function () {
-                    _this.drawText(textToDisplay, 32, 244);
+    }
+    writeTextToBattleBox(text) {
+        return new Promise((resolve) => {
+            for (let i = 1; i < text.length + 1; i++) {
+                const textToDisplay = text.slice(0, i);
+                setTimeout(() => {
+                    this.drawText(textToDisplay, 32, 244);
                 }, 20 * i);
-            };
-            for (var i = 1; i < text.length + 1; i++) {
-                _loop_2(i);
             }
-            setTimeout(function () {
-                _this.drawBattleBox();
+            setTimeout(() => {
+                this.drawBattleBox();
                 resolve(true);
             }, 20 * text.length + 1500);
         });
-    };
-    PokemonBattle.prototype.drawText = function (text, posX, posY) {
-        for (var i = 0; i < text.length; i++) {
-            var positions = {
+    }
+    drawBattleScene() {
+        if (this.battleAssets) {
+            this.ctx.drawImage(this.battleAssets, this.environment % 3 * this.GAME_WIDTH, ((0.5 + this.environment / 3) << 0) * 224, this.GAME_WIDTH, 224, 0, 0, this.GAME_WIDTH, 224);
+        }
+    }
+    drawBattleBox() {
+        if (this.battleAssets) {
+            this.ctx.drawImage(this.battleAssets, 0, 896, this.GAME_WIDTH, 96, 0, 224, this.GAME_WIDTH, 96);
+        }
+    }
+    drawSlidePokemonIn() {
+        return new Promise((resolve) => {
+            for (let i = 0; i < this.GAME_WIDTH + 1; i++) {
+                setTimeout(() => {
+                    this.drawBattleScene();
+                    if (this.battleAssets) {
+                        this.ctx.drawImage(this.battleAssets, this.environment % 3 * 256, ((0.5 + this.environment / 3) << 0) * 64 + 992, 256, 64, i - 256, 96, 256, 64);
+                        this.ctx.drawImage(this.battleAssets, this.environment % 3 * 256, ((0.5 + this.environment / 3) << 0) * 64 + 992, 256, 64, this.GAME_WIDTH - i, 200, 256, 64);
+                    }
+                    this.drawBattleBox();
+                }, 2 * i);
+            }
+            setTimeout(() => {
+                resolve(true);
+            }, 2 * this.GAME_WIDTH + 500);
+        });
+    }
+    drawText(text, posX, posY) {
+        for (let i = 0; i < text.length; i++) {
+            const positions = {
                 posX: FONT_CHARACTERS.indexOf(text[i]) % 39 * 12,
-                posY: Math.floor(FONT_CHARACTERS.indexOf(text[i]) / 39) * 26
+                posY: Math.floor(FONT_CHARACTERS.indexOf(text[i]) / 39) * 26,
             };
-            var width = 12;
+            let width = 12;
             if (text[i] === '|') { // caret is 13 pixels wide
                 width = 13;
             }
@@ -258,8 +215,7 @@ var PokemonBattle = /** @class */ (function () {
                 this.ctx.drawImage(this.font, positions.posX, positions.posY, width, 26, posX + 12 * i, posY, width, 26);
             }
         }
-    };
-    return PokemonBattle;
-}());
+    }
+}
 exports.PokemonBattle = PokemonBattle;
 //# sourceMappingURL=pokemon.js.map

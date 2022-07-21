@@ -1,5 +1,5 @@
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.keyboard = void 0;
 exports.keyboard = {
     LEFT: 'a',
@@ -10,7 +10,7 @@ exports.keyboard = {
         a: false,
         d: false,
         w: false,
-        s: false
+        s: false,
     },
     listenForEvents: function (keys) {
         window.addEventListener('keydown', this._onKeyDown.bind(this));
@@ -20,14 +20,14 @@ exports.keyboard = {
         }.bind(this));
     },
     _onKeyDown: function (event) {
-        var keyCode = event.key;
+        const keyCode = event.key;
         if (keyCode in this._keys) {
             event.preventDefault();
             this._keys[keyCode] = true;
         }
     },
     _onKeyUp: function (event) {
-        var keyCode = event.key;
+        const keyCode = event.key;
         if (keyCode in this._keys) {
             event.preventDefault();
             this._keys[keyCode] = false;

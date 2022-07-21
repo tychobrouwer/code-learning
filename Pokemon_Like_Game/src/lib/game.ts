@@ -15,20 +15,23 @@ import { PokemonBattle } from './pokemon';
 export class Game {
   GAME_HEIGHT = 320;
   GAME_WIDTH = 480;
+  ASSETS_FILE_HEIGHT = 512;
+  ASSETS_FILE_WIDTH = 512;
 
   avatar!: Avatar;
   camera!: Camera;
   loader: Loader;
 
-  tileAtlas?: HTMLImageElement;
+  // tileAtlas = document.createElement('canvas');
+  tileAtlas!: HTMLCanvasElement;
   ctx!: CanvasRenderingContext2D;
   _previousElapsed = 0;
   dirx = 0;
   diry = 0;
   direction = 0;
   animation = 0;
-  tileX = 0;
-  tileY = 0;
+  currentTileX = 0;
+  currentTileY = 0;
 
   constructor(context: CanvasRenderingContext2D) {
     this.loader = new Loader();
@@ -44,7 +47,7 @@ export class Game {
       this.ctx = context;
       this.camera.follow(this.avatar);
   
-      window.requestAnimationFrame(() => this.tick(0));
+      window.requestAnimationFrame(this.tick.bind(this));
     });
   }
 
@@ -61,15 +64,15 @@ export class Game {
   init() {
     keyboard.listenForEvents([keyboard.LEFT, keyboard.RIGHT, keyboard.UP, keyboard.DOWN]);
 
-    this.tileAtlas = this.loader.getImage('tiles');
+    this.tileAtlas = this.loader.loadImageToCanvas('tiles', this.ASSETS_FILE_HEIGHT, this.ASSETS_FILE_WIDTH);
   }
 
   async tick(elapsed: number) {
     this.ctx?.clearRect(0, 0, this.GAME_WIDTH, this.GAME_HEIGHT);
 
-    // let delta = (elapsed - this._previousElapsed) / 1000.0;
-    // delta = Math.min(delta, 0.25); // maximum delta of 250 ms
-    const delta = 0.01;
+    let delta = (elapsed - this._previousElapsed) / 1000.0;
+    delta = Math.min(delta, 0.25); // maximum delta of 250 ms
+
     this._previousElapsed = elapsed;
 
     this.update(delta);
@@ -77,18 +80,18 @@ export class Game {
 
     await this.findPokemon();
     
-    window.requestAnimationFrame(() => this.tick(elapsed));
+    window.requestAnimationFrame(this.tick.bind(this));
   }
 
   async findPokemon() {
-    const tileX = Math.floor(this.avatar.x / map.TSIZE);
-    const tileY = Math.floor(this.avatar.y / map.TSIZE);
+    const currentTileX = Math.floor(this.avatar.x / map.TSIZE);
+    const currentTileY = Math.floor(this.avatar.y / map.TSIZE);
 
-    if (tileX !== this.tileX || tileY !== this.tileY) {
-      this.tileX = tileX;
-      this.tileY = tileY;
+    if (currentTileX !== this.currentTileX || currentTileY !== this.currentTileY) {
+      this.currentTileX = currentTileX;
+      this.currentTileY = currentTileY;
 
-      const tile = map.getTile(0, this.tileX, this.tileY);
+      const tile = map.getTile(0, this.currentTileX, this.currentTileY);
 
       if (tile === 2 && Math.random() < 0.1) {
         const pokemonBattle = new PokemonBattle(this.ctx, this.loader, this.GAME_WIDTH, this.GAME_HEIGHT, 0, 0);
@@ -141,8 +144,8 @@ export class Game {
       for (let r = startRow; r <= endRow; r++) {
         const tile = map.getTile(layer, c, r);
         
-        const x = (c - startCol) * map.TSIZE + offsetX;
-        const y = (r - startRow) * map.TSIZE + offsetY;
+        const x = (0.5 + (c - startCol) * map.TSIZE + offsetX) << 0;
+        const y = (0.5 + (r - startRow) * map.TSIZE + offsetY) << 0;
 
         if (tile !== 0 && this.tileAtlas) {
           this.ctx.drawImage(
@@ -151,8 +154,8 @@ export class Game {
             Math.floor((tile - 1) / 16) * map.TSIZE,
             map.TSIZE,
             map.TSIZE,
-            Math.round(x),
-            Math.round(y),
+            x,
+            y,
             map.TSIZE,
             map.TSIZE
           );
@@ -172,15 +175,15 @@ export class Game {
     const pixelHeight = onlyDrawTop ? 30 : 40;
     const characterStart = this.direction * 84 + Math.floor(this.animation / 30) * 28;
 
-    if (this.avatar.image) {
+    if (this.avatar.avatarAsset) {
       this.ctx.drawImage(
-        this.avatar.image,
+        this.avatar.avatarAsset,
         characterStart,
         0,
         28,
         pixelHeight,
-        this.avatar.screenX - this.avatar.AVATAR_WIDTH / 2,
-        this.avatar.screenY - this.avatar.AVATAR_HEIGHT / 2,
+        (0.5 + this.avatar.screenX - this.avatar.AVATAR_WIDTH / 2) << 0,
+        (0.5 + this.avatar.screenY - this.avatar.AVATAR_HEIGHT / 2) << 0,
         28,
         pixelHeight
       );

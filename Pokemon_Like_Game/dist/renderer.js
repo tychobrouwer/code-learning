@@ -26,7 +26,7 @@
  *  });
  * ```
  */
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 require("../dist/index.css");
 require("../dist/main.js");
 // console.log('👋 This message is being logged by "renderer.js", included via webpack');

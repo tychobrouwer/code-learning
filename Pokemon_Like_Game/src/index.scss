@@ -12,13 +12,22 @@ body {
   margin: auto;
   text-align: center;
   height: 100vh;
-
+  
   #game-div {
     canvas {
       image-rendering: pixelated;
       width: 480px;
     }  
   }
+}
+
+.layered {
+  display: grid;
+}
+
+.layered > * {
+  grid-column-start: 1;
+  grid-row-start: 1;
 }
 
 .vertical-center {

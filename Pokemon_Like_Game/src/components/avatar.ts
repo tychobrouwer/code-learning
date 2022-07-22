@@ -1,15 +1,9 @@
-// import characterMap from '../assets/character.png';
+import { MapType } from '../utils/types';
+import { Loader } from '../utils/loader';
 
-import { MapType } from './types';
-import { Loader } from './loader' 
+import { constants } from '../utils/constants';
 
 export class Avatar {
-  SPEED = 128;
-  AVATAR_HEIGHT = 40;
-  AVATAR_WIDTH = 28;
-  ASSETS_AVATAR_HEIGHT = 256;
-  ASSETS_AVATAR_WIDTH = 512;
-
   map: MapType;
   loader: Loader;
 
@@ -21,23 +15,23 @@ export class Avatar {
   screenY = 0;
   avatarAsset: HTMLCanvasElement;
 
-  constructor(loader: Loader, map: MapType, startX: number, startY: number) {
+  constructor(loader: Loader, map: MapType) {
     this.loader = loader;
     this.map = map;
-    this.x = startX;
-    this.y = startY;
+    this.x = map.X_START;
+    this.y = map.Y_START;
 
-    this.maxX = this.map.COLS * this.map.TSIZE;
-    this.maxY = this.map.ROWS * this.map.TSIZE;
-    this.avatarAsset = this.loader.loadImageToCanvas('avatar', this.ASSETS_AVATAR_HEIGHT, this.ASSETS_AVATAR_WIDTH);
+    this.maxX = this.map.COLS * constants.MAP_TSIZE;
+    this.maxY = this.map.ROWS * constants.MAP_TSIZE;
+    this.avatarAsset = this.loader.loadImageToCanvas('avatar', constants.ASSETS_AVATAR_HEIGHT, constants.ASSETS_AVATAR_WIDTH);
   }
 
-  move(delta: number, dirx: number, diry: number) {
+  move(delta: number, dirx: number, diry: number): void {
     const x = this.x;
     const y = this.y;
 
-    this.x += dirx * this.SPEED * delta;
-    this.y += diry * this.SPEED * delta;  
+    this.x += dirx * constants.AVATAR_SPEED_WALK * delta;
+    this.y += diry * constants.AVATAR_SPEED_WALK * delta;  
 
     this._collide(dirx, diry, x, y);
 
@@ -47,9 +41,9 @@ export class Avatar {
   }
 
   _collide(dirx: number, diry: number, x: number, y: number): void {
-    const left = this.x - this.AVATAR_WIDTH / 2;
-    const right = this.x + this.AVATAR_WIDTH / 2 - 1;
-    const bottom = this.y + this.AVATAR_HEIGHT / 2 - 1;
+    const left = this.x - constants.AVATAR_WIDTH / 2;
+    const right = this.x + constants.AVATAR_WIDTH / 2 - 1;
+    const bottom = this.y + constants.AVATAR_HEIGHT / 2 - 1;
     const middleY = (this.y + bottom) / 2;
 
     const collision =

@@ -1,37 +1,32 @@
 "use strict";
-// import characterMap from '../assets/character.png';
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Avatar = void 0;
+const constants_1 = require("../utils/constants");
 class Avatar {
-    constructor(loader, map, startX, startY) {
-        this.SPEED = 128;
-        this.AVATAR_HEIGHT = 40;
-        this.AVATAR_WIDTH = 28;
-        this.ASSETS_AVATAR_HEIGHT = 256;
-        this.ASSETS_AVATAR_WIDTH = 512;
+    constructor(loader, map) {
         this.screenX = 0;
         this.screenY = 0;
         this.loader = loader;
         this.map = map;
-        this.x = startX;
-        this.y = startY;
-        this.maxX = this.map.COLS * this.map.TSIZE;
-        this.maxY = this.map.ROWS * this.map.TSIZE;
-        this.avatarAsset = this.loader.loadImageToCanvas('avatar', this.ASSETS_AVATAR_HEIGHT, this.ASSETS_AVATAR_WIDTH);
+        this.x = map.X_START;
+        this.y = map.Y_START;
+        this.maxX = this.map.COLS * constants_1.constants.MAP_TSIZE;
+        this.maxY = this.map.ROWS * constants_1.constants.MAP_TSIZE;
+        this.avatarAsset = this.loader.loadImageToCanvas('avatar', constants_1.constants.ASSETS_AVATAR_HEIGHT, constants_1.constants.ASSETS_AVATAR_WIDTH);
     }
     move(delta, dirx, diry) {
         const x = this.x;
         const y = this.y;
-        this.x += dirx * this.SPEED * delta;
-        this.y += diry * this.SPEED * delta;
+        this.x += dirx * constants_1.constants.AVATAR_SPEED * delta;
+        this.y += diry * constants_1.constants.AVATAR_SPEED * delta;
         this._collide(dirx, diry, x, y);
         this.x = Math.max(0, Math.min(this.x, this.maxX));
         this.y = Math.max(0, Math.min(this.y, this.maxY));
     }
     _collide(dirx, diry, x, y) {
-        const left = this.x - this.AVATAR_WIDTH / 2;
-        const right = this.x + this.AVATAR_WIDTH / 2 - 1;
-        const bottom = this.y + this.AVATAR_HEIGHT / 2 - 1;
+        const left = this.x - constants_1.constants.AVATAR_WIDTH / 2;
+        const right = this.x + constants_1.constants.AVATAR_WIDTH / 2 - 1;
+        const bottom = this.y + constants_1.constants.AVATAR_HEIGHT / 2 - 1;
         const middleY = (this.y + bottom) / 2;
         const collision = this.map.isSolidTileAtXY(left, this.y, dirx, diry) ||
             this.map.isSolidTileAtXY(right, this.y, dirx, diry) ||

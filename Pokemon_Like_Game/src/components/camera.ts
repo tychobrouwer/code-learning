@@ -1,5 +1,7 @@
-import { MapType } from './types';
+import { MapType } from '../utils/types';
 import { Avatar } from './avatar';
+
+import { constants } from '../utils/constants';
 
 export class Camera {
   x = 0;
@@ -13,17 +15,17 @@ export class Camera {
   constructor(map: MapType, width: number, height: number) {
     this.width = width;
     this.height = height;
-    this.maxX = map.COLS * map.TSIZE - width;
-    this.maxY = map.ROWS * map.TSIZE - height;
+    this.maxX = map.COLS * constants.MAP_TSIZE - width;
+    this.maxY = map.ROWS * constants.MAP_TSIZE - height;
   }
 
-  follow(sprite: Avatar) {
+  follow(sprite: Avatar): void {
     this.following = sprite;
     sprite.screenX = 0;
     sprite.screenY = 0;
   }
 
-  update() {
+  update(): void {
     if (this.following) {
       this.following.screenX = this.width / 2;
       this.following.screenY = this.height / 2;

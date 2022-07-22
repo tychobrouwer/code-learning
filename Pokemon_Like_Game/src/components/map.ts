@@ -1,9 +1,11 @@
-import { MapType } from './types';
+import { constants } from '../utils/constants';
+import { MapType } from '../utils/types';
 
 export const map: MapType = {
   COLS: 24,
   ROWS: 21,
-  TSIZE: 32,
+  X_START: 100,
+  Y_START: 100,
 
   layers: [[
       10, 11, 10, 11, 10, 11, 10, 11, 10, 11,  1,  1,  1,  1, 12, 13, 12, 13, 12, 13, 12, 13, 12, 13,
@@ -58,51 +60,49 @@ export const map: MapType = {
   },
 
   isSolidTileAtXY: function (x: number, y: number, dirX: number, dirY: number): boolean {
-    const col = Math.floor(x / this.TSIZE);
-    const row = Math.floor(y / this.TSIZE);
+    const col = Math.floor(x / constants.MAP_TSIZE);
+    const row = Math.floor(y / constants.MAP_TSIZE);
 
     return this.layers.reduce(function (this: MapType, res: boolean, layer: number[], index: number) {
       const tile = this.getTile(index, col, row);
       const isSolid = tile === 10 || tile === 11 || tile === 12 || tile === 13;
+      const colHalfTile = row + 0.5;
+      const rowHalfTile = row + 0.5;
 
       const oneWay: boolean =
-        ((tile === 3) && (row * this.TSIZE + 16) < y && (dirY === -1 || dirX !== 0)) ||
-        (tile === 4 && (row * this.TSIZE + 16) < y && (dirY === -1 || dirX === -1)) ||
-        (tile === 7 && (row * this.TSIZE + 16) < y && (dirY === -1 || dirX === 1)) ||
-        (tile === 5 && (row * this.TSIZE + 16) < y && (col * this.TSIZE + 16) < x) ||
-        (tile === 8 && (row * this.TSIZE + 16) < y && (col * this.TSIZE + 16) > x) ||
+        (tile === 3 && rowHalfTile * constants.MAP_TSIZE < y && (dirY === -1 || dirX !== 0)) ||
+        (tile === 4 && rowHalfTile * constants.MAP_TSIZE < y && (dirY === -1 || dirX === -1)) ||
+        (tile === 7 && rowHalfTile * constants.MAP_TSIZE < y && (dirY === -1 || dirX === 1)) ||
+        (tile === 5 && rowHalfTile * constants.MAP_TSIZE < y && colHalfTile * constants.MAP_TSIZE < x) ||
+        (tile === 8 && rowHalfTile * constants.MAP_TSIZE < y && colHalfTile * constants.MAP_TSIZE > x) ||
 
         (tile === 6 && (
-          ((row * this.TSIZE + 16) < y && (dirY === -1 || dirX !== 0)) || 
-          ((col * this.TSIZE + 16) < x && (dirX === -1 || dirY !== 0))
+          (rowHalfTile * constants.MAP_TSIZE < y && (dirY === -1 || dirX !== 0)) || 
+          (colHalfTile * constants.MAP_TSIZE < x && (dirX === -1 || dirY !== 0))
         )) ||
 
         (tile === 9 && (
-          (((row * this.TSIZE + 16) < y && (dirY === -1 || dirX !== 0))) || 
-          ((col * this.TSIZE + 16) > x && (dirX === 1 || dirY !== 0))
+          (rowHalfTile * constants.MAP_TSIZE < y && (dirY === -1 || dirX !== 0)) || 
+          (colHalfTile * constants.MAP_TSIZE > x && (dirX === 1 || dirY !== 0))
         ));
 
       return res || isSolid || oneWay;
     }.bind(this), false);
   },
 
-  // collisionTileAtBox: function(leftBoundry: number, rightBoundry: number, topBoundry: number, bottomBoundry: number) {
-
-  // }
-
   getCol: function (x: number): number {
-    return Math.floor(x / this.TSIZE);
+    return Math.floor(x / constants.MAP_TSIZE);
   },
 
   getRow: function (y: number): number {
-    return Math.floor(y / this.TSIZE);
+    return Math.floor(y / constants.MAP_TSIZE);
   },
 
   getX: function (col: number): number {
-    return col * this.TSIZE;
+    return col * constants.MAP_TSIZE;
   },
 
   getY: function (row: number): number {
-      return row * this.TSIZE;
+      return row * constants.MAP_TSIZE;
   }
 }

@@ -1,7 +1,9 @@
 export interface MapType {
   COLS: number;
   ROWS: number;
-  TSIZE: number;
+  X_START: number;
+  Y_START: number;
+
   layers: number[][];
   getTile: (layer: number, col: number, row: number) => number;
   isSolidTileAtXY: (x: number, y: number, dirx: number, diry: number) => boolean;
@@ -16,6 +18,7 @@ export interface Keyboard {
   RIGHT: string;
   UP: string;
   DOWN: string;
+
   _keys: Keys;
   listenForEvents: (keys: string[]) => void;
   _onKeyDown: (event: KeyboardEvent) => void;

@@ -8,8 +8,9 @@
     <title>Pokemon</title>
   </head>
   <body>
-    <div id="game-div" class="vertical-center">
-      <canvas id="demo" width="384" height="256"></canvas>
+    <div id="game-div" class="vertical-center layered">
+      <canvas id="overlayCanvas" width="480" height="320" style="z-index: 1;"></canvas>
+      <canvas id="mainGameCanvas" width="480" height="320" style="z-index: -1;"></canvas>
     </div>
   </body>
 </html>

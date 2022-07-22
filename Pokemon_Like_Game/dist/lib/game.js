@@ -15,18 +15,15 @@ const character_png_1 = require("../assets/character.png");
 const battle_assets_png_1 = require("../assets/battle_assets.png");
 const pokemon_1st_generation_png_1 = require("../assets/pokemon_1st_generation.png");
 const font_png_1 = require("../assets/font.png");
+const constants_1 = require("../utils/constants");
 const map_1 = require("./map");
-const keyboard_1 = require("./keyboard");
-const loader_1 = require("./loader");
+const keyboard_1 = require("../utils/keyboard");
+const loader_1 = require("../utils/loader");
 const camera_1 = require("./camera");
 const avatar_1 = require("./avatar");
 const pokemon_1 = require("./pokemon");
 class Game {
     constructor(context) {
-        this.GAME_HEIGHT = 320;
-        this.GAME_WIDTH = 480;
-        this.ASSETS_FILE_HEIGHT = 512;
-        this.ASSETS_FILE_WIDTH = 512;
         this._previousElapsed = 0;
         this.dirx = 0;
         this.diry = 0;
@@ -35,12 +32,14 @@ class Game {
         this.currentTileX = 0;
         this.currentTileY = 0;
         this.loader = new loader_1.Loader();
+        this.GAME_HEIGHT = constants_1.constants.GAME_HEIGHT;
+        this.GAME_WIDTH = constants_1.constants.GAME_WIDTH;
+        this.ctx = context;
         const p = this.load();
         Promise.all(p).then(() => {
             this.init();
-            this.avatar = new avatar_1.Avatar(this.loader, map_1.map, 200, 200);
-            this.camera = new camera_1.Camera(map_1.map, this.GAME_WIDTH, this.GAME_HEIGHT);
-            this.ctx = context;
+            this.avatar = new avatar_1.Avatar(this.loader, map_1.map);
+            this.camera = new camera_1.Camera(map_1.map, constants_1.constants.GAME_WIDTH, constants_1.constants.GAME_HEIGHT);
             this.camera.follow(this.avatar);
             window.requestAnimationFrame(this.tick.bind(this));
         });
@@ -56,12 +55,11 @@ class Game {
     }
     init() {
         keyboard_1.keyboard.listenForEvents([keyboard_1.keyboard.LEFT, keyboard_1.keyboard.RIGHT, keyboard_1.keyboard.UP, keyboard_1.keyboard.DOWN]);
-        this.tileAtlas = this.loader.loadImageToCanvas('tiles', this.ASSETS_FILE_HEIGHT, this.ASSETS_FILE_WIDTH);
+        this.tileAtlas = this.loader.loadImageToCanvas('tiles', constants_1.constants.ASSETS_TILES_HEIGHT, constants_1.constants.ASSETS_TILES_WIDTH);
     }
     tick(elapsed) {
-        var _a;
         return __awaiter(this, void 0, void 0, function* () {
-            (_a = this.ctx) === null || _a === void 0 ? void 0 : _a.clearRect(0, 0, this.GAME_WIDTH, this.GAME_HEIGHT);
+            this.ctx.clearRect(0, 0, constants_1.constants.GAME_WIDTH, constants_1.constants.GAME_HEIGHT);
             let delta = (elapsed - this._previousElapsed) / 1000.0;
             delta = Math.min(delta, 0.25); // maximum delta of 250 ms
             this._previousElapsed = elapsed;
@@ -73,14 +71,14 @@ class Game {
     }
     findPokemon() {
         return __awaiter(this, void 0, void 0, function* () {
-            const currentTileX = Math.floor(this.avatar.x / map_1.map.TSIZE);
-            const currentTileY = Math.floor(this.avatar.y / map_1.map.TSIZE);
+            const currentTileX = Math.floor(this.avatar.x / constants_1.constants.MAP_TSIZE);
+            const currentTileY = Math.floor(this.avatar.y / constants_1.constants.MAP_TSIZE);
             if (currentTileX !== this.currentTileX || currentTileY !== this.currentTileY) {
                 this.currentTileX = currentTileX;
                 this.currentTileY = currentTileY;
                 const tile = map_1.map.getTile(0, this.currentTileX, this.currentTileY);
                 if (tile === 2 && Math.random() < 0.1) {
-                    const pokemonBattle = new pokemon_1.PokemonBattle(this.ctx, this.loader, this.GAME_WIDTH, this.GAME_HEIGHT, 0, 0);
+                    const pokemonBattle = new pokemon_1.PokemonBattle(this.ctx, this.loader, 0, 0);
                     const pokemon = pokemonBattle.getPokemon();
                     console.log(pokemon.name + ' found!');
                     const battleResult = yield pokemonBattle.battle();
@@ -117,19 +115,19 @@ class Game {
         this.drawPlayer(true);
     }
     drawLayer(layer) {
-        const startCol = Math.floor(this.camera.x / map_1.map.TSIZE);
-        const endCol = startCol + (this.camera.width / map_1.map.TSIZE);
-        const startRow = Math.floor(this.camera.y / map_1.map.TSIZE);
-        const endRow = startRow + (this.camera.height / map_1.map.TSIZE);
-        const offsetX = -this.camera.x + startCol * map_1.map.TSIZE;
-        const offsetY = -this.camera.y + startRow * map_1.map.TSIZE;
+        const startCol = Math.floor(this.camera.x / constants_1.constants.MAP_TSIZE);
+        const endCol = startCol + (this.camera.width / constants_1.constants.MAP_TSIZE);
+        const startRow = Math.floor(this.camera.y / constants_1.constants.MAP_TSIZE);
+        const endRow = startRow + (this.camera.height / constants_1.constants.MAP_TSIZE);
+        const offsetX = -this.camera.x + startCol * constants_1.constants.MAP_TSIZE;
+        const offsetY = -this.camera.y + startRow * constants_1.constants.MAP_TSIZE;
         for (let c = startCol; c <= endCol; c++) {
             for (let r = startRow; r <= endRow; r++) {
                 const tile = map_1.map.getTile(layer, c, r);
-                const x = (0.5 + (c - startCol) * map_1.map.TSIZE + offsetX) << 0;
-                const y = (0.5 + (r - startRow) * map_1.map.TSIZE + offsetY) << 0;
+                const x = (0.5 + (c - startCol) * constants_1.constants.MAP_TSIZE + offsetX) << 0;
+                const y = (0.5 + (r - startRow) * constants_1.constants.MAP_TSIZE + offsetY) << 0;
                 if (tile !== 0 && this.tileAtlas) {
-                    this.ctx.drawImage(this.tileAtlas, (tile - 1) % 16 * map_1.map.TSIZE, Math.floor((tile - 1) / 16) * map_1.map.TSIZE, map_1.map.TSIZE, map_1.map.TSIZE, x, y, map_1.map.TSIZE, map_1.map.TSIZE);
+                    this.ctx.drawImage(this.tileAtlas, (tile - 1) % 16 * constants_1.constants.MAP_TSIZE, Math.floor((tile - 1) / 16) * constants_1.constants.MAP_TSIZE, constants_1.constants.MAP_TSIZE, constants_1.constants.MAP_TSIZE, x, y, constants_1.constants.MAP_TSIZE, constants_1.constants.MAP_TSIZE);
                 }
             }
         }
@@ -140,12 +138,14 @@ class Game {
             if (this.diry === 0 && this.dirx === 0) {
                 this.animation = 0;
             }
-            this.animation = this.animation < 87 ? this.animation + 1 : 0;
+            else {
+                this.animation = this.animation < 2.925 ? this.animation + 0.075 : 0;
+            }
         }
-        const pixelHeight = onlyDrawTop ? 30 : 40;
-        const characterStart = this.direction * 84 + Math.floor(this.animation / 30) * 28;
+        const pixelHeight = onlyDrawTop ? 0.75 * constants_1.constants.AVATAR_HEIGHT : constants_1.constants.AVATAR_HEIGHT;
+        const characterStart = this.direction * constants_1.constants.AVATAR_WIDTH * 3 + (this.animation << 0) * constants_1.constants.AVATAR_WIDTH;
         if (this.avatar.avatarAsset) {
-            this.ctx.drawImage(this.avatar.avatarAsset, characterStart, 0, 28, pixelHeight, (0.5 + this.avatar.screenX - this.avatar.AVATAR_WIDTH / 2) << 0, (0.5 + this.avatar.screenY - this.avatar.AVATAR_HEIGHT / 2) << 0, 28, pixelHeight);
+            this.ctx.drawImage(this.avatar.avatarAsset, characterStart, 0, constants_1.constants.AVATAR_WIDTH, pixelHeight, (0.5 + this.avatar.screenX - constants_1.constants.AVATAR_WIDTH / 2) << 0, (0.5 + this.avatar.screenY - constants_1.constants.AVATAR_HEIGHT / 2) << 0, constants_1.constants.AVATAR_WIDTH, pixelHeight);
         }
     }
 }

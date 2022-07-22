@@ -1,30 +1,27 @@
 import tileMap from '../assets/tiles.png';
 import characterMap from '../assets/character.png';
 import battleAssets from '../assets/battle_assets.png';
-import pokemonGeneration1 from '../assets/pokemon_1st_generation.png'
+import pokemonGeneration1 from '../assets/pokemon_1st_generation.png';
 import font from '../assets/font.png';
 
-import { map } from './map'
-import { keyboard } from './keyboard'
+import { constants } from '../utils/constants';
+import { map } from './map';
+import { keyboard } from '../utils/keyboard';
 
-import { Loader } from './loader' 
+import { Loader } from '../utils/loader';
 import { Camera } from './camera';
 import { Avatar } from './avatar';
 import { PokemonBattle } from './pokemon';
 
 export class Game {
-  GAME_HEIGHT = 320;
-  GAME_WIDTH = 480;
-  ASSETS_FILE_HEIGHT = 512;
-  ASSETS_FILE_WIDTH = 512;
-
+  loader: Loader;
   avatar!: Avatar;
   camera!: Camera;
-  loader: Loader;
 
   // tileAtlas = document.createElement('canvas');
   tileAtlas!: HTMLCanvasElement;
-  ctx!: CanvasRenderingContext2D;
+  gameCtx: CanvasRenderingContext2D;
+  overlayCtx: CanvasRenderingContext2D;
   _previousElapsed = 0;
   dirx = 0;
   diry = 0;
@@ -32,26 +29,32 @@ export class Game {
   animation = 0;
   currentTileX = 0;
   currentTileY = 0;
+  GAME_HEIGHT: number;
+  GAME_WIDTH: number;
 
-  constructor(context: CanvasRenderingContext2D) {
+  constructor(gameCtx: CanvasRenderingContext2D, overlayCtx: CanvasRenderingContext2D) {
     this.loader = new Loader();
+
+    this.GAME_HEIGHT = constants.GAME_HEIGHT;
+    this.GAME_WIDTH = constants.GAME_WIDTH;
+    this.gameCtx = gameCtx;
+    this.overlayCtx = overlayCtx;
 
     const p = this.load();
 
     Promise.all(p).then(() => {
       this.init();
 
-      this.avatar = new Avatar(this.loader, map, 200, 200);
-      this.camera = new Camera(map, this.GAME_WIDTH, this.GAME_HEIGHT);
+      this.avatar = new Avatar(this.loader, map);
+      this.camera = new Camera(map, constants.GAME_WIDTH, constants.GAME_HEIGHT);
   
-      this.ctx = context;
       this.camera.follow(this.avatar);
   
       window.requestAnimationFrame(this.tick.bind(this));
     });
   }
 
-  load() {
+  load(): Promise<HTMLImageElement | string>[] {
     return [
       this.loader.loadImage('tiles', tileMap),
       this.loader.loadImage('avatar', characterMap),
@@ -61,14 +64,14 @@ export class Game {
     ];
   }
 
-  init() {
+  init(): void {
     keyboard.listenForEvents([keyboard.LEFT, keyboard.RIGHT, keyboard.UP, keyboard.DOWN]);
 
-    this.tileAtlas = this.loader.loadImageToCanvas('tiles', this.ASSETS_FILE_HEIGHT, this.ASSETS_FILE_WIDTH);
+    this.tileAtlas = this.loader.loadImageToCanvas('tiles', constants.ASSETS_TILES_HEIGHT, constants.ASSETS_TILES_WIDTH);
   }
 
   async tick(elapsed: number) {
-    this.ctx?.clearRect(0, 0, this.GAME_WIDTH, this.GAME_HEIGHT);
+    this.gameCtx.clearRect(0, 0, constants.GAME_WIDTH, constants.GAME_HEIGHT);
 
     let delta = (elapsed - this._previousElapsed) / 1000.0;
     delta = Math.min(delta, 0.25); // maximum delta of 250 ms
@@ -83,9 +86,9 @@ export class Game {
     window.requestAnimationFrame(this.tick.bind(this));
   }
 
-  async findPokemon() {
-    const currentTileX = Math.floor(this.avatar.x / map.TSIZE);
-    const currentTileY = Math.floor(this.avatar.y / map.TSIZE);
+  async findPokemon(): Promise<void> {
+    const currentTileX = Math.floor(this.avatar.x / constants.MAP_TSIZE);
+    const currentTileY = Math.floor(this.avatar.y / constants.MAP_TSIZE);
 
     if (currentTileX !== this.currentTileX || currentTileY !== this.currentTileY) {
       this.currentTileX = currentTileX;
@@ -93,8 +96,8 @@ export class Game {
 
       const tile = map.getTile(0, this.currentTileX, this.currentTileY);
 
-      if (tile === 2 && Math.random() < 0.1) {
-        const pokemonBattle = new PokemonBattle(this.ctx, this.loader, this.GAME_WIDTH, this.GAME_HEIGHT, 0, 0);
+      if (tile === 2 && Math.random() < 0.5) {
+        const pokemonBattle = new PokemonBattle(this.overlayCtx, this.loader, 0, 0);
         const pokemon = pokemonBattle.getPokemon();
 
         console.log(pokemon.name + ' found!');
@@ -109,7 +112,7 @@ export class Game {
     }
   }
 
-  update(delta: number) {
+  update(delta: number): void {
     this.dirx = 0;
     this.diry = 0;
 
@@ -122,7 +125,7 @@ export class Game {
     this.camera.update();
   }
 
-  render() {
+  render(): void {
     this.drawLayer(0);
 
     this.drawPlayer(false);
@@ -132,59 +135,60 @@ export class Game {
     this.drawPlayer(true);
   }
 
-  drawLayer(layer: number) {
-    const startCol = Math.floor(this.camera.x / map.TSIZE);
-    const endCol = startCol + (this.camera.width / map.TSIZE);
-    const startRow = Math.floor(this.camera.y / map.TSIZE);
-    const endRow = startRow + (this.camera.height / map.TSIZE);
-    const offsetX = -this.camera.x + startCol * map.TSIZE;
-    const offsetY = -this.camera.y + startRow * map.TSIZE;
+  drawLayer(layer: number): void {
+    const startCol = Math.floor(this.camera.x / constants.MAP_TSIZE);
+    const endCol = startCol + (this.camera.width / constants.MAP_TSIZE);
+    const startRow = Math.floor(this.camera.y / constants.MAP_TSIZE);
+    const endRow = startRow + (this.camera.height / constants.MAP_TSIZE);
+    const offsetX = -this.camera.x + startCol * constants.MAP_TSIZE;
+    const offsetY = -this.camera.y + startRow * constants.MAP_TSIZE;
 
     for (let c = startCol; c <= endCol; c++) {
       for (let r = startRow; r <= endRow; r++) {
-        const tile = map.getTile(layer, c, r);
-        
-        const x = (0.5 + (c - startCol) * map.TSIZE + offsetX) << 0;
-        const y = (0.5 + (r - startRow) * map.TSIZE + offsetY) << 0;
+        const tile = map.getTile(layer, c, r);        
+        const x = (0.5 + (c - startCol) * constants.MAP_TSIZE + offsetX) << 0;
+        const y = (0.5 + (r - startRow) * constants.MAP_TSIZE + offsetY) << 0;
 
         if (tile !== 0 && this.tileAtlas) {
-          this.ctx.drawImage(
+          this.gameCtx.drawImage(
             this.tileAtlas,
-            (tile - 1) % 16 * map.TSIZE,
-            Math.floor((tile - 1) / 16) * map.TSIZE,
-            map.TSIZE,
-            map.TSIZE,
+            (tile - 1) % 16 * constants.MAP_TSIZE,
+            Math.floor((tile - 1) / 16) * constants.MAP_TSIZE,
+            constants.MAP_TSIZE,
+            constants.MAP_TSIZE,
             x,
             y,
-            map.TSIZE,
-            map.TSIZE
+            constants.MAP_TSIZE,
+            constants.MAP_TSIZE
           );
         }
       }
     }
   }
 
-  drawPlayer(onlyDrawTop: boolean) {
+  drawPlayer(onlyDrawTop: boolean): void {
     if (!onlyDrawTop) {
       this.direction = this.diry === 1 ? 0 : this.dirx === -1 ? 1 : this.diry === -1 ? 2 : this.dirx === 1 ? 3 : this.direction;
-      if (this.diry === 0 && this.dirx === 0) { this.animation = 0; }
-
-      this.animation = this.animation < 87 ? this.animation + 1 : 0;
+      if (this.diry === 0 && this.dirx === 0) {
+        this.animation = 0;
+      } else {
+        this.animation = this.animation < 2.925 ? this.animation + 0.075 : 0;
+      }
     }
 
-    const pixelHeight = onlyDrawTop ? 30 : 40;
-    const characterStart = this.direction * 84 + Math.floor(this.animation / 30) * 28;
+    const pixelHeight = onlyDrawTop ? 0.75 * constants.AVATAR_HEIGHT : constants.AVATAR_HEIGHT;
+    const characterStart = this.direction * constants.AVATAR_WIDTH * 3 + (this.animation << 0) * constants.AVATAR_WIDTH;
 
     if (this.avatar.avatarAsset) {
-      this.ctx.drawImage(
+      this.gameCtx.drawImage(
         this.avatar.avatarAsset,
         characterStart,
         0,
-        28,
+        constants.AVATAR_WIDTH,
         pixelHeight,
-        (0.5 + this.avatar.screenX - this.avatar.AVATAR_WIDTH / 2) << 0,
-        (0.5 + this.avatar.screenY - this.avatar.AVATAR_HEIGHT / 2) << 0,
-        28,
+        (0.5 + this.avatar.screenX - constants.AVATAR_WIDTH / 2) << 0,
+        (0.5 + this.avatar.screenY - constants.AVATAR_HEIGHT / 2) << 0,
+        constants.AVATAR_WIDTH,
         pixelHeight
       );
     }

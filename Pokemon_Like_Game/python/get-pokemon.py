@@ -99,7 +99,7 @@ for j in generations:
       if pokemonData['name'] == 'deoxys-normal':
         pokemonData['name'] = 'deoxys'
 
-      pokemonObj[pokemonData['name']] = pokemonData
+      pokemonObj[pokemonData['id']] = pokemonData
 
       json_string = json.dumps(pokemonObj)
 

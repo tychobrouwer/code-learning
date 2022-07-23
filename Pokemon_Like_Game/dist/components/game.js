@@ -14,6 +14,8 @@ const tiles_png_1 = require("../assets/tiles.png");
 const character_png_1 = require("../assets/character.png");
 const battle_assets_png_1 = require("../assets/battle_assets.png");
 const pokemon_1st_generation_png_1 = require("../assets/pokemon_1st_generation.png");
+const pokemon_2st_generation_png_1 = require("../assets/pokemon_2st_generation.png");
+const pokemon_3st_generation_png_1 = require("../assets/pokemon_3st_generation.png");
 const font_png_1 = require("../assets/font.png");
 const constants_1 = require("../utils/constants");
 const map_1 = require("./map");
@@ -51,6 +53,8 @@ class Game {
             this.loader.loadImage('avatar', character_png_1.default),
             this.loader.loadImage('battleAssets', battle_assets_png_1.default),
             this.loader.loadImage('pokemonGeneration1', pokemon_1st_generation_png_1.default),
+            this.loader.loadImage('pokemonGeneration2', pokemon_2st_generation_png_1.default),
+            this.loader.loadImage('pokemonGeneration3', pokemon_3st_generation_png_1.default),
             this.loader.loadImage('font', font_png_1.default),
         ];
     }

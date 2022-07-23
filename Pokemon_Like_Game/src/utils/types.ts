@@ -34,17 +34,49 @@ export interface Keys {
 }
 
 export interface pokemonIndexType {
-  [level: number]: {
-    [environment: number]: {
-      [pokemonName: string]: pokemonType;
+  [level: string]: {
+    [environment: string]: {
+      [pokemonKey: string]: pokemonType
     }
   }
 }
 
 export interface pokemonType {
-  name: string;
-  level: number[];
-  encounterRate: number;
-  tilePosX: number;
-  tilePosY: number;
+  id_string: string;
+  encounter_rate: number;
 }
+
+export interface pokedexType {
+  id: number;
+  name: string;
+  order: number;
+  species: string;
+  game_index: number;
+  weight: number;
+  height: number;
+  base_experience: number;
+  is_default: boolean;
+  forms: string[];
+  stats: {
+    base_stat: number;
+    effort: number;
+    stat: string;
+  }[]
+  abilities: {
+    ability: string;
+    is_hidden: boolean;
+    slot: number;
+  }[];
+  held_items: {
+    item: string;
+  }[];
+  moves: {
+    move: string;
+  }[];
+  types: {
+    slot: number;
+    type: string;
+  }[];
+}
+
+export interface pokedexCombType extends pokedexType, pokemonType {}

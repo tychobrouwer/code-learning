@@ -1,7 +1,9 @@
 import tileMap from '../assets/tiles.png';
-import characterMap from '../assets/character.png';
+import characterAssets from '../assets/character.png';
 import battleAssets from '../assets/battle_assets.png';
 import pokemonGeneration1 from '../assets/pokemon_1st_generation.png';
+import pokemonGeneration2 from '../assets/pokemon_2st_generation.png';
+import pokemonGeneration3 from '../assets/pokemon_3st_generation.png';
 import font from '../assets/font.png';
 
 import { constants } from '../utils/constants';
@@ -57,9 +59,11 @@ export class Game {
   load(): Promise<HTMLImageElement | string>[] {
     return [
       this.loader.loadImage('tiles', tileMap),
-      this.loader.loadImage('avatar', characterMap),
+      this.loader.loadImage('avatar', characterAssets),
       this.loader.loadImage('battleAssets', battleAssets),
       this.loader.loadImage('pokemonGeneration1', pokemonGeneration1),
+      this.loader.loadImage('pokemonGeneration2', pokemonGeneration2),
+      this.loader.loadImage('pokemonGeneration3', pokemonGeneration3),
       this.loader.loadImage('font', font),
     ];
   }

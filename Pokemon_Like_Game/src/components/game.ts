@@ -6,21 +6,23 @@ import pokemonGeneration2 from '../assets/pokemon_2st_generation.png';
 import pokemonGeneration3 from '../assets/pokemon_3st_generation.png';
 import font from '../assets/font.png';
 
-import { constants } from '../utils/constants';
-import { map } from './map';
-import { keyboard } from '../utils/keyboard';
-
+import { Map } from './map';
 import { Loader } from '../utils/loader';
 import { Camera } from './camera';
 import { Avatar } from './avatar';
 import { PokemonBattle } from './pokemon';
 
+import { constants } from '../utils/constants';
+import { keyboard } from '../utils/keyboard';
+import { randomFromMinMax } from '../utils/helper';
+// import { MapType } from '../utils/types';
+
 export class Game {
+  map!: Map;
   loader: Loader;
   avatar!: Avatar;
   camera!: Camera;
 
-  // tileAtlas = document.createElement('canvas');
   tileAtlas!: HTMLCanvasElement;
   gameCtx: CanvasRenderingContext2D;
   overlayCtx: CanvasRenderingContext2D;
@@ -31,6 +33,7 @@ export class Game {
   animation = 0;
   currentTileX = 0;
   currentTileY = 0;
+  currentMap = 'route 101';
   GAME_HEIGHT: number;
   GAME_WIDTH: number;
 
@@ -47,11 +50,14 @@ export class Game {
     Promise.all(p).then(() => {
       this.init();
 
-      this.avatar = new Avatar(this.loader, map);
-      this.camera = new Camera(map, constants.GAME_WIDTH, constants.GAME_HEIGHT);
-  
+      this.map = new Map({...constants.MAPS[this.currentMap]});
+      this.avatar = new Avatar(this.loader, this.map);
+      this.camera = new Camera({...constants.MAPS[this.currentMap]}, constants.GAME_WIDTH, constants.GAME_HEIGHT);
       this.camera.follow(this.avatar);
-  
+
+      this.map.updateMap(this.currentMap)
+      this.loadAdjacentMaps(true);
+
       window.requestAnimationFrame(this.tick.bind(this));
     });
   }
@@ -98,21 +104,22 @@ export class Game {
       this.currentTileX = currentTileX;
       this.currentTileY = currentTileY;
 
-      const tile = map.getTile(0, this.currentTileX, this.currentTileY);
+      const tile = this.map.getTile(0, this.currentTileX, this.currentTileY);
+      const randomNumber = randomFromMinMax(0, 2879);
 
-      if (tile === 2 && Math.random() < 0.5) {
-        const pokemonBattle = new PokemonBattle(this.overlayCtx, this.loader, 0, 0);
-        const pokemon = pokemonBattle.getPokemon();
+      // if (tile === 2 && randomNumber < constants.GRASS_ENCOUNTER_NUMBER) {
+      //   const pokemonBattle = new PokemonBattle(this.overlayCtx, this.loader, this.currentMap, 0);
+      //   const pokemon = pokemonBattle.getPokemon();
 
-        console.log(pokemon.name + ' found!');
+      //   console.log(pokemon.name + ' found!');
 
-        const battleResult = await pokemonBattle.battle();
+      //   const battleResult = await pokemonBattle.battle();
         
-        if (battleResult) {
-          console.log('battle won!')
-          // this.player.addPokemon(foundPokemon);
-        }
-      }
+      //   if (battleResult) {
+      //     console.log('battle with ' + pokemon.name + ' won!')
+      //     // this.player.addPokemon(foundPokemon);
+      //   }
+      // }
     }
   }
 
@@ -125,8 +132,96 @@ export class Game {
     else if (keyboard.isDown(keyboard.UP)) { this.diry = -1; }
     else if (keyboard.isDown(keyboard.DOWN)) {this. diry = 1; }
 
+    const isNextMap = this.map.isNextMap(this.avatar.x, this.avatar.y);
+
+    if (typeof isNextMap !== 'boolean') {      
+      this.currentMap = isNextMap[0];
+      console.log('Entered new area: ' + this.currentMap);
+      
+      this.map.updateMap(this.currentMap)
+
+      // if (isNextMap[1] === 'bottom') {
+      //   console.log('new map bottom')
+      //   added[1] -= 20;
+      // }
+
+      // if (isNextMap[1] === 'top') {
+      //   console.log('new map top')
+      //   added[1] += 20;
+      // }
+
+      // if (isNextMap[1] === 'right') {
+      //   console.log('new map right')
+      //   added[0] -= 50;
+      // }
+
+      // if (isNextMap[1] === 'left') {
+      //   console.log('new map left')
+      //   added[0] += 50;
+      // }
+
+      // if (isNextMap[1] === 'left') {
+      //   added[0] = 0;
+      //   added[1] = 0;
+      //   console.log('added')
+      // }
+
+      // console.log(isNextMap[1])
+
+      this.loadAdjacentMaps(false, isNextMap[1]);
+    }
+
     this.avatar.move(delta, this.dirx, this.diry);
     this.camera.update();
+  }
+
+  loadAdjacentMaps(addMap = false, fromDirection: string | boolean= false) {
+    const Adjacent = this.map.getAjacent(this.currentMap);
+    let updateMapObject;
+    const test1 = [];
+    const test2 = [];
+    let test = 0;
+    for (const adjacentMap of Object.values(Adjacent)) {
+      updateMapObject = this.map.addMap(adjacentMap.name, adjacentMap.position, 0);
+      test1.push(adjacentMap.position)
+      test2.push(updateMapObject.added[1])
+      test = constants.MAPS[this.currentMap].ROWS + updateMapObject.added[1] 
+      // console.log(added[0], added[1])
+    }
+
+    console.log(test)
+    console.log(test1)
+    console.log(test2)
+
+    if (updateMapObject) { 
+      this.camera.updateMap(updateMapObject);
+      // const added = updateMapObject.added;
+      const added = [ 0, 0 ]
+      
+      console.log(fromDirection)
+      
+      // THIS SHOULD BE RESULT OF ADDED!!
+      if (test1.includes('top') && test1.includes('bottom') && fromDirection === 'top') {
+        added[1] = 20;
+      } else if (test1.includes('top') && !test1.includes('bottom') && fromDirection === 'bottom') {
+        added[1] = -20;
+      }
+      
+      if (test1.includes('left') && test1.includes('bottom') && fromDirection === 'top') {
+        added[0] = 50;
+      } else if (test1.includes('bottom') && test1.includes('top') && fromDirection === 'bottom') {
+        added[0] = -50;
+      }
+      // ///////////////////////////// //
+
+      console.log(added)
+
+      if (addMap) {
+        this.avatar.addMapUpdate(this.map);
+      } else {
+        this.avatar.newAreaMapUpdate(this.map, added);
+      }
+    }
   }
 
   render(): void {
@@ -149,9 +244,10 @@ export class Game {
 
     for (let c = startCol; c <= endCol; c++) {
       for (let r = startRow; r <= endRow; r++) {
-        const tile = map.getTile(layer, c, r);        
-        const x = (0.5 + (c - startCol) * constants.MAP_TSIZE + offsetX) << 0;
-        const y = (0.5 + (r - startRow) * constants.MAP_TSIZE + offsetY) << 0;
+        const tile = this.map.getTile(layer, c, r);
+        if (tile === -1) break; 
+        const x = (c - startCol) * constants.MAP_TSIZE + offsetX;
+        const y = (r - startRow) * constants.MAP_TSIZE + offsetY;
 
         if (tile !== 0 && this.tileAtlas) {
           this.gameCtx.drawImage(
@@ -160,8 +256,8 @@ export class Game {
             Math.floor((tile - 1) / 16) * constants.MAP_TSIZE,
             constants.MAP_TSIZE,
             constants.MAP_TSIZE,
-            x,
-            y,
+            Math.round(x),
+            Math.round(y),
             constants.MAP_TSIZE,
             constants.MAP_TSIZE
           );
@@ -176,12 +272,12 @@ export class Game {
       if (this.diry === 0 && this.dirx === 0) {
         this.animation = 0;
       } else {
-        this.animation = this.animation < 2.925 ? this.animation + 0.075 : 0;
+        this.animation = this.animation < 3.96 ? this.animation + 0.04 : 0;
       }
     }
 
     const pixelHeight = onlyDrawTop ? 0.75 * constants.AVATAR_HEIGHT : constants.AVATAR_HEIGHT;
-    const characterStart = this.direction * constants.AVATAR_WIDTH * 3 + (this.animation << 0) * constants.AVATAR_WIDTH;
+    const characterStart = this.direction * constants.AVATAR_WIDTH * 4 + (this.animation << 0) * constants.AVATAR_WIDTH;
 
     if (this.avatar.avatarAsset) {
       this.gameCtx.drawImage(
@@ -191,7 +287,7 @@ export class Game {
         constants.AVATAR_WIDTH,
         pixelHeight,
         (0.5 + this.avatar.screenX - constants.AVATAR_WIDTH / 2) << 0,
-        (0.5 + this.avatar.screenY - constants.AVATAR_HEIGHT / 2) << 0,
+        (0.5 + this.avatar.screenY - constants.AVATAR_HEIGHT / 2 + (((1 < this.animation && this.animation < 2) || (3 < this.animation && this.animation < 4)) ? 1 : 0)) << 0,
         constants.AVATAR_WIDTH,
         pixelHeight
       );

@@ -11,10 +11,12 @@ class Camera {
         this.maxX = map.COLS * constants_1.constants.MAP_TSIZE - width;
         this.maxY = map.ROWS * constants_1.constants.MAP_TSIZE - height;
     }
+    updateMap(updateObject) {
+        this.maxX = updateObject.currentMap.COLS * constants_1.constants.MAP_TSIZE - this.width;
+        this.maxY = updateObject.currentMap.ROWS * constants_1.constants.MAP_TSIZE - this.height;
+    }
     follow(sprite) {
         this.following = sprite;
-        sprite.screenX = 0;
-        sprite.screenY = 0;
     }
     update() {
         if (this.following) {

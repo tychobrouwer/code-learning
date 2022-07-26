@@ -1,69 +1,88 @@
+import { MapType, addMapReturnType, MapLocation } from '../utils/types';
+
 import { constants } from '../utils/constants';
-import { MapType } from '../utils/types';
 
-export const map: MapType = {
-  COLS: 24,
-  ROWS: 21,
-  X_START: 100,
-  Y_START: 100,
+export class Map {
+  currentMap: MapType
+  MapLocation: MapLocation;
+  prevMapCols = 0;
+  prevMapRows = 0;
+  added = [ 0, 0 ];
+  adjacentMaps: {
+    [direction: string]: string;
+  }
 
-  layers: [[
-      10, 11, 10, 11, 10, 11, 10, 11, 10, 11,  1,  1,  1,  1, 12, 13, 12, 13, 12, 13, 12, 13, 12, 13,
-      12, 13, 12, 13, 12, 13, 12, 13, 12, 13,  1,  1,  1,  1, 10, 11, 10, 11, 10, 11, 10, 11, 10, 11,
-      10, 11, 10, 11, 10, 11, 10, 11, 10, 11,  1,  1,  1,  1, 12, 13, 12, 13, 12, 13, 12, 13, 12, 13,
-      12, 13, 12, 13,  2,  2,  2,  1,  1,  1,  1,  1,  1,  1, 10, 11, 10, 11, 10, 11, 10, 11, 10, 11,
-      10, 11, 10, 11,  2,  2,  2,  2,  1,  1,  1,  1,  1,  1,  1,  2,  2,  2, 12, 13, 12, 13, 12, 13,
-      12, 13,  2,  2,  2,  2,  2,  2,  1,  1,  1,  1,  1,  1,  2,  2,  2,  2, 10, 11, 10, 11, 10, 11,
-      10, 11,  2,  2,  2,  2,  1,  1,  1,  1,  1,  1,  1,  1,  2,  2,  2,  2,  2,  2, 12, 13, 12, 13,
-      12, 13, 12, 13,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  2,  2,  2,  2,  2,  2, 10, 11, 10, 11,
-      10, 11, 10, 11,  1,  1,  1,  1,  5,  3,  3,  3,  4, 12, 13,  2,  2,  2,  2,  1,  1,  1, 12, 13,
-      12, 13, 12, 13,  7,  3,  3,  3,  6,  1,  1,  1,  1, 10, 11, 12, 13,  1,  1,  1,  1,  1, 10, 11,
-      10, 11, 10, 11,  1,  1,  1,  1,  1,  1,  1,  1,  1, 12, 13, 10, 11,  1,  1, 22, 23,  1, 12, 13,
-      12, 13, 12, 13,  1,  1,  1,  1,  1, 22, 18, 23,  1, 10, 11,  2,  2,  1, 22, 17, 20,  1, 10, 11,
-      10, 11, 10, 11, 12, 13,  1, 22, 18, 17, 17, 20,  1,  2,  2,  2,  2,  2, 24, 17, 17, 23, 12, 13,
-      12, 13, 12, 13, 10, 11,  1, 24, 17, 17, 17, 25,  1,  2,  2,  2,  2,  2,  2, 24, 17, 20, 10, 11,
-      10, 11, 10, 11, 12, 13,  1,  1, 24, 19, 25,  1,  1,  2,  2,  2,  2,  2,  2,  1, 24, 25, 12, 13,
-      12, 13, 12, 13, 10, 11,  1,  1,  1,  1,  7,  3,  3,  4,  2,  2,  2,  2,  2,  1,  1,  1, 10, 11,
-      10, 11, 10, 11,  2,  2,  2,  1,  1,  1,  1,  1,  1,  1, 12, 13,  2,  2,  1,  1,  1,  1, 12, 13,
-      12, 13, 12, 13,  2,  2,  2,  2,  1,  1,  1,  1,  1,  1, 10, 11,  2,  2,  1,  1,  1,  1, 10, 11,
-      10, 11, 10, 11,  2,  2,  2,  2,  1,  1,  1,  1,  1,  1, 12, 13, 12, 13, 12, 13, 12, 13, 12, 13,
-      12, 13, 12, 13, 12, 13, 12, 13, 12, 13,  1,  1,  1,  1, 10, 11, 10, 11, 10, 11, 10, 11, 10, 11,
-      10, 11, 10, 11, 10, 11, 10, 11, 10, 11,  1,  1,  1,  1, 12, 13, 12, 13, 12, 13, 12, 13, 12, 13
+  constructor(map: MapType) {
+    this.currentMap = map;
+    this.adjacentMaps = {};
 
-  ], [
-      14, 15, 14, 15, 14, 15, 14, 15, 14, 15,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
-       0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0, 14, 15, 14, 15, 14, 15, 14, 15, 14, 15,
-      14, 15, 14, 15,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
-       0,  0,  0,  0, 16, 16, 16,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0, 14, 15, 14, 15, 14, 15,
-      14, 15,  0,  0, 16, 16, 16, 16,  0,  0,  0,  0,  0,  0,  0, 16, 16, 16,  0,  0,  0,  0,  0,  0,
-       0,  0, 16, 16, 16, 16, 16, 16,  0,  0,  0,  0,  0,  0, 16, 16, 16, 16,  0,  0, 14, 15, 14, 15,
-      14, 15, 26, 27, 16, 16,  0,  0,  0,  0,  0,  0,  0,  0, 16, 16, 16, 16, 16, 16,  0,  0,  0,  0,
-       0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0, 14, 27, 16, 16, 16, 16, 16,  0,  0, 14, 15,
-      14, 15, 14, 15,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0, 26, 27, 16, 16,  0,  0,  0,  0,  0,
-       0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0, 14, 15,  0,  0,  0,  0,  0,  0,  0, 14, 15,
-      14, 15, 14, 15,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
-       0,  0,  0,  0, 14, 15,  0,  0,  0,  0,  0,  0,  0,  0,  0, 16, 16,  0,  0,  0,  0,  0, 14, 15,
-      14, 15, 14, 15, 12, 13,  0,  0,  0,  0,  0,  0,  0, 16, 16, 16, 16, 16,  0,  0,  0,  0,  0,  0,
-       0,  0,  0,  0, 14, 15,  0,  0,  0,  0,  0,  0,  0, 16, 16, 16, 16, 16, 16,  0,  0,  0, 14, 15,
-      14, 15, 14, 15,  0,  0,  0,  0,  0,  0,  0,  0,  0, 16, 16, 16, 16, 16, 16,  0,  0,  0,  0,  0,
-       0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0, 26, 27, 16, 16, 16,  0,  0,  0, 14, 15,
-      14, 15, 14, 15, 16, 16, 16,  0,  0,  0,  0,  0,  0,  0,  0,  0, 16, 16,  0,  0,  0,  0,  0,  0,
-       0,  0,  0,  0, 16, 16, 16, 16,  0,  0,  0,  0,  0,  0, 14, 15, 26, 27, 14, 15, 14, 15, 14, 15,
-      14, 15, 14, 15, 26, 27, 26, 27, 14, 15,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
-       0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0, 14, 15, 14, 15, 14, 15, 14, 15, 14, 15,
-       0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+    this.MapLocation = {
+      xBegin: 0,
+      xEnd: this.currentMap.COLS,
+      yBegin: 0,
+      yEnd: this.currentMap.ROWS,
+    }
+  }
 
-  ]],
+  getTile(layer: number, col: number, row: number): number {
+    return this.currentMap.layers[layer][row * this.currentMap.COLS + col];
+  }
 
-  getTile: function (layer: number, col: number, row: number): number {
-      return this.layers[layer][row * map.COLS + col];
-  },
+  updateMap(mapName: string) {
+    this.added = [ 
+      0,
+      0
+    ];
 
-  isSolidTileAtXY: function (x: number, y: number, dirX: number, dirY: number): boolean {
+    // console.log(this.added[0], map.COLS)
+    // console.log(this.added[1], map.ROWS)
+
+    // this.prevMapCols = this.currentMap.COLS
+    // this.prevMapRows = this.currentMap.ROWS
+
+    this.currentMap = {...constants.MAPS[mapName]};
+    this.adjacentMaps = {};
+
+    this.MapLocation = {
+      xBegin: 0,
+      xEnd: this.currentMap.COLS,
+      yBegin: 0,
+      yEnd: this.currentMap.ROWS,
+    }
+
+    // console.log(this.MapLocation)
+    // this.added = [ 0, 0 ];
+
+    // return added;
+  }
+
+  isNextMap(x: number, y: number): boolean | string[] {
+    if (this.MapLocation) {
+      const currentCol = this.getCol(x);
+      const currentRow = this.getRow(y);
+
+      // console.debug('x-axis: ' + this.MapLocation.xBegin + ' : ' + currentCol + ' : ' + this.MapLocation.xEnd)
+      console.debug('y-axis: ' + this.MapLocation.yBegin + ' : ' + currentRow + ' : ' + this.MapLocation.yEnd)
+
+      if (this.MapLocation.xBegin < currentCol && currentCol < this.MapLocation.xEnd) {
+        // console.log('y-axis')
+        if (this.MapLocation.yBegin > currentRow) return [this.adjacentMaps['top'], 'top'];
+        if (this.MapLocation.yEnd < currentRow)   return [this.adjacentMaps['bottom'], 'bottom'];  
+      } else {
+        // console.log('x-axis')
+        if (this.MapLocation.xBegin > currentCol) return [this.adjacentMaps['left'], 'left'];
+        if (this.MapLocation.xEnd < currentCol)   return [this.adjacentMaps['right'], 'right'];  
+      }
+    }
+
+    return false;
+  }
+
+  isSolidTileAtXY(x: number, y: number, dirX: number, dirY: number): boolean {
     const col = Math.floor(x / constants.MAP_TSIZE);
     const row = Math.floor(y / constants.MAP_TSIZE);
 
-    return this.layers.reduce(function (this: MapType, res: boolean, layer: number[], index: number) {
+    return this.currentMap.layers.reduce((res: boolean, layer: number[], index: number) => {
       const tile = this.getTile(index, col, row);
       const isSolid = tile === 10 || tile === 11 || tile === 12 || tile === 13;
       const colHalfTile = row + 0.5;
@@ -84,25 +103,150 @@ export const map: MapType = {
         (tile === 9 && (
           (rowHalfTile * constants.MAP_TSIZE < y && (dirY === -1 || dirX !== 0)) || 
           (colHalfTile * constants.MAP_TSIZE > x && (dirX === 1 || dirY !== 0))
-        ));
+        )) ||
+        (tile === 30 && (row + 0.3) * constants.MAP_TSIZE < y);
 
       return res || isSolid || oneWay;
-    }.bind(this), false);
-  },
+    }, false);  
+  }
 
-  getCol: function (x: number): number {
+  addMap(locationName: string, location: string, tileOffset: number) {
+    const mapToAdd = constants.MAPS[locationName];
+    const finalLayers: number[][] = [];
+    // const added = [ 0, 0 ];
+    let finalCols = 0, finalRows = 0;
+
+    for (let layer = 0; layer < this.currentMap.layers.length; layer++) {
+      if (!finalLayers[layer]) finalLayers[layer] = [];
+      if (location === 'right' || location === 'left') {
+        for (let row = 0; row < this.currentMap.ROWS; row++) {
+          const begin = row * this.currentMap.COLS;
+          const end = begin + this.currentMap.COLS;
+    
+          const begin2 = row * mapToAdd.COLS;
+          const end2 = begin2 + mapToAdd.COLS;
+          
+          const arrayCurrentMap = this.currentMap.layers[layer].slice(begin, end);
+          const arrayAddedMap = (mapToAdd.layers[layer][begin2]) ? mapToAdd.layers[layer].slice(begin2, end2) : Array(end2 - begin2).fill(0);
+    
+          if (location === 'left') {
+            finalLayers[layer].push(...arrayAddedMap);
+          }
+
+          finalLayers[layer].push(...arrayCurrentMap);
+
+          if (location === 'right') {
+            finalLayers[layer].push(...arrayAddedMap);
+          }
+        }
+
+        if (location === 'left' && layer === 0) {
+          // added[0] = mapToAdd.COLS;
+          console.log('loading map to left') 
+
+          this.MapLocation.xBegin = this.MapLocation.xBegin + mapToAdd.COLS;
+          this.MapLocation.xEnd = this.MapLocation.xEnd + mapToAdd.COLS;  
+        }
+
+        if (location === 'right' && layer === 0) {
+          console.log('loading map to right')
+        }
+
+        finalCols = this.currentMap.COLS + mapToAdd.COLS;
+        finalRows = this.currentMap.ROWS;
+      } else if (location === 'top' || location === 'bottom') {
+          const arrayAddedMap = [];
+
+        for (let row = 0; row < mapToAdd.ROWS; row++) {
+          for (let col = 0; col < this.currentMap.COLS; col++) {
+            if (col >= tileOffset && col < this.currentMap.COLS + tileOffset) {
+              arrayAddedMap.push(mapToAdd.layers[layer][col - tileOffset + row * mapToAdd.COLS]);
+            } else {
+              arrayAddedMap.push(0);
+            }
+          }
+        }
+    
+        if (location === 'bottom') {
+          if (layer === 0) {
+            console.log('loading map to bottom')
+          }
+          finalLayers[layer].push(...this.currentMap.layers[layer]);
+        }
+
+        finalLayers[layer].push(...arrayAddedMap);
+
+        if (location === 'top') {
+          finalLayers[layer].push(...this.currentMap.layers[layer]);
+
+          if (layer === 0) {
+            console.log('loading map to top')
+            this.MapLocation.yBegin = this.MapLocation.yBegin + mapToAdd.ROWS;
+            this.MapLocation.yEnd = this.MapLocation.yEnd + mapToAdd.ROWS;  
+
+            this.added[1] = mapToAdd.ROWS
+          }
+        }
+
+        finalCols = this.currentMap.COLS;
+        finalRows = this.currentMap.ROWS + mapToAdd.ROWS;
+      }
+    }
+
+    console.log('added rows to top: ' + this.added[1] + ' | current map rows: ' + this.currentMap.ROWS)
+    console.log('map rows difference: ' + (this.added[1] - finalRows))
+
+    this.adjacentMaps[location] = locationName;
+    this.currentMap.layers = finalLayers;
+    this.currentMap.COLS = finalCols;
+    this.currentMap.ROWS = finalRows;
+
+    const returnObject: addMapReturnType = {
+      currentMap: this.currentMap,
+      location: location,
+      added: [ this.added[0] - finalCols, this.added[1] - finalRows],
+    };
+
+    return returnObject;
+  }
+
+  getAjacent(mapName: string) {
+    if (mapName === 'route 101') {
+      return [
+        {name: 'litteroot town', position: 'bottom'},
+        {name: 'oldale town', position: 'top'},
+      ]
+    } else if (mapName === 'route 102') {
+      return [
+        {name: 'oldale town', position: 'right'},
+      ]
+    } else if (mapName === 'litteroot town') {
+      return [
+        {name: 'route 101', position: 'top'},
+      ]
+    } else if (mapName === 'oldale town') {
+      return [
+        {name: 'route 101', position: 'bottom'},
+        {name: 'route 102', position: 'left'},
+      ]
+    }
+
+    return []
+  }
+
+  getCol(x: number): number {
     return Math.floor(x / constants.MAP_TSIZE);
-  },
+  }
 
-  getRow: function (y: number): number {
+  getRow(y: number): number {
     return Math.floor(y / constants.MAP_TSIZE);
-  },
+  }
 
-  getX: function (col: number): number {
+  getX(col: number): number {
     return col * constants.MAP_TSIZE;
-  },
+  }
 
-  getY: function (row: number): number {
+  getY(row: number): number {
       return row * constants.MAP_TSIZE;
   }
 }

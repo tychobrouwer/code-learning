@@ -20,6 +20,7 @@ export const keyboard: Keyboard = {
     keys.forEach(function (this: Keyboard, keyCode: string) {
       this._keys[keyCode as keyof Keys] = false;
     }.bind(this));
+
   },
 
   _onKeyDown: function(event: KeyboardEvent) {

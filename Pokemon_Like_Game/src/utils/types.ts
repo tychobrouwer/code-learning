@@ -1,16 +1,22 @@
 export interface MapType {
   COLS: number;
   ROWS: number;
-  X_START: number;
-  Y_START: number;
 
   layers: number[][];
-  getTile: (layer: number, col: number, row: number) => number;
-  isSolidTileAtXY: (x: number, y: number, dirx: number, diry: number) => boolean;
-  getCol: (x: number) => number;
-  getRow: (y: number) => number;
-  getX: (col: number) => number;
-  getY: (row: number) => number;
+}
+
+export interface MapsType {
+  [mapName: string] : MapType;
+}
+
+export interface addMapReturnType {
+  currentMap: MapType;
+  location: string;
+  added: number[]
+}
+
+export interface MapLocation {
+  [coordinate: string]: number;
 }
 
 export interface Keyboard {
@@ -36,17 +42,31 @@ export interface Keys {
 export interface pokemonIndexType {
   [level: string]: {
     [environment: string]: {
-      [pokemonKey: string]: pokemonType
+      [pokemonKey: string]: pokemonType2
     }
   }
 }
 
-export interface pokemonType {
+export interface pokemonType2 {
   id_string: string;
-  encounter_rate: number;
+  rate: number;
+  level: number[];
 }
 
-export interface pokedexType {
+export interface pokemonType {
+  rate: number;
+  level: number[];
+}
+
+export interface encounterTableType {
+  [route: string]: {
+    [encounterMethod: string]: {
+      [id: number]: pokemonType;
+    }
+  }
+}
+
+export interface pokemonInfoType {
   id: number;
   name: string;
   order: number;
@@ -79,4 +99,6 @@ export interface pokedexType {
   }[];
 }
 
-export interface pokedexCombType extends pokedexType, pokemonType {}
+export interface pokedexType { 
+  [id_string: string]: pokemonInfoType;
+}

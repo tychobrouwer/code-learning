@@ -131,28 +131,32 @@ class Game {
     }
     loadAdjacentMaps(addMap = false, fromDirection = false) {
         const Adjacent = this.map.getAjacent(this.currentMap);
-        let updatedMap;
+        let updatedData;
         const test1 = Adjacent.map(a => a.position);
         for (const adjacentMap of Object.values(Adjacent)) {
-            updatedMap = this.map.addMap(adjacentMap.name, adjacentMap.position, 0);
+            updatedData = this.map.addMap(adjacentMap.name, adjacentMap.position, 0);
         }
         // console.log(test1)
-        if (updatedMap) {
-            this.camera.updateMap(updatedMap);
+        if (updatedData) {
+            this.camera.updateMap(updatedData.currentMap);
             const added = [0, 0];
-            // console.log(fromDirection);
+            // console.log(updatedData.diff);
             // THIS SHOULD MAYBE BE UPDATED!!
             if (test1.includes('top') && test1.includes('bottom') && fromDirection === 'top') {
-                added[1] = 20;
+                added[1] = updatedData.diff[1];
+                // console.log('first')
             }
             else if (test1.includes('top') && !test1.includes('bottom') && fromDirection === 'bottom') {
-                added[1] = -20;
+                added[1] = updatedData.diff[1];
+                // console.log('second')
             }
             if (test1.includes('left') && test1.includes('bottom') && fromDirection === 'top') {
-                added[0] = 50;
+                added[0] = updatedData.diff[0];
+                // console.log('third')diff
             }
             else if (test1.includes('bottom') && test1.includes('top') && fromDirection === 'bottom') {
-                added[0] = -50;
+                added[0] = updatedData.diff[0];
+                // console.log('fourth')
             }
             // /////////////////////////// //
             // console.log(added)

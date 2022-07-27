@@ -38,6 +38,7 @@ const BATTLE_STATUS = [
     'writeAppearText',
     'writeGoText',
     'throwPokemon',
+    'playerTurn',
     'finished',
 ];
 class PokemonBattle {
@@ -148,25 +149,30 @@ class PokemonBattle {
             if (BATTLE_STATUS[this.battleStatus] === 'slidePokemonIn') {
                 this.drawBattleArena();
                 this.drawEnemyPokemon(delta, true, true);
-                this.drawActionBox();
+                this.drawActionBox(false);
             }
             else if (BATTLE_STATUS[this.battleStatus] === 'writeAppearText') {
                 this.drawBattleArena();
                 this.drawEnemyPokemon(0, true);
-                this.drawActionBox();
-                this.writeTextToBattleBox('Wild ' + this.enemyPokemon.pokemon.name.toUpperCase() + ' appeared!|', 0, 1, delta, 1, true);
+                this.drawActionBox(false);
+                this.writeTextToBattleBox('Wild ' + this.enemyPokemon.pokemon.name.toUpperCase() + ' appeared!|', 0, 1, delta, 1, 0, true, true);
                 this.drawEnemyHealth(delta, true);
             }
             else if (BATTLE_STATUS[this.battleStatus] === 'writeGoText') {
-                this.writeTextToBattleBox('Go! ' + this.playerPokemon.pokemon.name.toUpperCase() + '!', 0, 1, delta, 0, true);
+                this.writeTextToBattleBox('Go! ' + this.playerPokemon.pokemon.name.toUpperCase() + '!', 0, 1, delta, 0, 0, true, true);
             }
             else if (BATTLE_STATUS[this.battleStatus] === 'throwPokemon') {
                 this.drawBattleArena();
                 this.drawEnemyPokemon(0);
-                this.drawEnemyHealth(0);
+                this.drawEnemyHealth(0, false);
                 this.drawPlayerPokemon(delta, true, true);
-                this.drawActionBox();
+                this.drawActionBox(false);
                 this.drawText('Go! ' + this.playerPokemon.pokemon.name.toUpperCase() + '!', 0, 1, 16, 122);
+            }
+            else if (BATTLE_STATUS[this.battleStatus] === 'playerTurn') {
+                this.drawActionBox(true);
+                this.writeTextToBattleBox('What should ', 0, 1, delta, 0, 0, false, false);
+                this.writeTextToBattleBox(this.playerPokemon.pokemon.name.toUpperCase() + ' do?', 0, 1, delta, 0, 1, false, false);
             }
             if (BATTLE_STATUS[this.battleStatus] !== 'finished') {
                 window.requestAnimationFrame(this.tick.bind(this));
@@ -180,9 +186,9 @@ class PokemonBattle {
     drawEnemyPokemon(delta, drawPlayer = false, nextPhase = false) {
         const speed = 176;
         const xPixel = (this.X_slidePokemonIn + delta * speed) << 0;
-        this.ctx.drawImage(this.battleAssets, this.encounterMethod % 3 * constants_1.constants.BATTLE_SCENE_WIDTH, ((0.5 + this.encounterMethod / 3) << 0) * constants_1.constants.BATTLE_SCENE_HEIGHT + 3 * constants_1.constants.BATTLE_ARENA_HEIGHT + constants_1.constants.TEXT_BOX_HEIGHT, constants_1.constants.BATTLE_SCENE_WIDTH, constants_1.constants.BATTLE_SCENE_HEIGHT, xPixel - constants_1.constants.BATTLE_SCENE_WIDTH, 48, constants_1.constants.BATTLE_SCENE_WIDTH, constants_1.constants.BATTLE_SCENE_HEIGHT);
+        this.ctx.drawImage(this.battleAssets, this.encounterMethod % 3 * constants_1.constants.BATTLE_SCENE_WIDTH, ((0.5 + this.encounterMethod / 3) << 0) * constants_1.constants.BATTLE_SCENE_HEIGHT + 3 * constants_1.constants.BATTLE_ARENA_HEIGHT + constants_1.constants.ACTION_BOX_HEIGHT, constants_1.constants.BATTLE_SCENE_WIDTH, constants_1.constants.BATTLE_SCENE_HEIGHT, xPixel - constants_1.constants.BATTLE_SCENE_WIDTH, 48, constants_1.constants.BATTLE_SCENE_WIDTH, constants_1.constants.BATTLE_SCENE_HEIGHT);
         this.ctx.drawImage(this.enemyPokemonSprite, this.enemyPokemon.xSource, this.enemyPokemon.ySource, constants_1.constants.POKEMON_SIZE, constants_1.constants.POKEMON_SIZE, xPixel - 0.75 * constants_1.constants.BATTLE_SCENE_WIDTH, 48 - constants_1.constants.POKEMON_SIZE / 2, constants_1.constants.POKEMON_SIZE, constants_1.constants.POKEMON_SIZE);
-        this.ctx.drawImage(this.battleAssets, this.encounterMethod % 3 * constants_1.constants.BATTLE_SCENE_WIDTH, ((0.5 + this.encounterMethod / 3) << 0) * constants_1.constants.BATTLE_SCENE_HEIGHT + 3 * constants_1.constants.BATTLE_ARENA_HEIGHT + constants_1.constants.TEXT_BOX_HEIGHT, constants_1.constants.BATTLE_SCENE_WIDTH, constants_1.constants.BATTLE_SCENE_HEIGHT, constants_1.constants.GAME_WIDTH - xPixel, 100, constants_1.constants.BATTLE_SCENE_WIDTH, constants_1.constants.BATTLE_SCENE_HEIGHT);
+        this.ctx.drawImage(this.battleAssets, this.encounterMethod % 3 * constants_1.constants.BATTLE_SCENE_WIDTH, ((0.5 + this.encounterMethod / 3) << 0) * constants_1.constants.BATTLE_SCENE_HEIGHT + 3 * constants_1.constants.BATTLE_ARENA_HEIGHT + constants_1.constants.ACTION_BOX_HEIGHT, constants_1.constants.BATTLE_SCENE_WIDTH, constants_1.constants.BATTLE_SCENE_HEIGHT, constants_1.constants.GAME_WIDTH - xPixel, 100, constants_1.constants.BATTLE_SCENE_WIDTH, constants_1.constants.BATTLE_SCENE_HEIGHT);
         if (drawPlayer) {
             this.ctx.drawImage(this.avatarAssets, constants_1.constants.AVATAR_BATTLE_OFFSET, 0, constants_1.constants.AVATAR_BATTLE_WIDTH, constants_1.constants.AVATAR_BATTLE_HEIGHT, constants_1.constants.GAME_WIDTH - xPixel + 0.5 * constants_1.constants.BATTLE_SCENE_WIDTH, constants_1.constants.BATTLE_ARENA_HEIGHT - constants_1.constants.AVATAR_BATTLE_HEIGHT, constants_1.constants.AVATAR_BATTLE_WIDTH, constants_1.constants.AVATAR_BATTLE_HEIGHT);
             if (xPixel >= constants_1.constants.GAME_WIDTH && nextPhase) {
@@ -192,8 +198,8 @@ class PokemonBattle {
             this.X_throwPokemon = this.X_slidePokemonIn;
         }
     }
-    drawEnemyHealth(delta, slideIn = false) {
-        const speed = 128;
+    drawEnemyHealth(delta, slideIn) {
+        const speed = 224;
         let xPixel = (this.X_slideEnemyHealth + delta * speed - constants_1.constants.ASSETS_ENEMY_HEALTH_WIDTH) << 0;
         if (xPixel > 13)
             xPixel = 13;
@@ -234,7 +240,7 @@ class PokemonBattle {
             if (xPixelPokeball >= 70) {
                 this.ctx.drawImage(this.playerPokemonSprite, this.playerPokemon.xSource + 2 * constants_1.constants.POKEMON_SIZE, this.playerPokemon.ySource, constants_1.constants.POKEMON_SIZE, constants_1.constants.POKEMON_SIZE, 0.5 * (constants_1.constants.BATTLE_SCENE_WIDTH - constants_1.constants.POKEMON_SIZE), constants_1.constants.BATTLE_ARENA_HEIGHT - constants_1.constants.AVATAR_BATTLE_HEIGHT, constants_1.constants.POKEMON_SIZE, constants_1.constants.POKEMON_SIZE);
                 this.pokemoinAlternativeOpacity -= delta * 8;
-                const speedHealth = 128;
+                const speedHealth = 224;
                 let xPixelPlayerHealth = (this.X_slidePlayerHealth - delta * speedHealth + constants_1.constants.GAME_WIDTH) << 0;
                 if (xPixelPlayerHealth < 127)
                     xPixelPlayerHealth = 127;
@@ -251,34 +257,43 @@ class PokemonBattle {
             this.ctx.globalAlpha = 1;
         }
         this.ctx.drawImage(this.avatarAssets, constants_1.constants.AVATAR_BATTLE_OFFSET, assetOffset, constants_1.constants.AVATAR_BATTLE_WIDTH, constants_1.constants.AVATAR_BATTLE_HEIGHT, constants_1.constants.GAME_WIDTH - xPixel + 0.5 * constants_1.constants.BATTLE_SCENE_WIDTH, constants_1.constants.BATTLE_ARENA_HEIGHT - constants_1.constants.AVATAR_BATTLE_HEIGHT, constants_1.constants.AVATAR_BATTLE_WIDTH, constants_1.constants.AVATAR_BATTLE_HEIGHT);
-        if (xPixelPokeball >= 200 && nextPhase) {
+        if (xPixelPokeball >= 100 && nextPhase) {
             this.nextBattlePhase();
         }
         if (throwPokemon) {
             this.X_throwPokemon += delta * speed;
         }
     }
-    writeTextToBattleBox(text, fontsize, fontColor, delta, delayAfter, nextPhase = false) {
+    writeTextToBattleBox(text, fontsize, fontColor, delta, delayAfter, textLine, writeOut, nextPhase = false) {
         const speed = 304;
-        const i = ((this.X_writeTextToBattleBox + delta * speed) / 6) << 0;
-        const textToDisplay = text.slice(0, i);
-        this.drawText(textToDisplay, fontsize, fontColor, 16, 122);
-        if (i >= text.length + delayAfter * speed / 6) {
-            this.X_writeTextToBattleBox = 0;
-            this.drawActionBox();
-            if (nextPhase) {
-                this.nextBattlePhase();
+        const yText = 122 + 16 * textLine;
+        if (writeOut) {
+            const i = ((this.X_writeTextToBattleBox + delta * speed) / 6) << 0;
+            const textToDisplay = text.slice(0, i);
+            this.drawText(textToDisplay, fontsize, fontColor, 16, yText);
+            if (i >= text.length + delayAfter * speed / 6) {
+                this.X_writeTextToBattleBox = 0;
+                this.drawActionBox(false);
+                if (nextPhase) {
+                    this.nextBattlePhase();
+                }
+            }
+            else {
+                this.X_writeTextToBattleBox += delta * speed;
             }
         }
         else {
-            this.X_writeTextToBattleBox += delta * speed;
+            this.drawText(text, fontsize, fontColor, 16, yText);
         }
     }
     drawBattleArena() {
         this.ctx.drawImage(this.battleAssets, this.encounterMethod % 4 * constants_1.constants.GAME_WIDTH, ((0.5 + this.encounterMethod / 4) << 0) * constants_1.constants.BATTLE_ARENA_HEIGHT, constants_1.constants.GAME_WIDTH, constants_1.constants.BATTLE_ARENA_HEIGHT, 0, 0, constants_1.constants.GAME_WIDTH, constants_1.constants.BATTLE_ARENA_HEIGHT);
     }
-    drawActionBox() {
-        this.ctx.drawImage(this.battleAssets, 0, 3 * constants_1.constants.BATTLE_ARENA_HEIGHT, constants_1.constants.GAME_WIDTH, constants_1.constants.TEXT_BOX_HEIGHT, 0, constants_1.constants.BATTLE_ARENA_HEIGHT, constants_1.constants.GAME_WIDTH, constants_1.constants.TEXT_BOX_HEIGHT);
+    drawActionBox(actionchoice) {
+        this.ctx.drawImage(this.battleAssets, 0, 3 * constants_1.constants.BATTLE_ARENA_HEIGHT, constants_1.constants.GAME_WIDTH, constants_1.constants.ACTION_BOX_HEIGHT, 0, constants_1.constants.BATTLE_ARENA_HEIGHT, constants_1.constants.GAME_WIDTH, constants_1.constants.ACTION_BOX_HEIGHT);
+        if (actionchoice) {
+            this.ctx.drawImage(this.battleAssets, constants_1.constants.GAME_WIDTH, 3 * constants_1.constants.BATTLE_ARENA_HEIGHT, constants_1.constants.ACTION_BOX_WIDTH, constants_1.constants.ACTION_BOX_HEIGHT, constants_1.constants.GAME_WIDTH - constants_1.constants.ACTION_BOX_WIDTH, constants_1.constants.BATTLE_ARENA_HEIGHT, constants_1.constants.ACTION_BOX_WIDTH, constants_1.constants.ACTION_BOX_HEIGHT);
+        }
     }
     drawText(text, fontsize, fontColor, posX, posY) {
         for (let i = 0; i < text.length; i++) {

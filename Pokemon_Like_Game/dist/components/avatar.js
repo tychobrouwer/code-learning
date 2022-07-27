@@ -14,8 +14,8 @@ class Avatar {
     }
     addMapUpdate(map) {
         this.map = map;
-        this.x = 100;
-        this.y = 100 + 320;
+        this.x = 90;
+        this.y = 90 + 320;
     }
     newAreaMapUpdate(map, added) {
         this.map = map;

@@ -19,14 +19,7 @@ class Map {
         };
     }
     getTile(layer, col, row) {
-        // if (layer === 1 && (row * this.currentMap.COLS + col) === 399) {
-        //   console.log(this.currentMap.layers[layer])
-        //   console.log(this.currentMap.layers[layer][row * this.currentMap.COLS + col])
-        // }
-        //   return 1;
-        // } else {
         return this.currentMap.layers[layer][row * this.currentMap.COLS + col];
-        // }
     }
     updateMap(mapName) {
         this.prevAddedCols = this.added[0];
@@ -72,19 +65,26 @@ class Map {
         const row = Math.floor(y / constants_1.constants.MAP_TSIZE);
         return this.currentMap.layers.reduce((res, layer, index) => {
             const tile = this.getTile(index, col, row);
-            const isSolid = tile === 10 || tile === 11 || tile === 12 || tile === 13;
-            const colHalfTile = row + 0.5;
+            const isSolid = tile === 10 || tile === 11 || tile === 12 || tile === 13 || tile === 36 || tile === 37 ||
+                tile === 38 || tile === 39 || tile === 40 || tile === 41 || tile === 42;
+            const colHalfTile = col + 0.5;
             const rowHalfTile = row + 0.5;
             const oneWay = (tile === 3 && rowHalfTile * constants_1.constants.MAP_TSIZE < y && (dirY === -1 || dirX !== 0)) ||
                 (tile === 4 && rowHalfTile * constants_1.constants.MAP_TSIZE < y && (dirY === -1 || dirX === -1)) ||
                 (tile === 7 && rowHalfTile * constants_1.constants.MAP_TSIZE < y && (dirY === -1 || dirX === 1)) ||
                 (tile === 5 && rowHalfTile * constants_1.constants.MAP_TSIZE < y && colHalfTile * constants_1.constants.MAP_TSIZE < x) ||
                 (tile === 8 && rowHalfTile * constants_1.constants.MAP_TSIZE < y && colHalfTile * constants_1.constants.MAP_TSIZE > x) ||
-                (tile === 6 && ((rowHalfTile * constants_1.constants.MAP_TSIZE < y && (dirY === -1 || dirX !== 0)) ||
-                    (colHalfTile * constants_1.constants.MAP_TSIZE < x && (dirX === -1 || dirY !== 0)))) ||
-                (tile === 9 && ((rowHalfTile * constants_1.constants.MAP_TSIZE < y && (dirY === -1 || dirX !== 0)) ||
-                    (colHalfTile * constants_1.constants.MAP_TSIZE > x && (dirX === 1 || dirY !== 0)))) ||
-                (tile === 30 && (row + 0.3) * constants_1.constants.MAP_TSIZE < y);
+                (tile === 6 &&
+                    (rowHalfTile * constants_1.constants.MAP_TSIZE < y || colHalfTile * constants_1.constants.MAP_TSIZE < x) &&
+                    (dirX === -1 || dirY === -1)) ||
+                (tile === 9 && (rowHalfTile * constants_1.constants.MAP_TSIZE < y || colHalfTile * constants_1.constants.MAP_TSIZE < x &&
+                    (dirX === 1 || dirY === -1))) ||
+                (tile === 30 && (row + 0.3) * constants_1.constants.MAP_TSIZE < y) ||
+                (tile === 33 && colHalfTile * constants_1.constants.MAP_TSIZE < x && (dirX === -1 || dirY !== 0)) ||
+                (tile === 34 && colHalfTile * constants_1.constants.MAP_TSIZE < x && (dirX === -1 || dirY === 1));
+            (tile === 35 &&
+                (rowHalfTile * constants_1.constants.MAP_TSIZE < y ||
+                    colHalfTile * constants_1.constants.MAP_TSIZE < x) && (dirX === -1 || dirY !== 0));
             return res || isSolid || oneWay;
         }, false);
     }
@@ -169,7 +169,10 @@ class Map {
             COLS: finalCols,
             ROWS: finalRows,
         };
-        return this.currentMap;
+        return {
+            currentMap: this.currentMap,
+            diff: [finalCols - this.prevMapCols, finalRows - this.prevMapRows],
+        };
     }
     getAjacent(mapName) {
         if (mapName === 'route 101') {

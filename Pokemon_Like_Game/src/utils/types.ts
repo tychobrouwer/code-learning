@@ -11,8 +11,7 @@ export interface MapsType {
 
 export interface addMapReturnType {
   currentMap: MapType;
-  location: string;
-  added: number[]
+  diff: number[]
 }
 
 export interface MapLocation {

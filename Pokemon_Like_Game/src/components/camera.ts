@@ -1,7 +1,7 @@
 import { Avatar } from './avatar';
 // import { Map } from './map';
 
-import { MapType, addMapReturnType } from '../utils/types';
+import { MapType } from '../utils/types';
 
 import { constants } from '../utils/constants';
 
@@ -22,9 +22,9 @@ export class Camera {
     this.maxY = map.ROWS * constants.MAP_TSIZE - height;
   }
 
-  updateMap(updateObject: addMapReturnType) {
-    this.maxX = updateObject.currentMap.COLS * constants.MAP_TSIZE - this.width;
-    this.maxY = updateObject.currentMap.ROWS * constants.MAP_TSIZE - this.height;
+  updateMap(currentMap: MapType) {
+    this.maxX = currentMap.COLS * constants.MAP_TSIZE - this.width;
+    this.maxY = currentMap.ROWS * constants.MAP_TSIZE - this.height;
   }
 
   follow(sprite: Avatar): void {

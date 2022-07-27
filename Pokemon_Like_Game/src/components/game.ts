@@ -15,6 +15,7 @@ import { PokemonBattle } from './pokemon';
 import { constants } from '../utils/constants';
 import { keyboard } from '../utils/keyboard';
 import { randomFromMinMax } from '../utils/helper';
+import { MapType } from '../utils/types';
 // import { MapType } from '../utils/types';
 
 export class Game {
@@ -139,35 +140,6 @@ export class Game {
       console.log('Entered new area: ' + this.currentMap);
       
       this.map.updateMap(this.currentMap)
-
-      // if (isNextMap[1] === 'bottom') {
-      //   console.log('new map bottom')
-      //   added[1] -= 20;
-      // }
-
-      // if (isNextMap[1] === 'top') {
-      //   console.log('new map top')
-      //   added[1] += 20;
-      // }
-
-      // if (isNextMap[1] === 'right') {
-      //   console.log('new map right')
-      //   added[0] -= 50;
-      // }
-
-      // if (isNextMap[1] === 'left') {
-      //   console.log('new map left')
-      //   added[0] += 50;
-      // }
-
-      // if (isNextMap[1] === 'left') {
-      //   added[0] = 0;
-      //   added[1] = 0;
-      //   console.log('added')
-      // }
-
-      // console.log(isNextMap[1])
-
       this.loadAdjacentMaps(false, isNextMap[1]);
     }
 
@@ -175,32 +147,24 @@ export class Game {
     this.camera.update();
   }
 
-  loadAdjacentMaps(addMap = false, fromDirection: string | boolean= false) {
+  loadAdjacentMaps(addMap = false, fromDirection: string | boolean = false) {
     const Adjacent = this.map.getAjacent(this.currentMap);
-    let updateMapObject;
-    const test1 = [];
-    const test2 = [];
-    let test = 0;
+    let updatedMap: MapType | undefined;
+    const test1 = Adjacent.map(a => a.position)
+
     for (const adjacentMap of Object.values(Adjacent)) {
-      updateMapObject = this.map.addMap(adjacentMap.name, adjacentMap.position, 0);
-      test1.push(adjacentMap.position)
-      test2.push(updateMapObject.added[1])
-      test = constants.MAPS[this.currentMap].ROWS + updateMapObject.added[1] 
-      // console.log(added[0], added[1])
+      updatedMap = this.map.addMap(adjacentMap.name, adjacentMap.position, 0);
     }
 
-    console.log(test)
-    console.log(test1)
-    console.log(test2)
+    // console.log(test1)
 
-    if (updateMapObject) { 
-      this.camera.updateMap(updateMapObject);
-      // const added = updateMapObject.added;
-      const added = [ 0, 0 ]
+    if (updatedMap) { 
+      this.camera.updateMap(updatedMap);
+      const added = [ 0, 0 ];
       
-      console.log(fromDirection)
-      
-      // THIS SHOULD BE RESULT OF ADDED!!
+      // console.log(fromDirection);
+
+      // THIS SHOULD MAYBE BE UPDATED!!
       if (test1.includes('top') && test1.includes('bottom') && fromDirection === 'top') {
         added[1] = 20;
       } else if (test1.includes('top') && !test1.includes('bottom') && fromDirection === 'bottom') {
@@ -212,9 +176,9 @@ export class Game {
       } else if (test1.includes('bottom') && test1.includes('top') && fromDirection === 'bottom') {
         added[0] = -50;
       }
-      // ///////////////////////////// //
+      // /////////////////////////// //
 
-      console.log(added)
+      // console.log(added)
 
       if (addMap) {
         this.avatar.addMapUpdate(this.map);

@@ -6,9 +6,6 @@ class Map {
     constructor(map) {
         this.prevMapCols = 0;
         this.prevMapRows = 0;
-        this.prevAddedCols = 0;
-        this.prevAddedRows = 0;
-        this.added = [0, 0];
         this.currentMap = map;
         this.adjacentMaps = {};
         this.MapLocation = {
@@ -22,8 +19,6 @@ class Map {
         return this.currentMap.layers[layer][row * this.currentMap.COLS + col];
     }
     updateMap(mapName) {
-        this.prevAddedCols = this.added[0];
-        this.prevAddedRows = this.added[1];
         this.prevMapCols = this.currentMap.COLS;
         this.prevMapRows = this.currentMap.ROWS;
         this.currentMap = Object.assign({}, constants_1.constants.MAPS[mapName]);
@@ -34,10 +29,6 @@ class Map {
             yBegin: 0,
             yEnd: this.currentMap.ROWS,
         };
-        this.added = [
-            0,
-            0
-        ];
     }
     isNextMap(x, y) {
         if (this.MapLocation) {
@@ -112,14 +103,13 @@ class Map {
                     }
                 }
                 if (location === 'left' && layer === 0) {
-                    console.log('loading ' + mapName + ' to left');
+                    // console.log('loading ' +  mapName + ' to left') 
                     this.MapLocation.xBegin = this.MapLocation.xBegin + mapToAdd.COLS;
                     this.MapLocation.xEnd = this.MapLocation.xEnd + mapToAdd.COLS;
-                    this.added[0] = mapToAdd.COLS;
                 }
-                if (location === 'right' && layer === 0) {
-                    console.log('loading ' + mapName + ' to right');
-                }
+                // if (location === 'right' && layer === 0) {
+                //   console.log('loading ' +  mapName + ' to right')
+                // }
                 finalCols = this.currentMap.COLS + mapToAdd.COLS;
                 finalRows = this.currentMap.ROWS;
             }
@@ -136,19 +126,18 @@ class Map {
                     }
                 }
                 if (location === 'bottom') {
-                    if (layer === 0) {
-                        console.log('loading ' + mapName + ' to bottom');
-                    }
+                    // if (layer === 0) {
+                    //   console.log('loading ' +  mapName + ' to bottom')
+                    // }
                     finalLayers[layer].push(...this.currentMap.layers[layer]);
                 }
                 finalLayers[layer].push(...arrayAddedMap);
                 if (location === 'top') {
                     finalLayers[layer].push(...this.currentMap.layers[layer]);
                     if (layer === 0) {
-                        console.log('loading ' + mapName + ' to top');
+                        // console.log('loading ' +  mapName + ' to top')
                         this.MapLocation.yBegin = this.MapLocation.yBegin + mapToAdd.ROWS;
                         this.MapLocation.yEnd = this.MapLocation.yEnd + mapToAdd.ROWS;
-                        this.added[1] = mapToAdd.ROWS;
                     }
                 }
                 finalCols = this.currentMap.COLS;
@@ -177,7 +166,7 @@ class Map {
     getAjacent(mapName) {
         if (mapName === 'route 101') {
             return [
-                { name: 'litteroot town', position: 'bottom' },
+                { name: 'littleroot town', position: 'bottom' },
                 { name: 'oldale town', position: 'top' },
             ];
         }
@@ -186,7 +175,7 @@ class Map {
                 { name: 'oldale town', position: 'right' },
             ];
         }
-        else if (mapName === 'litteroot town') {
+        else if (mapName === 'littleroot town') {
             return [
                 { name: 'route 101', position: 'top' },
             ];

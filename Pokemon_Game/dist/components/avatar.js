@@ -12,15 +12,15 @@ class Avatar {
         this.avatarAsset = this.loader.loadImageToCanvas('avatar', constants_1.constants.ASSETS_AVATAR_HEIGHT, constants_1.constants.ASSETS_AVATAR_WIDTH);
         this.map = map;
     }
-    addMapUpdate(map) {
+    loadMapUpdate(map, x, y) {
         this.map = map;
-        this.x = 90;
-        this.y = 90 + 320;
+        this.x = x;
+        this.y = y;
     }
-    newAreaMapUpdate(map, added) {
+    newAreaMapUpdate(map, addedTiles) {
         this.map = map;
-        this.x = this.x + added[0] * constants_1.constants.MAP_TSIZE;
-        this.y = this.y + added[1] * constants_1.constants.MAP_TSIZE;
+        this.x = this.x + addedTiles[0] * constants_1.constants.MAP_TSIZE;
+        this.y = this.y + addedTiles[1] * constants_1.constants.MAP_TSIZE;
     }
     move(delta, dirx, diry) {
         if (this.map) {

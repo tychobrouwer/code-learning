@@ -5,12 +5,14 @@ export const keyboard: Keyboard = {
   RIGHT: 'd',
   UP: 'w',
   DOWN: 's',
+  ENTER: 'Enter',
   
   _keys: {
     a: false,
     d: false,
     w: false,
     s: false,
+    enter: false,
   },
 
   listenForEvents: function(keys: string[]) {

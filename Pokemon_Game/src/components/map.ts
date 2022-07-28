@@ -7,10 +7,7 @@ export class Map {
   MapLocation: MapLocation;
   prevMapCols = 0;
   prevMapRows = 0;
-  prevAddedCols = 0;
-  prevAddedRows = 0;
 
-  added = [ 0, 0 ];
   adjacentMaps: {
     [direction: string]: string;
   }
@@ -32,9 +29,6 @@ export class Map {
   }
 
   updateMap(mapName: string) {
-    this.prevAddedCols = this.added[0];
-    this.prevAddedRows = this.added[1];
-
     this.prevMapCols = this.currentMap.COLS
     this.prevMapRows = this.currentMap.ROWS
 
@@ -47,11 +41,6 @@ export class Map {
       yBegin: 0,
       yEnd: this.currentMap.ROWS,
     }
-
-    this.added = [ 
-      0,
-      0
-    ];
   }
 
   isNextMap(x: number, y: number): boolean | string[] {
@@ -145,16 +134,14 @@ export class Map {
         }
 
         if (location === 'left' && layer === 0) {
-          console.log('loading ' +  mapName + ' to left') 
+          // console.log('loading ' +  mapName + ' to left') 
           this.MapLocation.xBegin = this.MapLocation.xBegin + mapToAdd.COLS;
           this.MapLocation.xEnd = this.MapLocation.xEnd + mapToAdd.COLS;
-
-          this.added[0] = mapToAdd.COLS;
         }
 
-        if (location === 'right' && layer === 0) {
-          console.log('loading ' +  mapName + ' to right')
-        }
+        // if (location === 'right' && layer === 0) {
+        //   console.log('loading ' +  mapName + ' to right')
+        // }
 
         finalCols = this.currentMap.COLS + mapToAdd.COLS;
         finalRows = this.currentMap.ROWS;
@@ -172,9 +159,9 @@ export class Map {
         }
     
         if (location === 'bottom') {
-          if (layer === 0) {
-            console.log('loading ' +  mapName + ' to bottom')
-          }
+          // if (layer === 0) {
+          //   console.log('loading ' +  mapName + ' to bottom')
+          // }
           finalLayers[layer].push(...this.currentMap.layers[layer]);
         }
 
@@ -184,11 +171,9 @@ export class Map {
           finalLayers[layer].push(...this.currentMap.layers[layer]);
 
           if (layer === 0) {
-            console.log('loading ' +  mapName + ' to top')
+            // console.log('loading ' +  mapName + ' to top')
             this.MapLocation.yBegin = this.MapLocation.yBegin + mapToAdd.ROWS;
             this.MapLocation.yEnd = this.MapLocation.yEnd + mapToAdd.ROWS; 
-            
-            this.added[1] = mapToAdd.ROWS
           }
         }
 
@@ -222,14 +207,14 @@ export class Map {
   getAjacent(mapName: string) {
     if (mapName === 'route 101') {
       return [
-        {name: 'litteroot town', position: 'bottom'},
+        {name: 'littleroot town', position: 'bottom'},
         {name: 'oldale town', position: 'top'},
       ]
     } else if (mapName === 'route 102') {
       return [
         {name: 'oldale town', position: 'right'},
       ]
-    } else if (mapName === 'litteroot town') {
+    } else if (mapName === 'littleroot town') {
       return [
         {name: 'route 101', position: 'top'},
       ]

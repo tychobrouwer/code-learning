@@ -1,20 +1,30 @@
-import { Loader } from '../utils/loader';
-
-import { encounterTableType, pokemonInfoType, pokedexType } from '../utils/types';
-import { randomFromArray, randomFromMinMax } from '../utils/helper';
-import { constants } from '../utils/constants';
-
 import * as pokedex from '../pokedex.json';
 import * as encounterTable from '../encounter_table.json';
+
+import { Loader } from '../utils/loader';
+
+import { randomFromArray, randomFromMinMax } from '../utils/helper';
+import { constants } from '../utils/constants';
+import { keyboard } from '../utils/keyboard';
+
+import { encounterTableType, pokemonInfoType, pokedexType } from '../utils/types';
 
 const BATTLE_STATUS = [
   'slidePokemonIn',
   'writeAppearText',
   'writeGoText',
   'throwPokemon',
-  'playerTurn',
+  'playerActionSelect',
+  'playerAction',
   'finished',
-]
+];
+
+// const BATTLE_ACTIONS = [
+//   'fight',
+//   'bag',
+//   'pokemon',
+//   'run'
+// ];
 
 export class PokemonBattle {
   loader: Loader;
@@ -33,6 +43,7 @@ export class PokemonBattle {
   enemyPokemon: {
     pokemon: pokemonInfoType;
     health: number;
+    maxHealth: number;
     level: number;
     male: boolean;
     xSource: number;
@@ -44,6 +55,7 @@ export class PokemonBattle {
   playerPokemon: {
     pokemon: pokemonInfoType;
     health: number;
+    maxHealth: number;
     level: number;
     male: boolean;
     pokeball: number;
@@ -51,6 +63,7 @@ export class PokemonBattle {
     ySource: number;  
   }
 
+  battleAction = 0;
   battleResultWin = false;
 
   _previousElapsed = 0;
@@ -73,6 +86,7 @@ export class PokemonBattle {
     const playerPokemonLevel = 5;
     const playerPokemonPokeball = 2;
     const playerPokemonHealth = 19;
+    const playerPokemonMaxHealth = 25;
     const playerPokemonGender = true;
 
     this.encounterMethod = encounterMethod;
@@ -85,7 +99,8 @@ export class PokemonBattle {
     const pokedexDataEnemy = this.pokedex[enemyPokemonData[0].toString()]
     this.enemyPokemon = {
       pokemon: pokedexDataEnemy,
-      health: 100,
+      health: 25,
+      maxHealth: 25,
       level: enemyPokemonData[1],
       male: !randomFromArray([0, 1]),
       xSource: (pokedexDataEnemy.id - constants.ASSETS_GENERATION_OFFSET[this.enemyGeneration] - 1) % 3 * constants.POKEMON_SPRITE_WIDTH,
@@ -96,6 +111,7 @@ export class PokemonBattle {
     this.playerPokemon = {
       pokemon: pokedexDataPlayer,
       health: playerPokemonHealth,
+      maxHealth: playerPokemonMaxHealth,
       level: playerPokemonLevel,
       male: playerPokemonGender,
       pokeball: playerPokemonPokeball,
@@ -198,10 +214,43 @@ export class PokemonBattle {
       this.drawActionBox(false);
       this.drawText('Go! ' + this.playerPokemon.pokemon.name.toUpperCase() + '!', 0, 1, 16, 122)
 
-    } else if (BATTLE_STATUS[this.battleStatus] === 'playerTurn') {
+    } else if (BATTLE_STATUS[this.battleStatus] === 'playerActionSelect') {
       this.drawActionBox(true);
       this.writeTextToBattleBox('What should ', 0, 1, delta, 0, 0, false, false);
       this.writeTextToBattleBox(this.playerPokemon.pokemon.name.toUpperCase() + ' do?', 0, 1, delta, 0, 1, false, false);
+
+      if (keyboard.isDown(keyboard.LEFT)) {
+        if (this.battleAction === 1 || this.battleAction === 3) {
+          this.battleAction--;
+        }
+      } else if (keyboard.isDown(keyboard.RIGHT)) { 
+        if (this.battleAction === 0 || this.battleAction === 2) {
+          this.battleAction++;
+        }
+      } else if (keyboard.isDown(keyboard.UP)) { 
+        if (this.battleAction === 2 || this.battleAction === 3) {
+          this.battleAction -= 2;
+        }
+      } else if (keyboard.isDown(keyboard.DOWN)) { 
+        if (this.battleAction === 0 || this.battleAction === 1) {
+          this.battleAction += 2;
+        }
+      } else if (keyboard.isDown(keyboard.ENTER)) {
+        this.nextBattlePhase();
+      }
+
+      let xOffset = this.battleAction * 46;
+      let yColumn = 0;
+  
+      if (this.battleAction === 2 || this.battleAction === 3)  {
+        xOffset = (this.battleAction - 2) * 46;
+        yColumn = 1;
+      }
+  
+      this.drawActionSelector(constants.GAME_WIDTH - constants.ACTION_BOX_WIDTH + 8 + xOffset, constants.GAME_WIDTH - constants.ACTION_BOX_WIDTH + 8 + 42 + xOffset, yColumn);
+    
+    } else if (BATTLE_STATUS[this.battleStatus] === 'playerAction') {
+      console.log(this.battleAction);
     }
     
     if (BATTLE_STATUS[this.battleStatus] !== 'finished') {
@@ -229,6 +278,12 @@ export class PokemonBattle {
       constants.BATTLE_SCENE_HEIGHT,
     );
 
+    const enemyPokemonCtx = this.enemyPokemonSprite.getContext('2d');
+
+    if (enemyPokemonCtx && xPixel <= constants.GAME_WIDTH - 1) {
+      this.ctx.globalAlpha = 0.8;
+    }
+
     this.ctx.drawImage(
       this.enemyPokemonSprite,
       this.enemyPokemon.xSource,
@@ -240,6 +295,8 @@ export class PokemonBattle {
       constants.POKEMON_SIZE,
       constants.POKEMON_SIZE,
     );
+
+    this.ctx.globalAlpha = 1;
 
     this.ctx.drawImage(
       this.battleAssets,
@@ -293,8 +350,9 @@ export class PokemonBattle {
       constants.ASSETS_ENEMY_HEALTH_HEIGHT,
     );
 
-    const healthbarOffset = (this.enemyPokemon.health < 20) ? 4 : (this.enemyPokemon.health < 50) ? 2: 0;
-    const healthbarWidth = (this.enemyPokemon.health / 100 * 48) << 0
+    const healthFrac = this.enemyPokemon.health / this.enemyPokemon.maxHealth;
+    const healthbarWidth = (healthFrac * 48) << 0
+    const healthbarOffset = (healthFrac < 0.2) ? 4 : (healthFrac < 0.5) ? 2: 0;
 
     this.ctx.drawImage(
       this.battleAssets,
@@ -354,7 +412,7 @@ export class PokemonBattle {
       const opacity = (this.pokemoinAlternativeOpacity > 0) ? this.pokemoinAlternativeOpacity : 0;
       this.ctx.globalAlpha = opacity;
 
-      if (opacity > 0) {
+      if (opacity > 0) {      
         this.ctx.drawImage(
           this.playerPokemonSprite,
           this.playerPokemon.xSource + 2 * constants.POKEMON_SIZE + constants.POKEMON_ALTERNATIVE_OFFSET,
@@ -365,7 +423,7 @@ export class PokemonBattle {
           (constants.BATTLE_ARENA_HEIGHT - constants.AVATAR_BATTLE_HEIGHT + constants.POKEMON_SIZE - (xPixelPokeball - 30) / 40 * constants.POKEMON_SIZE) << 0,
           constants.POKEMON_SIZE * (xPixelPokeball - 30) / 40,
           constants.POKEMON_SIZE * (xPixelPokeball - 30) / 40,
-        );  
+        );
       }
 
       this.ctx.globalAlpha = 1 - opacity;
@@ -389,7 +447,7 @@ export class PokemonBattle {
         let xPixelPlayerHealth = (this.X_slidePlayerHealth - delta * speedHealth + constants.GAME_WIDTH) << 0;
     
         if (xPixelPlayerHealth < 127) xPixelPlayerHealth = 127;
-    
+
         this.ctx.drawImage(
           this.battleAssets,
           0,
@@ -397,13 +455,14 @@ export class PokemonBattle {
           constants.ASSETS_PLAYER_HEALTH_WIDTH,
           constants.ASSETS_PLAYER_HEALTH_HEIGHT,
           xPixelPlayerHealth,
-          74,
+          75,
           constants.ASSETS_PLAYER_HEALTH_WIDTH,
           constants.ASSETS_PLAYER_HEALTH_HEIGHT,
         );
 
-        const healthbarOffset = (this.playerPokemon.health < 20) ? 4 : (this.playerPokemon.health < 50) ? 2: 0;
-        const healthbarWidth = (this.playerPokemon.health / 100 * 48) << 0
+        const healthFrac = this.playerPokemon.health / this.playerPokemon.maxHealth;
+        const healthbarOffset = (healthFrac < 0.2) ? 4 : (healthFrac < 0.5) ? 2: 0;
+        const healthbarWidth = (healthFrac * 48) << 0
 
         this.ctx.drawImage(
           this.battleAssets,
@@ -412,13 +471,14 @@ export class PokemonBattle {
           healthbarWidth,
           2,
           xPixelPlayerHealth + 47,
-          74 + 17,
+          75 + 17,
           healthbarWidth,
           2,
         );
 
         this.drawText(this.playerPokemon.pokemon.name.toUpperCase() + ((this.playerPokemon.male) ? '#' : '^'), 1, 0, xPixelPlayerHealth + 14, 74 + 6)
-        this.drawText(this.playerPokemon.level.toString(), 1, 0, xPixelPlayerHealth + 83, 74 + 6)
+        this.drawText(this.playerPokemon.level.toString(), 1, 0, xPixelPlayerHealth + 84, 75 + 6)
+        this.drawText(this.playerPokemon.health.toString().padStart(3, ' ') + '/' + this.playerPokemon.maxHealth.toString().padStart(3, ' '), 1, 0, xPixelPlayerHealth + 59, 75 + 22)
 
         if (throwPokemon) {
           this.X_slidePlayerHealth -= delta * speedHealth;
@@ -447,6 +507,22 @@ export class PokemonBattle {
     if (throwPokemon) {
       this.X_throwPokemon += delta * speed;
     }
+  }
+
+  drawActionSelector(xStart: number, xEnd: number, column: number) {
+    this.ctx.beginPath();
+    this.ctx.moveTo(xStart, 121 + column * 16 - 0.5);
+    this.ctx.lineTo(xEnd - 1, 121 + column * 16 - 0.5);
+    this.ctx.moveTo(xEnd - 0.5, 121 + column * 16);
+    this.ctx.lineTo(xEnd - 0.5, 121 + 14 + column * 16);
+    this.ctx.moveTo(xEnd - 1, 121 + 14 + column * 16 + 0.5);
+    this.ctx.lineTo(xStart, 121 + 14 + column * 16 + 0.5);
+    this.ctx.moveTo(xStart - 0.5, 121 + 14 + column * 16);
+    this.ctx.lineTo(xStart - 0.5, 121 + column * 16);
+
+    this.ctx.lineWidth = 1;
+    this.ctx.strokeStyle = '#f86058';
+    this.ctx.stroke();
   }
 
   writeTextToBattleBox(text: string, fontsize: number, fontColor: number, delta: number, delayAfter: number, textLine: number, writeOut: boolean, nextPhase = false) {

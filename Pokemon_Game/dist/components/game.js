@@ -20,14 +20,15 @@ const pokemon_1st_generation_png_1 = __importDefault(require("../assets/pokemon_
 const pokemon_2st_generation_png_1 = __importDefault(require("../assets/pokemon_2st_generation.png"));
 const pokemon_3st_generation_png_1 = __importDefault(require("../assets/pokemon_3st_generation.png"));
 const font_png_1 = __importDefault(require("../assets/font.png"));
+const player_1 = require("./player");
 const map_1 = require("./map");
 const loader_1 = require("../utils/loader");
 const camera_1 = require("./camera");
 const avatar_1 = require("./avatar");
+const pokemon_1 = require("./pokemon");
 const constants_1 = require("../utils/constants");
 const keyboard_1 = require("../utils/keyboard");
 const helper_1 = require("../utils/helper");
-// import { MapType } from '../utils/types';
 class Game {
     constructor(gameCtx, overlayCtx) {
         this._previousElapsed = 0;
@@ -37,21 +38,29 @@ class Game {
         this.animation = 0;
         this.currentTileX = 0;
         this.currentTileY = 0;
-        this.currentMap = 'route 101';
+        this.currentMap = 'littleroot town';
         this.loader = new loader_1.Loader();
+        this.player = new player_1.Player();
         this.GAME_HEIGHT = constants_1.constants.GAME_HEIGHT;
         this.GAME_WIDTH = constants_1.constants.GAME_WIDTH;
         this.gameCtx = gameCtx;
         this.overlayCtx = overlayCtx;
+        let playerData = this.player.getPlayerData('playerData');
+        if (!playerData.location) {
+            playerData = this.player.createNewPlayer(true);
+        }
+        this.currentMap = playerData.location;
         const p = this.load();
         Promise.all(p).then(() => {
             this.init();
-            this.map = new map_1.Map(Object.assign({}, constants_1.constants.MAPS[this.currentMap]));
+            this.map = new map_1.Map(Object.assign({}, constants_1.constants.MAPS[playerData.location]));
             this.avatar = new avatar_1.Avatar(this.loader, this.map);
-            this.camera = new camera_1.Camera(Object.assign({}, constants_1.constants.MAPS[this.currentMap]), constants_1.constants.GAME_WIDTH, constants_1.constants.GAME_HEIGHT);
+            this.camera = new camera_1.Camera(Object.assign({}, constants_1.constants.MAPS[playerData.location]), constants_1.constants.GAME_WIDTH, constants_1.constants.GAME_HEIGHT);
             this.camera.follow(this.avatar);
             this.map.updateMap(this.currentMap);
             this.loadAdjacentMaps(true);
+            this.avatar.loadMapUpdate(this.map, playerData.position.x, playerData.position.y);
+            setInterval(() => this.updatePlayerDataLoop(), 1000);
             window.requestAnimationFrame(this.tick.bind(this));
         });
     }
@@ -67,7 +76,7 @@ class Game {
         ];
     }
     init() {
-        keyboard_1.keyboard.listenForEvents([keyboard_1.keyboard.LEFT, keyboard_1.keyboard.RIGHT, keyboard_1.keyboard.UP, keyboard_1.keyboard.DOWN]);
+        keyboard_1.keyboard.listenForEvents([keyboard_1.keyboard.LEFT, keyboard_1.keyboard.RIGHT, keyboard_1.keyboard.UP, keyboard_1.keyboard.DOWN, keyboard_1.keyboard.ENTER]);
         this.tileAtlas = this.loader.loadImageToCanvas('tiles', constants_1.constants.ASSETS_TILES_HEIGHT, constants_1.constants.ASSETS_TILES_WIDTH);
     }
     tick(elapsed) {
@@ -82,6 +91,19 @@ class Game {
             window.requestAnimationFrame(this.tick.bind(this));
         });
     }
+    updatePlayerDataLoop() {
+        if (this.avatar) {
+            const playerData = {
+                location: this.currentMap,
+                position: {
+                    x: this.avatar.x,
+                    y: this.avatar.y,
+                },
+                pokemon: {}
+            };
+            this.player.setPlayerData('playerData', playerData);
+        }
+    }
     findPokemon() {
         return __awaiter(this, void 0, void 0, function* () {
             const currentTileX = Math.floor(this.avatar.x / constants_1.constants.MAP_TSIZE);
@@ -91,16 +113,16 @@ class Game {
                 this.currentTileY = currentTileY;
                 const tile = this.map.getTile(0, this.currentTileX, this.currentTileY);
                 const randomNumber = (0, helper_1.randomFromMinMax)(0, 2879);
-                // if (tile === 2 && randomNumber < constants.GRASS_ENCOUNTER_NUMBER) {
-                //   const pokemonBattle = new PokemonBattle(this.overlayCtx, this.loader, this.currentMap, 0);
-                //   const pokemon = pokemonBattle.getPokemon();
-                //   console.log(pokemon.name + ' found!');
-                //   const battleResult = await pokemonBattle.battle();
-                //   if (battleResult) {
-                //     console.log('battle with ' + pokemon.name + ' won!')
-                //     // this.player.addPokemon(foundPokemon);
-                //   }
-                // }
+                if (tile === 2 && randomNumber < constants_1.constants.GRASS_ENCOUNTER_NUMBER) {
+                    const pokemonBattle = new pokemon_1.PokemonBattle(this.overlayCtx, this.loader, this.currentMap, 0);
+                    const pokemon = pokemonBattle.getPokemon();
+                    console.log(pokemon.name + ' found!');
+                    const battleResult = yield pokemonBattle.battle();
+                    if (battleResult) {
+                        console.log('battle with ' + pokemon.name + ' won!');
+                        // this.player.addPokemon(foundPokemon);
+                    }
+                }
             }
         });
     }
@@ -124,48 +146,43 @@ class Game {
             this.currentMap = isNextMap[0];
             console.log('Entered new area: ' + this.currentMap);
             this.map.updateMap(this.currentMap);
-            this.loadAdjacentMaps(false, isNextMap[1]);
+            const addedTiles = this.loadAdjacentMaps(isNextMap[1]);
+            if (addedTiles) {
+                this.avatar.newAreaMapUpdate(this.map, addedTiles);
+            }
         }
         this.avatar.move(delta, this.dirx, this.diry);
         this.camera.update();
     }
-    loadAdjacentMaps(addMap = false, fromDirection = false) {
+    loadAdjacentMaps(fromDirection = false) {
         const Adjacent = this.map.getAjacent(this.currentMap);
         let updatedData;
-        const test1 = Adjacent.map(a => a.position);
+        const addedAreas = Adjacent.map(a => a.position);
         for (const adjacentMap of Object.values(Adjacent)) {
             updatedData = this.map.addMap(adjacentMap.name, adjacentMap.position, 0);
         }
-        // console.log(test1)
         if (updatedData) {
             this.camera.updateMap(updatedData.currentMap);
-            const added = [0, 0];
-            // console.log(updatedData.diff);
+            const addedTiles = [0, 0];
             // THIS SHOULD MAYBE BE UPDATED!!
-            if (test1.includes('top') && test1.includes('bottom') && fromDirection === 'top') {
-                added[1] = updatedData.diff[1];
+            if (addedAreas.includes('top') && addedAreas.includes('bottom') && fromDirection === 'top') {
+                addedTiles[1] = updatedData.diff[1];
                 // console.log('first')
             }
-            else if (test1.includes('top') && !test1.includes('bottom') && fromDirection === 'bottom') {
-                added[1] = updatedData.diff[1];
+            else if (addedAreas.includes('top') && !addedAreas.includes('bottom') && fromDirection === 'bottom') {
+                addedTiles[1] = updatedData.diff[1];
                 // console.log('second')
             }
-            if (test1.includes('left') && test1.includes('bottom') && fromDirection === 'top') {
-                added[0] = updatedData.diff[0];
-                // console.log('third')diff
+            if (addedAreas.includes('left') && addedAreas.includes('bottom') && fromDirection === 'top') {
+                addedTiles[0] = updatedData.diff[0];
+                // console.log('third')
             }
-            else if (test1.includes('bottom') && test1.includes('top') && fromDirection === 'bottom') {
-                added[0] = updatedData.diff[0];
+            else if (addedAreas.includes('bottom') && addedAreas.includes('top') && fromDirection === 'bottom') {
+                addedTiles[0] = updatedData.diff[0];
                 // console.log('fourth')
             }
             // /////////////////////////// //
-            // console.log(added)
-            if (addMap) {
-                this.avatar.addMapUpdate(this.map);
-            }
-            else {
-                this.avatar.newAreaMapUpdate(this.map, added);
-            }
+            return addedTiles;
         }
     }
     render() {

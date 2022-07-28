@@ -1,3 +1,24 @@
+export interface PlayerDataType {
+  location: string;
+  position: {
+    x: number;
+    y: number;
+  };
+  pokemon: {
+    [pokemonName: string]: pokemonDataType;
+  };
+}
+
+export interface pokemonDataType {
+  pokemon: pokemonInfoType;
+  health: number;
+  maxHealth: number;
+  level: number;
+  male: boolean;
+  xSource: number;
+  ySource: number;
+}
+
 export interface MapType {
   COLS: number;
   ROWS: number;
@@ -23,6 +44,7 @@ export interface Keyboard {
   RIGHT: string;
   UP: string;
   DOWN: string;
+  ENTER: string;
 
   _keys: Keys;
   listenForEvents: (keys: string[]) => void;
@@ -36,6 +58,7 @@ export interface Keys {
   d: boolean;
   w: boolean;
   s: boolean;
+  enter: boolean;
 }
 
 export interface pokemonIndexType {

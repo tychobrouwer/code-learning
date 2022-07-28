@@ -141,7 +141,7 @@ const WATER_ENCOUNTER_NUMBER = 320;
 const SEAWEED_ENCOUNTER_NUMBER = 320;
 
 const MAPS: MapsType = {
-  "litteroot town": {
+  "littleroot town": {
     COLS: 20,
     ROWS: 20,
 

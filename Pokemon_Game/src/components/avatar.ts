@@ -21,18 +21,18 @@ export class Avatar {
     this.map = map;
   }
 
-  addMapUpdate(map: Map) {
+  loadMapUpdate(map: Map, x: number, y: number) {
     this.map = map;
 
-    this.x = 90;
-    this.y = 90 + 320;
+    this.x = x;
+    this.y = y;
   }
 
-  newAreaMapUpdate(map: Map, added: number[]) {
+  newAreaMapUpdate(map: Map, addedTiles: number[]) {
     this.map = map;
 
-    this.x = this.x + added[0] * constants.MAP_TSIZE;
-    this.y = this.y + added[1] * constants.MAP_TSIZE;
+    this.x = this.x + addedTiles[0] * constants.MAP_TSIZE;
+    this.y = this.y + addedTiles[1] * constants.MAP_TSIZE;
   }
 
   move(delta: number, dirx: number, diry: number): void {

@@ -1,5 +1,4 @@
 import { Avatar } from './avatar';
-// import { Map } from './map';
 
 import { MapType } from '../utils/types';
 

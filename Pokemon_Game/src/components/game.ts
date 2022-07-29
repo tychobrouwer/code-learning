@@ -143,12 +143,12 @@ export class Game {
         const pokemonBattle = new PokemonBattle(this.overlayCtx, this.loader, this.currentMap, 0);
         const pokemon = pokemonBattle.getPokemon();
 
-        console.log(pokemon.name + ' found!');
+        console.log(pokemon.pokemonName + ' found!');
 
         const battleResult = await pokemonBattle.battle();
         
         if (battleResult) {
-          console.log('battle with ' + pokemon.name + ' won!')
+          console.log('battle with ' + pokemon.pokemonName + ' won!')
           // this.player.addPokemon(foundPokemon);
         }
       }

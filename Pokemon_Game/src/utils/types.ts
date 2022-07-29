@@ -10,13 +10,36 @@ export interface PlayerDataType {
 }
 
 export interface pokemonDataType {
-  pokemon: pokemonInfoType;
-  health: number;
-  maxHealth: number;
+  pokemonId: number;
+  generation: number;
+  pokemonName: string;
   level: number;
-  male: boolean;
+  health: number;
+  gender: number;
+  ability: {
+    ability: string;
+    is_hidden: boolean;
+    slot: number;
+  };
+  shininess: boolean;
+  size: number;
+  height: number;
+  personality: number;
+  nature: pokemonStatsType;
+  EV: pokemonStatsType;
+  IV: pokemonStatsType;
+  stats: pokemonStatsType;
   xSource: number;
   ySource: number;
+}
+
+interface pokemonStatsType {
+  hp: number;
+  attack: number;
+  defense: number;
+  specialDefense: number;
+  specialAttack: number;
+  speed: number;
 }
 
 export interface MapType {
@@ -53,26 +76,12 @@ export interface Keyboard {
   isDown: (keyCode: string) => boolean;
 }
 
-export interface Keys {
+interface Keys {
   a: boolean;
   d: boolean;
   w: boolean;
   s: boolean;
   enter: boolean;
-}
-
-export interface pokemonIndexType {
-  [level: string]: {
-    [environment: string]: {
-      [pokemonKey: string]: pokemonType2
-    }
-  }
-}
-
-export interface pokemonType2 {
-  id_string: string;
-  rate: number;
-  level: number[];
 }
 
 export interface pokemonType {
@@ -85,6 +94,14 @@ export interface encounterTableType {
     [encounterMethod: string]: {
       [id: number]: pokemonType;
     }
+  }
+}
+
+export interface sizeTableType {
+  [maxSize: number]: {
+    x: number;
+    y: number;
+    z: number;
   }
 }
 

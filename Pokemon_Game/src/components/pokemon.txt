@@ -1,0 +1,44 @@
+- pokemonData
+  - pokemonId
+  - name
+  - current HP
+  - level                 random dependent on area
+  - Nature                0-24 (one of the 25 posibilities, inclusive)
+                          changes two values, increases one by 1.1, decrease on by 0.9
+  - gender                50:50 (male or female)
+  - individual values
+    - seperate one for HP, Attack, Defense, Speed, Special Defense, and Special Attack
+      - IV                0-31 (random, inclusive, individual value)
+      - EV                0-255 (1-3 earned by won battle for specific stat dependend on pokemon (see pokedex), 
+                          max total of 510, inclusive, effort)
+  - ability               0 or 1 (first or second non hidden)
+  - shininess             1:8192 to be shiny
+  - size                  s=0-65535 (x, y, and z depend on s) => floor(h*floor((s-z)/y+x)/10), h = base height
+  - stats
+    - HP                  floor((2*base+IV+floor(EV/4))*level/100)+level+10
+    - Attack              floor((floor((2*base+IV+floor(EV/4))*level/100)+5)*Nature)
+    - Defense             floor((floor((2*base+IV+floor(EV/4))*level/100)+5)*Nature)
+    - Special Attack      floor((floor((2*base+IV+floor(EV/4))*level/100)+5)*Nature)
+    - Special Defense     floor((floor((2*base+IV+floor(EV/4))*level/100)+5)*Nature)
+    - Speed               floor((floor((2*base+IV+floor(EV/4))*level/100)+5)*Nature)
+  - moves                 
+
+
+Pokedex
+  - pokemon
+    - abilities
+    - stats
+      - stat
+      - base_stat
+
+
+s (max):	9	  109 309	709	2709	7709	17709	32709	47709	57709	62709	64709	65209	65409	65535
+      x:	290	300	400	500	600	  700	  800	  900	  1000	1100	1200	1300	1400	1500	1700
+      y:	1	  1	  2	  4	  20	  50	  100	  150	  150	  100	  50	  20	  5	    2	    1
+      z:	0	  10	110	310	710	  2710	7710	17710	32710	47710	57710	62710	64710	65210	65510
+
+
+pokemon specific data
+  - Unown's letter        0-27, 0=>A, 26=>!, 27=>?
+  - Wurmple's evolution   50:50 Silcoon or Cascoon
+  - Spinda's spots        random positions

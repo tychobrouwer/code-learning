@@ -66,38 +66,26 @@ class PokemonBattle {
         this.loader = loader;
         this.pokedex = pokedex;
         this.encounterTable = encounterTable;
-        const playerPokemonId = '12';
-        const playerPokemonLevel = 5;
-        const playerPokemonPokeball = 2;
-        const playerPokemonHealth = 19;
-        const playerPokemonMaxHealth = 25;
-        const playerPokemonGender = true;
         this.encounterMethod = encounterMethod;
         this.route = route;
         this.ctx = context;
-        this.playerGeneration = (parseInt(playerPokemonId) <= 151) ? 0 : (parseInt(playerPokemonId) < 251) ? 1 : 2;
-        const enemyPokemonData = this.init();
-        const pokedexDataEnemy = this.pokedex[enemyPokemonData[0].toString()];
-        this.enemyPokemon = {
-            pokemon: pokedexDataEnemy,
-            health: 25,
-            maxHealth: 25,
-            level: enemyPokemonData[1],
-            male: !(0, helper_1.randomFromArray)([0, 1]),
-            xSource: (pokedexDataEnemy.id - constants_1.constants.ASSETS_GENERATION_OFFSET[this.enemyGeneration] - 1) % 3 * constants_1.constants.POKEMON_SPRITE_WIDTH,
-            ySource: (((pokedexDataEnemy.id - constants_1.constants.ASSETS_GENERATION_OFFSET[this.enemyGeneration] - 1) / 3) << 0) * constants_1.constants.POKEMON_SIZE,
-        };
+        // TEMPORARY PLAYER POKEMON
+        const playerPokemonId = '12';
         const pokedexDataPlayer = this.pokedex[playerPokemonId];
+        this.playerGeneration = (parseInt(playerPokemonId) <= 151) ? 0 : (parseInt(playerPokemonId) < 251) ? 1 : 2;
         this.playerPokemon = {
             pokemon: pokedexDataPlayer,
-            health: playerPokemonHealth,
-            maxHealth: playerPokemonMaxHealth,
-            level: playerPokemonLevel,
-            male: playerPokemonGender,
-            pokeball: playerPokemonPokeball,
+            health: 19,
+            maxHealth: 25,
+            level: 5,
+            male: false,
+            pokeball: 2,
             xSource: (pokedexDataPlayer.id - constants_1.constants.ASSETS_GENERATION_OFFSET[this.playerGeneration] - 1) % 3 * constants_1.constants.POKEMON_SPRITE_WIDTH,
             ySource: (((pokedexDataPlayer.id - constants_1.constants.ASSETS_GENERATION_OFFSET[this.playerGeneration] - 1) / 3) << 0) * constants_1.constants.POKEMON_SIZE,
         };
+        // ////////////////////////
+        const enemyPokemonData = this.init();
+        this.enemyPokemon = enemyPokemonData;
         console.log(this.enemyPokemon);
         console.log(this.playerPokemon);
     }
@@ -108,25 +96,21 @@ class PokemonBattle {
             candinateIds.push(...Array(candinates[pokemonIndex].rate).fill(parseInt(pokemonIndex)));
         }
         const pokemonId = (0, helper_1.randomFromArray)(candinateIds);
-        const pokemonLevel = (0, helper_1.randomFromMinMax)(candinates[pokemonId].level[0], candinates[pokemonId].level[1]);
-        this.enemyGeneration = (pokemonId <= 151) ? 0 : (pokemonId < 251) ? 1 : 2;
+        const enemyPokemon = (0, helper_1.generatePokemon)(this.pokedex[pokemonId.toString()], candinates[pokemonId], pokemonId);
         this.battleAssets = this.loader.loadImageToCanvas('battleAssets', constants_1.constants.ASSETS_BATTLE_HEIGHT, constants_1.constants.ASSETS_BATTLE_WIDTH);
         this.font = this.loader.loadImageToCanvas('font', constants_1.constants.ASSETS_FONT_HEIGHT, constants_1.constants.ASSETS_FONT_WIDTH);
         this.avatarAssets = this.loader.loadImageToCanvas('avatar', constants_1.constants.ASSETS_AVATAR_HEIGHT, constants_1.constants.ASSETS_AVATAR_WIDTH);
-        this.enemyPokemonSprite = this.loader.loadImageToCanvas('pokemonGeneration' + (this.enemyGeneration + 1), constants_1.constants.ASSETS_POKEMON_HEIGHT[this.enemyGeneration], constants_1.constants.ASSETS_POKEMON_WIDTH);
-        if (this.enemyGeneration === this.playerGeneration) {
+        this.enemyPokemonSprite = this.loader.loadImageToCanvas('pokemonGeneration' + (enemyPokemon.generation + 1), constants_1.constants.ASSETS_POKEMON_HEIGHT[enemyPokemon.generation], constants_1.constants.ASSETS_POKEMON_WIDTH);
+        if (enemyPokemon.generation === this.playerGeneration) {
             this.playerPokemonSprite = this.enemyPokemonSprite;
         }
         else {
             this.playerPokemonSprite = this.loader.loadImageToCanvas('pokemonGeneration' + (this.playerGeneration + 1), constants_1.constants.ASSETS_POKEMON_HEIGHT[this.playerGeneration], constants_1.constants.ASSETS_POKEMON_WIDTH);
         }
-        return [
-            pokemonId,
-            pokemonLevel,
-        ];
+        return enemyPokemon;
     }
     getPokemon() {
-        return this.enemyPokemon.pokemon;
+        return this.enemyPokemon;
     }
     battle() {
         return __awaiter(this, void 0, void 0, function* () {
@@ -167,7 +151,7 @@ class PokemonBattle {
                 this.drawBattleArena();
                 this.drawEnemyPokemon(0, true);
                 this.drawActionBox(false);
-                this.writeTextToBattleBox('Wild ' + this.enemyPokemon.pokemon.name.toUpperCase() + ' appeared!|', 0, 1, delta, 1, 0, true, true);
+                this.writeTextToBattleBox('Wild ' + this.enemyPokemon.pokemonName.toUpperCase() + ' appeared!|', 0, 1, delta, 1, 0, true, true);
                 this.drawEnemyHealth(delta, true);
             }
             else if (BATTLE_STATUS[this.battleStatus] === 'writeGoText') {
@@ -254,11 +238,11 @@ class PokemonBattle {
         if (xPixel > 13)
             xPixel = 13;
         this.ctx.drawImage(this.battleAssets, constants_1.constants.ASSETS_PLAYER_HEALTH_WIDTH, constants_1.constants.ASSETS_HEALTH_OFFSET, constants_1.constants.ASSETS_ENEMY_HEALTH_WIDTH, constants_1.constants.ASSETS_ENEMY_HEALTH_HEIGHT, xPixel, 16, constants_1.constants.ASSETS_ENEMY_HEALTH_WIDTH, constants_1.constants.ASSETS_ENEMY_HEALTH_HEIGHT);
-        const healthFrac = this.enemyPokemon.health / this.enemyPokemon.maxHealth;
+        const healthFrac = this.enemyPokemon.health / this.enemyPokemon.stats.hp;
         const healthbarWidth = (healthFrac * 48) << 0;
         const healthbarOffset = (healthFrac < 0.2) ? 4 : (healthFrac < 0.5) ? 2 : 0;
         this.ctx.drawImage(this.battleAssets, constants_1.constants.ASSETS_ENEMY_HEALTH_WIDTH + constants_1.constants.ASSETS_PLAYER_HEALTH_WIDTH, constants_1.constants.ASSETS_HEALTH_OFFSET + healthbarOffset, healthbarWidth, 2, xPixel + 39, 16 + 17, healthbarWidth, 2);
-        this.drawText(this.enemyPokemon.pokemon.name.toUpperCase() + ((this.enemyPokemon.male) ? '#' : '^'), 1, 0, xPixel - 13 + 20, 22);
+        this.drawText(this.enemyPokemon.pokemonName.toUpperCase() + ((this.enemyPokemon.gender) ? '#' : '^'), 1, 0, xPixel - 13 + 20, 22);
         this.drawText(this.enemyPokemon.level.toString(), 1, 0, xPixel - 13 + 89, 22);
         if (slideIn) {
             this.X_slideEnemyHealth += delta * speed;

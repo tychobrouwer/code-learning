@@ -314,6 +314,99 @@ const MAPS = {
             ]],
     }
 };
+const SIZE_TABLE = {
+    9: {
+        x: 290,
+        y: 1,
+        z: 0,
+    },
+    109: {
+        x: 300,
+        y: 1,
+        z: 10,
+    },
+    309: {
+        x: 400,
+        y: 2,
+        z: 110,
+    },
+    709: {
+        x: 500,
+        y: 4,
+        z: 310,
+    },
+    2709: {
+        x: 600,
+        y: 20,
+        z: 710,
+    },
+    7709: {
+        x: 700,
+        y: 50,
+        z: 2710,
+    },
+    17709: {
+        x: 800,
+        y: 100,
+        z: 7710,
+    },
+    32709: {
+        x: 900,
+        y: 150,
+        z: 17710,
+    },
+    47709: {
+        x: 1000,
+        y: 150,
+        z: 32710,
+    },
+    57709: {
+        x: 1100,
+        y: 100,
+        z: 47710,
+    },
+    62709: {
+        x: 1200,
+        y: 50,
+        z: 57710,
+    },
+    64709: {
+        x: 1300,
+        y: 20,
+        z: 62710,
+    },
+    65209: {
+        x: 1400,
+        y: 5,
+        z: 64710,
+    },
+    65409: {
+        x: 1500,
+        y: 2,
+        z: 65210,
+    },
+    65535: {
+        x: 1700,
+        y: 1,
+        z: 65410,
+    },
+};
+const POKEMON_PERSONALITIES = {
+    increase: {
+        attack: [1, 2, 3, 4],
+        defense: [5, 7, 8, 9],
+        specialAttack: [15, 16, 17, 19],
+        specialDefense: [20, 21, 22, 23],
+        speed: [10, 11, 13, 14],
+    },
+    decrease: {
+        attack: [5, 10, 15, 20],
+        defense: [1, 11, 16, 21],
+        specialAttack: [3, 8, 13, 23],
+        specialDefense: [4, 9, 14, 19],
+        speed: [2, 7, 17, 22],
+    },
+};
 exports.constants = {
     GAME_HEIGHT,
     GAME_WIDTH,
@@ -361,5 +454,7 @@ exports.constants = {
     WATER_ENCOUNTER_NUMBER,
     SEAWEED_ENCOUNTER_NUMBER,
     MAPS,
+    SIZE_TABLE,
+    POKEMON_PERSONALITIES,
 };
 //# sourceMappingURL=constants.js.map

@@ -38,16 +38,15 @@ export class PokemonBattle {
   font!: HTMLCanvasElement;
   avatarAssets!: HTMLCanvasElement;
 
-  enemyGeneration!: number;
   enemyPokemonSprite!: HTMLCanvasElement;
   enemyPokemon: pokemonDataType;
 
   playerPokemonSprite!: HTMLCanvasElement;
-  playerGeneration: number;
   playerPokemon: {
     pokemon: pokemonInfoType;
     health: number;
     maxHealth: number;
+    generation: number;
     level: number;
     male: boolean;
     pokeball: number;
@@ -79,21 +78,22 @@ export class PokemonBattle {
     this.route = route;
     this.ctx = context;
 
-    // TEMPORARY PLAYER POKEMON
+    // TEMPORARY PLAYER POKEMON //
     const playerPokemonId = '12';
     const pokedexDataPlayer = this.pokedex[playerPokemonId];
-    this.playerGeneration = (parseInt(playerPokemonId) <= 151) ? 0 : (parseInt(playerPokemonId) < 251) ? 1 : 2;
+    const playerGeneration = (parseInt(playerPokemonId) <= 151) ? 0 : (parseInt(playerPokemonId) < 251) ? 1 : 2;
     this.playerPokemon = {
       pokemon: pokedexDataPlayer,
       health: 19,
       maxHealth: 25,
+      generation: playerGeneration,
       level: 5,
       male: false,
       pokeball: 2,
-      xSource: (pokedexDataPlayer.id - constants.ASSETS_GENERATION_OFFSET[this.playerGeneration] - 1) % 3 * constants.POKEMON_SPRITE_WIDTH,
-      ySource: (((pokedexDataPlayer.id - constants.ASSETS_GENERATION_OFFSET[this.playerGeneration] - 1) / 3) << 0) * constants.POKEMON_SIZE,
+      xSource: (pokedexDataPlayer.id - constants.ASSETS_GENERATION_OFFSET[playerGeneration] - 1) % 3 * constants.POKEMON_SPRITE_WIDTH,
+      ySource: (((pokedexDataPlayer.id - constants.ASSETS_GENERATION_OFFSET[playerGeneration] - 1) / 3) << 0) * constants.POKEMON_SIZE,
     }
-    // ////////////////////////
+    // //////////////////////// //
 
     const enemyPokemonData = this.init();
     this.enemyPokemon = enemyPokemonData;
@@ -117,10 +117,10 @@ export class PokemonBattle {
     this.font = this.loader.loadImageToCanvas('font', constants.ASSETS_FONT_HEIGHT, constants.ASSETS_FONT_WIDTH);
     this.avatarAssets = this.loader.loadImageToCanvas('avatar', constants.ASSETS_AVATAR_HEIGHT, constants.ASSETS_AVATAR_WIDTH);
     this.enemyPokemonSprite = this.loader.loadImageToCanvas('pokemonGeneration' + (enemyPokemon.generation + 1), constants.ASSETS_POKEMON_HEIGHT[enemyPokemon.generation], constants.ASSETS_POKEMON_WIDTH);
-    if (enemyPokemon.generation === this.playerGeneration) {
+    if (enemyPokemon.generation === this.playerPokemon.generation) {
       this.playerPokemonSprite = this.enemyPokemonSprite;
     } else {
-      this.playerPokemonSprite = this.loader.loadImageToCanvas('pokemonGeneration' + (this.playerGeneration + 1), constants.ASSETS_POKEMON_HEIGHT[this.playerGeneration], constants.ASSETS_POKEMON_WIDTH);
+      this.playerPokemonSprite = this.loader.loadImageToCanvas('pokemonGeneration' + (this.playerPokemon.generation + 1), constants.ASSETS_POKEMON_HEIGHT[this.playerPokemon.generation], constants.ASSETS_POKEMON_WIDTH);
     }
     
     return enemyPokemon;

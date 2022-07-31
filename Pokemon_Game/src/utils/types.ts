@@ -76,7 +76,7 @@ export interface Keyboard {
   isDown: (keyCode: string) => boolean;
 }
 
-interface Keys {
+export interface Keys {
   a: boolean;
   d: boolean;
   w: boolean;

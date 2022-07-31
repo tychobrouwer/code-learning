@@ -1,6 +1,7 @@
 import tileMap from '../assets/tiles.png';
 import avatarAssets from '../assets/character.png';
 import battleAssets from '../assets/battle_assets.png';
+import starterAssets from '../assets/choose_starter.png';
 import pokemonGeneration1 from '../assets/pokemon_1st_generation.png';
 import pokemonGeneration2 from '../assets/pokemon_2st_generation.png';
 import pokemonGeneration3 from '../assets/pokemon_3st_generation.png';
@@ -15,7 +16,7 @@ import { PokemonBattle } from './pokemon';
 
 import { constants } from '../utils/constants';
 import { keyboard } from '../utils/keyboard';
-import { randomFromMinMax } from '../utils/helper';
+import { randomFromMinMax, setLocalStorage } from '../utils/helper';
 
 
 import { addMapReturnType, PlayerDataType } from '../utils/types';
@@ -28,8 +29,11 @@ export class Game {
   camera!: Camera;
 
   tileAtlas!: HTMLCanvasElement;
+  starterAtlas!: HTMLCanvasElement;
   gameCtx: CanvasRenderingContext2D;
   overlayCtx: CanvasRenderingContext2D;
+  GAME_WIDTH: number;
+  GAME_HEIGHT: number;
 
   _previousElapsed = 0;
   dirx = 0;
@@ -38,26 +42,37 @@ export class Game {
   animation = 0;
   currentTileX = 0;
   currentTileY = 0;
-  currentMap = 'littleroot town';
-  GAME_HEIGHT: number;
-  GAME_WIDTH: number;
+  currentMap: string;
+  gameTriggers: {[trigger: string]: boolean};
+  gameStatus = 'game';
+
+  selectedStarter = 1;
+  keyDown = false;
 
   constructor(gameCtx: CanvasRenderingContext2D, overlayCtx: CanvasRenderingContext2D) {
     this.loader = new Loader();
     this.player = new Player();
 
-    this.GAME_HEIGHT = constants.GAME_HEIGHT;
-    this.GAME_WIDTH = constants.GAME_WIDTH;
     this.gameCtx = gameCtx;
     this.overlayCtx = overlayCtx;
+    this.GAME_HEIGHT = constants.GAME_HEIGHT;
+    this.GAME_WIDTH = constants.GAME_WIDTH;
 
     let playerData: PlayerDataType = this.player.getPlayerData('playerData');
+    let gameTriggers: {[trigger: string]: boolean} = this.player.getPlayerData('gameTriggers');
 
     if (!playerData.location) {
       playerData = this.player.createNewPlayer(true);
     }
+
+    // if (!gameTriggers.chooseStarter) {
+      gameTriggers = {
+        chooseStarter: false,
+      }
+    // }
     
     this.currentMap = playerData.location;
+    this.gameTriggers = gameTriggers;
 
     const p = this.load();
 
@@ -73,7 +88,7 @@ export class Game {
       this.loadAdjacentMaps(true);
       this.avatar.loadMapUpdate(this.map, playerData.position.x, playerData.position.y);
 
-      setInterval(() => this.updatePlayerDataLoop(), 1000);
+      setInterval(() => this.updateSaveDataLoop(), 1000);
 
       window.requestAnimationFrame(this.tick.bind(this));
     });
@@ -84,6 +99,7 @@ export class Game {
       this.loader.loadImage('tiles', tileMap),
       this.loader.loadImage('avatar', avatarAssets),
       this.loader.loadImage('battleAssets', battleAssets),
+      this.loader.loadImage('starterAssets', starterAssets),
       this.loader.loadImage('pokemonGeneration1', pokemonGeneration1),
       this.loader.loadImage('pokemonGeneration2', pokemonGeneration2),
       this.loader.loadImage('pokemonGeneration3', pokemonGeneration3),
@@ -95,25 +111,32 @@ export class Game {
     keyboard.listenForEvents([keyboard.LEFT, keyboard.RIGHT, keyboard.UP, keyboard.DOWN, keyboard.ENTER]);
 
     this.tileAtlas = this.loader.loadImageToCanvas('tiles', constants.ASSETS_TILES_HEIGHT, constants.ASSETS_TILES_WIDTH);
+    this.starterAtlas = this.loader.loadImageToCanvas('starterAssets', constants.ASSETS_STARTER_HEIGHT, constants.ASSETS_STARTER_WIDTH);
   }
 
   async tick(elapsed: number) {
-    this.gameCtx.clearRect(0, 0, constants.GAME_WIDTH, constants.GAME_HEIGHT);
+    if (this.gameStatus === 'chooseStarter') {
 
-    let delta = (elapsed - this._previousElapsed) / 1000.0;
-    delta = Math.min(delta, 0.25); // maximum delta of 250 ms
+      this.chooseStarter();
+    } else {
+      this.overlayCtx.clearRect(0, 0, constants.GAME_WIDTH, constants.GAME_HEIGHT);
+      this.gameCtx.clearRect(0, 0, constants.GAME_WIDTH, constants.GAME_HEIGHT);
 
-    this._previousElapsed = elapsed;
-
-    this.update(delta);
-    this.render();
-
-    await this.findPokemon();
+      let delta = (elapsed - this._previousElapsed) / 1000.0;
+      delta = Math.min(delta, 0.25); // maximum delta of 250 ms
+  
+      this._previousElapsed = elapsed;
+  
+      this.update(delta);
+      this.render();
+  
+      await this.findPokemon();
+    }
     
     window.requestAnimationFrame(this.tick.bind(this));
   }
 
-  updatePlayerDataLoop() {
+  updateSaveDataLoop() {
     if (this.avatar) {
       const playerData = {
         location: this.currentMap,
@@ -124,7 +147,8 @@ export class Game {
         pokemon: {}
       };
   
-      this.player.setPlayerData('playerData', playerData);
+      setLocalStorage('playerData', playerData);
+      setLocalStorage('gameTriggers', this.gameTriggers);
     }
   }
 
@@ -155,7 +179,115 @@ export class Game {
     }
   }
 
-  update(delta: number): void {
+  chooseStarter() {
+    this.animation = this.animation < 8.85 ? this.animation + 0.15 : 0;
+
+    let pokeballSource0 = 110;
+    let pokeballSource1 = 110;
+    let pokeballSource2 = 110;
+
+    if (this.animation < 4) {
+      pokeballSource0 = (this.selectedStarter === 0) ? 110 + (this.animation << 0) * 23 : 110;
+      pokeballSource1 = (this.selectedStarter === 1) ? 110 + (this.animation << 0) * 23 : 110;
+      pokeballSource2 = (this.selectedStarter === 2) ? 110 + (this.animation << 0) * 23 : 110;  
+    }
+
+    const handXcoor = (this.selectedStarter === 0) ? 48 : (this.selectedStarter === 1) ? 108 : 169;
+    const handYcoor = (this.selectedStarter === 1) ? 33 : 9;
+
+    this.overlayCtx.drawImage(
+      this.starterAtlas,
+      0,
+      0,
+      constants.GAME_WIDTH,
+      constants.GAME_HEIGHT,
+      0,
+      0,
+      constants.GAME_WIDTH,
+      constants.GAME_HEIGHT,
+    );
+
+    this.overlayCtx.drawImage(
+      this.starterAtlas,
+      0,
+      160,
+      110,
+      64,
+      65,
+      8,
+      110,
+      64,
+    );
+
+    this.overlayCtx.drawImage(
+      this.starterAtlas,
+      pokeballSource0,
+      160,
+      23,
+      20,
+      50,
+      54,
+      23,
+      20,
+    );
+
+    this.overlayCtx.drawImage(
+      this.starterAtlas,
+      pokeballSource1,
+      160,
+      23,
+      20,
+      110,
+      78,
+      23,
+      20,
+    );
+
+    this.overlayCtx.drawImage(
+      this.starterAtlas,
+      pokeballSource2,
+      160,
+      23,
+      20,
+      170,
+      54,
+      23,
+      20,
+    );
+
+    this.overlayCtx.drawImage(
+      this.starterAtlas,
+      202,
+      160,
+      25,
+      27,
+      handXcoor,
+      handYcoor,
+      25,
+      27,
+    );
+
+    if (!this.keyDown) {
+      if (keyboard.isDown(keyboard.LEFT) && this.selectedStarter !== 0) {
+        this.selectedStarter--;
+        this.keyDown = true;
+      } else if (keyboard.isDown(keyboard.RIGHT) && this.selectedStarter !== 2) {
+        this.selectedStarter++;
+        this.keyDown = true;
+      }
+    }
+    
+    if (!keyboard.isDown(keyboard.LEFT) && !keyboard.isDown(keyboard.RIGHT)) {
+      this.keyDown = false;
+    }
+
+    if (keyboard.isDown(keyboard.ENTER)) {
+      this.gameTriggers.chooseStarter = true;
+      this.gameStatus = 'game';
+    }
+  }
+
+  update(delta: number) {
     this.dirx = 0;
     this.diry = 0;
 
@@ -175,6 +307,11 @@ export class Game {
 
       if (addedTiles) {
         this.avatar.newAreaMapUpdate(this.map, addedTiles);
+      }
+
+      if (this.currentMap === 'route 101' && this.gameTriggers.chooseStarter === false) {
+        this.gameStatus = 'chooseStarter';
+        // await this.chooseStarter();
       }
     }
 
@@ -265,7 +402,7 @@ export class Game {
       if (this.diry === 0 && this.dirx === 0) {
         this.animation = 0;
       } else {
-        this.animation = this.animation < 3.96 ? this.animation + 0.04 : 0;
+        this.animation = this.animation < 3.93 ? this.animation + 0.07 : 0;
       }
     }
 

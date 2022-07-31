@@ -7,9 +7,9 @@ export class Player {
     return getLocalStorage(key);
   }
 
-  setPlayerData(key: string, playerData: PlayerDataType) {
-    return setLocalStorage(key, playerData);
-  }
+  // setPlayerData(key: string, playerData: PlayerDataType) {
+  //   return setLocalStorage(key, playerData);
+  // }
 
   createNewPlayer(male: boolean): PlayerDataType {
     const avatar = male ? 'Brendan' : 'May';

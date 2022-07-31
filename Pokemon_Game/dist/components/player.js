@@ -6,9 +6,9 @@ class Player {
     getPlayerData(key) {
         return (0, helper_1.getLocalStorage)(key);
     }
-    setPlayerData(key, playerData) {
-        return (0, helper_1.setLocalStorage)(key, playerData);
-    }
+    // setPlayerData(key: string, playerData: PlayerDataType) {
+    //   return setLocalStorage(key, playerData);
+    // }
     createNewPlayer(male) {
         const avatar = male ? 'Brendan' : 'May';
         const playerData = {

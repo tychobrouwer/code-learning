@@ -16,6 +16,7 @@ exports.Game = void 0;
 const tiles_png_1 = __importDefault(require("../assets/tiles.png"));
 const character_png_1 = __importDefault(require("../assets/character.png"));
 const battle_assets_png_1 = __importDefault(require("../assets/battle_assets.png"));
+const choose_starter_png_1 = __importDefault(require("../assets/choose_starter.png"));
 const pokemon_1st_generation_png_1 = __importDefault(require("../assets/pokemon_1st_generation.png"));
 const pokemon_2st_generation_png_1 = __importDefault(require("../assets/pokemon_2st_generation.png"));
 const pokemon_3st_generation_png_1 = __importDefault(require("../assets/pokemon_3st_generation.png"));
@@ -38,18 +39,27 @@ class Game {
         this.animation = 0;
         this.currentTileX = 0;
         this.currentTileY = 0;
-        this.currentMap = 'littleroot town';
+        this.gameStatus = 'game';
+        this.selectedStarter = 1;
+        this.keyDown = false;
         this.loader = new loader_1.Loader();
         this.player = new player_1.Player();
-        this.GAME_HEIGHT = constants_1.constants.GAME_HEIGHT;
-        this.GAME_WIDTH = constants_1.constants.GAME_WIDTH;
         this.gameCtx = gameCtx;
         this.overlayCtx = overlayCtx;
+        this.GAME_HEIGHT = constants_1.constants.GAME_HEIGHT;
+        this.GAME_WIDTH = constants_1.constants.GAME_WIDTH;
         let playerData = this.player.getPlayerData('playerData');
+        let gameTriggers = this.player.getPlayerData('gameTriggers');
         if (!playerData.location) {
             playerData = this.player.createNewPlayer(true);
         }
+        // if (!gameTriggers.chooseStarter) {
+        gameTriggers = {
+            chooseStarter: false,
+        };
+        // }
         this.currentMap = playerData.location;
+        this.gameTriggers = gameTriggers;
         const p = this.load();
         Promise.all(p).then(() => {
             this.init();
@@ -60,7 +70,7 @@ class Game {
             this.map.updateMap(this.currentMap);
             this.loadAdjacentMaps(true);
             this.avatar.loadMapUpdate(this.map, playerData.position.x, playerData.position.y);
-            setInterval(() => this.updatePlayerDataLoop(), 1000);
+            setInterval(() => this.updateSaveDataLoop(), 1000);
             window.requestAnimationFrame(this.tick.bind(this));
         });
     }
@@ -69,6 +79,7 @@ class Game {
             this.loader.loadImage('tiles', tiles_png_1.default),
             this.loader.loadImage('avatar', character_png_1.default),
             this.loader.loadImage('battleAssets', battle_assets_png_1.default),
+            this.loader.loadImage('starterAssets', choose_starter_png_1.default),
             this.loader.loadImage('pokemonGeneration1', pokemon_1st_generation_png_1.default),
             this.loader.loadImage('pokemonGeneration2', pokemon_2st_generation_png_1.default),
             this.loader.loadImage('pokemonGeneration3', pokemon_3st_generation_png_1.default),
@@ -78,20 +89,27 @@ class Game {
     init() {
         keyboard_1.keyboard.listenForEvents([keyboard_1.keyboard.LEFT, keyboard_1.keyboard.RIGHT, keyboard_1.keyboard.UP, keyboard_1.keyboard.DOWN, keyboard_1.keyboard.ENTER]);
         this.tileAtlas = this.loader.loadImageToCanvas('tiles', constants_1.constants.ASSETS_TILES_HEIGHT, constants_1.constants.ASSETS_TILES_WIDTH);
+        this.starterAtlas = this.loader.loadImageToCanvas('starterAssets', constants_1.constants.ASSETS_STARTER_HEIGHT, constants_1.constants.ASSETS_STARTER_WIDTH);
     }
     tick(elapsed) {
         return __awaiter(this, void 0, void 0, function* () {
-            this.gameCtx.clearRect(0, 0, constants_1.constants.GAME_WIDTH, constants_1.constants.GAME_HEIGHT);
-            let delta = (elapsed - this._previousElapsed) / 1000.0;
-            delta = Math.min(delta, 0.25); // maximum delta of 250 ms
-            this._previousElapsed = elapsed;
-            this.update(delta);
-            this.render();
-            yield this.findPokemon();
+            if (this.gameStatus === 'chooseStarter') {
+                this.chooseStarter();
+            }
+            else {
+                this.overlayCtx.clearRect(0, 0, constants_1.constants.GAME_WIDTH, constants_1.constants.GAME_HEIGHT);
+                this.gameCtx.clearRect(0, 0, constants_1.constants.GAME_WIDTH, constants_1.constants.GAME_HEIGHT);
+                let delta = (elapsed - this._previousElapsed) / 1000.0;
+                delta = Math.min(delta, 0.25); // maximum delta of 250 ms
+                this._previousElapsed = elapsed;
+                this.update(delta);
+                this.render();
+                yield this.findPokemon();
+            }
             window.requestAnimationFrame(this.tick.bind(this));
         });
     }
-    updatePlayerDataLoop() {
+    updateSaveDataLoop() {
         if (this.avatar) {
             const playerData = {
                 location: this.currentMap,
@@ -101,7 +119,8 @@ class Game {
                 },
                 pokemon: {}
             };
-            this.player.setPlayerData('playerData', playerData);
+            (0, helper_1.setLocalStorage)('playerData', playerData);
+            (0, helper_1.setLocalStorage)('gameTriggers', this.gameTriggers);
         }
     }
     findPokemon() {
@@ -126,6 +145,42 @@ class Game {
             }
         });
     }
+    chooseStarter() {
+        this.animation = this.animation < 8.85 ? this.animation + 0.15 : 0;
+        let pokeballSource0 = 110;
+        let pokeballSource1 = 110;
+        let pokeballSource2 = 110;
+        if (this.animation < 4) {
+            pokeballSource0 = (this.selectedStarter === 0) ? 110 + (this.animation << 0) * 23 : 110;
+            pokeballSource1 = (this.selectedStarter === 1) ? 110 + (this.animation << 0) * 23 : 110;
+            pokeballSource2 = (this.selectedStarter === 2) ? 110 + (this.animation << 0) * 23 : 110;
+        }
+        const handXcoor = (this.selectedStarter === 0) ? 48 : (this.selectedStarter === 1) ? 108 : 169;
+        const handYcoor = (this.selectedStarter === 1) ? 33 : 9;
+        this.overlayCtx.drawImage(this.starterAtlas, 0, 0, constants_1.constants.GAME_WIDTH, constants_1.constants.GAME_HEIGHT, 0, 0, constants_1.constants.GAME_WIDTH, constants_1.constants.GAME_HEIGHT);
+        this.overlayCtx.drawImage(this.starterAtlas, 0, 160, 110, 64, 65, 8, 110, 64);
+        this.overlayCtx.drawImage(this.starterAtlas, pokeballSource0, 160, 23, 20, 50, 54, 23, 20);
+        this.overlayCtx.drawImage(this.starterAtlas, pokeballSource1, 160, 23, 20, 110, 78, 23, 20);
+        this.overlayCtx.drawImage(this.starterAtlas, pokeballSource2, 160, 23, 20, 170, 54, 23, 20);
+        this.overlayCtx.drawImage(this.starterAtlas, 202, 160, 25, 27, handXcoor, handYcoor, 25, 27);
+        if (!this.keyDown) {
+            if (keyboard_1.keyboard.isDown(keyboard_1.keyboard.LEFT) && this.selectedStarter !== 0) {
+                this.selectedStarter--;
+                this.keyDown = true;
+            }
+            else if (keyboard_1.keyboard.isDown(keyboard_1.keyboard.RIGHT) && this.selectedStarter !== 2) {
+                this.selectedStarter++;
+                this.keyDown = true;
+            }
+        }
+        if (!keyboard_1.keyboard.isDown(keyboard_1.keyboard.LEFT) && !keyboard_1.keyboard.isDown(keyboard_1.keyboard.RIGHT)) {
+            this.keyDown = false;
+        }
+        if (keyboard_1.keyboard.isDown(keyboard_1.keyboard.ENTER)) {
+            this.gameTriggers.chooseStarter = true;
+            this.gameStatus = 'game';
+        }
+    }
     update(delta) {
         this.dirx = 0;
         this.diry = 0;
@@ -149,6 +204,10 @@ class Game {
             const addedTiles = this.loadAdjacentMaps(isNextMap[1]);
             if (addedTiles) {
                 this.avatar.newAreaMapUpdate(this.map, addedTiles);
+            }
+            if (this.currentMap === 'route 101' && this.gameTriggers.chooseStarter === false) {
+                this.gameStatus = 'chooseStarter';
+                // await this.chooseStarter();
             }
         }
         this.avatar.move(delta, this.dirx, this.diry);
@@ -218,7 +277,7 @@ class Game {
                 this.animation = 0;
             }
             else {
-                this.animation = this.animation < 3.96 ? this.animation + 0.04 : 0;
+                this.animation = this.animation < 3.93 ? this.animation + 0.07 : 0;
             }
         }
         const pixelHeight = onlyDrawTop ? 0.75 * constants_1.constants.AVATAR_HEIGHT : constants_1.constants.AVATAR_HEIGHT;

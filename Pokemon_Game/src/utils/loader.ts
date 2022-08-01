@@ -3,7 +3,7 @@ interface ImageType {
 }
 
 export class Loader {
-  images: ImageType
+  private images: ImageType
 
   constructor() {
     this.images = {};

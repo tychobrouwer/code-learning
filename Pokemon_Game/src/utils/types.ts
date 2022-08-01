@@ -4,12 +4,11 @@ export interface PlayerDataType {
     x: number;
     y: number;
   };
-  pokemon: {
-    [pokemonName: string]: pokemonDataType;
-  };
+  pokemon: PokemonDataType[];
+  currentPokemon: number;
 }
 
-export interface pokemonDataType {
+export interface PokemonDataType {
   pokemonId: number;
   generation: number;
   pokemonName: string;
@@ -24,22 +23,30 @@ export interface pokemonDataType {
   shininess: boolean;
   size: number;
   height: number;
+  pokeball: number,
   personality: number;
-  nature: pokemonStatsType;
-  EV: pokemonStatsType;
-  IV: pokemonStatsType;
-  stats: pokemonStatsType;
+  nature: PokemonStatsType;
+  EV: PokemonStatsType;
+  IV: PokemonStatsType;
+  stats: PokemonStatsType;
   xSource: number;
   ySource: number;
 }
 
-interface pokemonStatsType {
+interface PokemonStatsType {
   hp: number;
   attack: number;
   defense: number;
   specialDefense: number;
   specialAttack: number;
   speed: number;
+}
+
+export interface AssetsLocationTilesType {
+  [location: string]: {
+    width: number;
+    height: number;
+  }
 }
 
 export interface MapType {
@@ -53,7 +60,7 @@ export interface MapsType {
   [mapName: string] : MapType;
 }
 
-export interface addMapReturnType {
+export interface AddMapReturnType {
   currentMap: MapType;
   diff: number[]
 }
@@ -84,20 +91,20 @@ export interface Keys {
   enter: boolean;
 }
 
-export interface pokemonType {
+export interface PokemonType {
   rate: number;
   level: number[];
 }
 
-export interface encounterTableType {
+export interface EncounterTableType {
   [route: string]: {
     [encounterMethod: string]: {
-      [id: number]: pokemonType;
+      [id: number]: PokemonType;
     }
   }
 }
 
-export interface sizeTableType {
+export interface SizeTableType {
   [maxSize: number]: {
     x: number;
     y: number;
@@ -105,7 +112,7 @@ export interface sizeTableType {
   }
 }
 
-export interface pokemonInfoType {
+export interface PokemonInfoType {
   id: number;
   name: string;
   order: number;
@@ -138,6 +145,6 @@ export interface pokemonInfoType {
   }[];
 }
 
-export interface pokedexType { 
-  [id_string: string]: pokemonInfoType;
+export interface PokedexType { 
+  [id_string: string]: PokemonInfoType;
 }

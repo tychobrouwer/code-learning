@@ -1,36 +1,58 @@
-import { getLocalStorage, setLocalStorage } from '../utils/helper';
+import * as pokedex from '../pokedex.json';
 
-import { PlayerDataType } from '../utils/types';
+import { getLocalStorage, setLocalStorage, generatePokemon } from '../utils/helper';
+
+import { PokedexType, PlayerDataType } from '../utils/types';
 
 export class Player {
-  getPlayerData(key: string) {
+  public playerData!: PlayerDataType;
+  private pokedex: PokedexType;
+
+  constructor() {
+    this.playerData = getLocalStorage('playerData');
+    this.pokedex = pokedex;
+  }
+
+  getPlayerData() {
+    return this.playerData;
+  }
+
+  getStoredPlayerData(key: string) {
     return getLocalStorage(key);
   }
 
-  // setPlayerData(key: string, playerData: PlayerDataType) {
-  //   return setLocalStorage(key, playerData);
-  // }
+  setPlayerPosition(location: string, x: number, y: number) {
+    this.playerData.location = location;
+    this.playerData.position.x = x;
+    this.playerData.position.y = y;
+  }
+
+  addPlayerPokemon(pokemonId: number, levelRange: number[]) {
+    this.playerData.pokemon.push(generatePokemon(this.pokedex[pokemonId.toString()], levelRange, pokemonId, 2));
+
+    console.log(this.playerData.pokemon);
+  }
 
   createNewPlayer(male: boolean): PlayerDataType {
     const avatar = male ? 'Brendan' : 'May';
 
-    const playerData = {
+    this.playerData = {
       position: {
         x: 100,
         y: 420,
       },
       location: 'littleroot town',
-      pokemon: {}
+      pokemon: [],
+      currentPokemon: 0,
     }
 
     const accountData = {
       avatar: avatar,
     }
 
-    setLocalStorage('playerData', playerData);
+    setLocalStorage('playerData', this.playerData);
     setLocalStorage('accountData', accountData);
 
-    return playerData;
+    return this.playerData;
   }
-
 }

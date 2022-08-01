@@ -8,11 +8,11 @@ window.onload = function () {
   const overlayContext = overlayCanvas.getContext('2d');
 
   if (gameContext && overlayContext) {
-    const game = new Game(gameContext, overlayContext);
+    new Game(gameContext, overlayContext);
 
-    gameCanvas.height = game.GAME_HEIGHT;
-    gameCanvas.width = game.GAME_WIDTH;
-    overlayCanvas.height = game.GAME_HEIGHT;
-    overlayCanvas.width = game.GAME_WIDTH;
+    gameCanvas.height = Game.GAME_HEIGHT;
+    gameCanvas.width = Game.GAME_WIDTH;
+    overlayCanvas.height = Game.GAME_HEIGHT;
+    overlayCanvas.width = Game.GAME_WIDTH;
   }
 };

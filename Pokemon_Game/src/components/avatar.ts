@@ -4,15 +4,15 @@ import { Map } from './map';
 import { constants } from '../utils/constants';
 
 export class Avatar {
-  loader: Loader;
+  private loader: Loader;
 
-  map: Map;
-  x = 0;
-  y = 0;
+  private map: Map;
 
-  screenX = 0;
-  screenY = 0;
-  avatarAsset: HTMLCanvasElement;
+  public x = 0;
+  public y = 0;
+  public screenX = 0;
+  public screenY = 0;
+  public avatarAsset: HTMLCanvasElement;
 
   constructor(loader: Loader, map: Map) {  
     this.loader = loader;

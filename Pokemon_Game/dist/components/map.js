@@ -56,8 +56,16 @@ class Map {
         const row = Math.floor(y / constants_1.constants.MAP_TSIZE);
         return this.currentMap.layers.reduce((res, layer, index) => {
             const tile = this.getTile(index, col, row);
-            const isSolid = tile === 10 || tile === 11 || tile === 12 || tile === 13 || tile === 36 || tile === 37 ||
-                tile === 38 || tile === 39 || tile === 40 || tile === 41 || tile === 42;
+            // const isSolid = tile === 10 || tile === 11 || tile === 12 || tile === 13 || tile === 36 || tile === 37 ||
+            //                 tile === 38 || tile === 39 || tile === 40 || tile === 41 || tile === 42 ||
+            //                 tile === 38 || tile === 39 || tile === 40 || tile === 41 || tile === 42;
+            const solidTiles = [
+                10, 11, 12, 13, 36, 37, 38, 39, 40, 41, 42,
+                549, 550, 551, 552, 553, 554, 555, 556, 557, 558, 559, 560,
+                565, 566, 567, 568, 569, 570, 571, 572, 573, 574, 575, 576,
+                581, 582, 583, 584, 585, 597, 598, 599, 600, 601,
+            ];
+            const isSolid = solidTiles.includes(tile);
             const colHalfTile = col + 0.5;
             const rowHalfTile = row + 0.5;
             const oneWay = (tile === 3 && rowHalfTile * constants_1.constants.MAP_TSIZE < y && (dirY === -1 || dirX !== 0)) ||

@@ -3,12 +3,12 @@ import { MapType, MapLocation } from '../utils/types';
 import { constants } from '../utils/constants';
 
 export class Map {
-  currentMap: MapType
-  MapLocation: MapLocation;
-  prevMapCols = 0;
-  prevMapRows = 0;
+  public currentMap: MapType
+  private MapLocation: MapLocation;
+  private prevMapCols = 0;
+  private prevMapRows = 0;
 
-  adjacentMaps: {
+  private adjacentMaps: {
     [direction: string]: string;
   }
 
@@ -69,8 +69,18 @@ export class Map {
 
     return this.currentMap.layers.reduce((res: boolean, layer: number[], index: number) => {
       const tile = this.getTile(index, col, row);
-      const isSolid = tile === 10 || tile === 11 || tile === 12 || tile === 13 || tile === 36 || tile === 37 ||
-                      tile === 38 || tile === 39 || tile === 40 || tile === 41 || tile === 42;
+      // const isSolid = tile === 10 || tile === 11 || tile === 12 || tile === 13 || tile === 36 || tile === 37 ||
+      //                 tile === 38 || tile === 39 || tile === 40 || tile === 41 || tile === 42 ||
+      //                 tile === 38 || tile === 39 || tile === 40 || tile === 41 || tile === 42;
+
+      const solidTiles = [
+        10, 11, 12, 13, 36, 37, 38, 39, 40, 41, 42,
+        549, 550, 551, 552, 553, 554, 555, 556, 557, 558, 559, 560,
+        565, 566, 567, 568, 569, 570, 571, 572, 573, 574, 575, 576,
+        581, 582, 583, 584, 585, 597, 598, 599, 600, 601,
+      ];
+
+      const isSolid = solidTiles.includes(tile);
 
       const colHalfTile = col + 0.5;
       const rowHalfTile = row + 0.5;

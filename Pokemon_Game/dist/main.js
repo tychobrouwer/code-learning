@@ -7,11 +7,11 @@ window.onload = function () {
     const overlayCanvas = document.getElementById('overlayCanvas');
     const overlayContext = overlayCanvas.getContext('2d');
     if (gameContext && overlayContext) {
-        const game = new game_1.Game(gameContext, overlayContext);
-        gameCanvas.height = game.GAME_HEIGHT;
-        gameCanvas.width = game.GAME_WIDTH;
-        overlayCanvas.height = game.GAME_HEIGHT;
-        overlayCanvas.width = game.GAME_WIDTH;
+        new game_1.Game(gameContext, overlayContext);
+        gameCanvas.height = game_1.Game.GAME_HEIGHT;
+        gameCanvas.width = game_1.Game.GAME_WIDTH;
+        overlayCanvas.height = game_1.Game.GAME_HEIGHT;
+        overlayCanvas.width = game_1.Game.GAME_WIDTH;
     }
 };
 //# sourceMappingURL=main.js.map

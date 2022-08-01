@@ -1,6 +1,6 @@
 import { constants } from '../utils/constants';
 
-import { pokemonType, pokemonDataType, pokemonInfoType } from '../utils/types';
+import { PokemonDataType, PokemonInfoType } from '../utils/types';
 
 export function randomFromArray(propbabilityArray: number[]) {
   return propbabilityArray[Math.floor(Math.random() * propbabilityArray.length)];
@@ -11,7 +11,9 @@ export function randomFromMinMax(min: number, max: number): number {
 }
 
 export function setLocalStorage(key: string, data: object): void {
-  localStorage.setItem(key, JSON.stringify(data))
+  if (data) {
+    localStorage.setItem(key, JSON.stringify(data))
+  }
 }
 
 export function getLocalStorage(key: string): any {
@@ -24,8 +26,46 @@ export function getLocalStorage(key: string): any {
   return JSON.parse(data);
 }
 
-export function generatePokemon(pokedexEntry: pokemonInfoType, candinate: pokemonType, pokemonId: number): pokemonDataType {
-  const level = randomFromMinMax(candinate.level[0], candinate.level[1]);
+export function drawText(ctx: CanvasRenderingContext2D, font: HTMLCanvasElement, text: string, fontsize: number, fontColor: number, posX: number, posY: number) {
+  for (let i = 0; i < text.length; i++) {
+    const positions = {
+      posX: constants.CHAR_IN_FONT.indexOf(text[i]) % 40 * constants.FONT_WIDTH[fontsize],
+      posY: ((constants.CHAR_IN_FONT.indexOf(text[i]) / 40) << 0) * constants.FONT_HEIGHT[fontsize],
+    }
+
+    let width = constants.FONT_WIDTH[fontsize];
+    if (text[i] === '|') { // characters that are seven pixels wide
+      width = 7;
+    }
+
+    if (text[i] === ' ' || text[i] === 'l' || text[i] === '.') { // characters that are three pixels wide
+      width = 3;
+    }
+
+    if (text[i] === 'i') { // characters that are four pixels wide
+      width = 4;
+    }
+
+    const yOffset = (fontsize === 0) ? fontColor * 2 * constants.FONT_HEIGHT[fontsize] : 56 + fontColor * 2 * constants.FONT_HEIGHT[fontsize];
+
+    ctx.drawImage(
+      font,
+      positions.posX,
+      positions.posY + yOffset,
+      width,
+      constants.FONT_HEIGHT[fontsize],
+      posX + constants.FONT_WIDTH[fontsize] * i
+        - 3 * (text.substring(0, i).match(/ |l|\./g)||[]).length
+        - 2 * (text.substring(0, i).match(/i/g)||[]).length,
+      posY,
+      width,
+      constants.FONT_HEIGHT[fontsize]
+    );
+  }
+}
+
+export function generatePokemon(pokedexEntry: PokemonInfoType, levelRange: number[], pokemonId: number, pokeball: number): PokemonDataType {
+  const level = randomFromMinMax(levelRange[0], levelRange[1]);
   const personality = randomFromMinMax(0, 24);
   const nature = {
     hp: 1,
@@ -86,6 +126,7 @@ export function generatePokemon(pokedexEntry: pokemonInfoType, candinate: pokemo
     shininess: (randomFromMinMax(1, 8192) === 1) ? true : false,
     size: size,
     height: height,
+    pokeball: pokeball,
     personality: personality,
     nature: nature,
     EV: EV,

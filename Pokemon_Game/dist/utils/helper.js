@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.generatePokemon = exports.getLocalStorage = exports.setLocalStorage = exports.randomFromMinMax = exports.randomFromArray = void 0;
+exports.generatePokemon = exports.drawText = exports.getLocalStorage = exports.setLocalStorage = exports.randomFromMinMax = exports.randomFromArray = void 0;
 const constants_1 = require("../utils/constants");
 function randomFromArray(propbabilityArray) {
     return propbabilityArray[Math.floor(Math.random() * propbabilityArray.length)];
@@ -11,7 +11,9 @@ function randomFromMinMax(min, max) {
 }
 exports.randomFromMinMax = randomFromMinMax;
 function setLocalStorage(key, data) {
-    localStorage.setItem(key, JSON.stringify(data));
+    if (data) {
+        localStorage.setItem(key, JSON.stringify(data));
+    }
 }
 exports.setLocalStorage = setLocalStorage;
 function getLocalStorage(key) {
@@ -22,8 +24,31 @@ function getLocalStorage(key) {
     return JSON.parse(data);
 }
 exports.getLocalStorage = getLocalStorage;
-function generatePokemon(pokedexEntry, candinate, pokemonId) {
-    const level = randomFromMinMax(candinate.level[0], candinate.level[1]);
+function drawText(ctx, font, text, fontsize, fontColor, posX, posY) {
+    for (let i = 0; i < text.length; i++) {
+        const positions = {
+            posX: constants_1.constants.CHAR_IN_FONT.indexOf(text[i]) % 40 * constants_1.constants.FONT_WIDTH[fontsize],
+            posY: ((constants_1.constants.CHAR_IN_FONT.indexOf(text[i]) / 40) << 0) * constants_1.constants.FONT_HEIGHT[fontsize],
+        };
+        let width = constants_1.constants.FONT_WIDTH[fontsize];
+        if (text[i] === '|') { // characters that are seven pixels wide
+            width = 7;
+        }
+        if (text[i] === ' ' || text[i] === 'l' || text[i] === '.') { // characters that are three pixels wide
+            width = 3;
+        }
+        if (text[i] === 'i') { // characters that are four pixels wide
+            width = 4;
+        }
+        const yOffset = (fontsize === 0) ? fontColor * 2 * constants_1.constants.FONT_HEIGHT[fontsize] : 56 + fontColor * 2 * constants_1.constants.FONT_HEIGHT[fontsize];
+        ctx.drawImage(font, positions.posX, positions.posY + yOffset, width, constants_1.constants.FONT_HEIGHT[fontsize], posX + constants_1.constants.FONT_WIDTH[fontsize] * i
+            - 3 * (text.substring(0, i).match(/ |l|\./g) || []).length
+            - 2 * (text.substring(0, i).match(/i/g) || []).length, posY, width, constants_1.constants.FONT_HEIGHT[fontsize]);
+    }
+}
+exports.drawText = drawText;
+function generatePokemon(pokedexEntry, levelRange, pokemonId, pokeball) {
+    const level = randomFromMinMax(levelRange[0], levelRange[1]);
     const personality = randomFromMinMax(0, 24);
     const nature = {
         hp: 1,
@@ -80,6 +105,7 @@ function generatePokemon(pokedexEntry, candinate, pokemonId) {
         shininess: (randomFromMinMax(1, 8192) === 1) ? true : false,
         size: size,
         height: height,
+        pokeball: pokeball,
         personality: personality,
         nature: nature,
         EV: EV,

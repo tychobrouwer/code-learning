@@ -6,6 +6,7 @@ import pokemonGeneration1 from '../assets/pokemon_1st_generation.png';
 import pokemonGeneration2 from '../assets/pokemon_2st_generation.png';
 import pokemonGeneration3 from '../assets/pokemon_3st_generation.png';
 import font from '../assets/font.png';
+import buildingAtlas from '../assets/building_assets.png';
 
 import { Player } from './player';
 import { Map } from './map';
@@ -16,60 +17,58 @@ import { PokemonBattle } from './pokemon';
 
 import { constants } from '../utils/constants';
 import { keyboard } from '../utils/keyboard';
-import { randomFromMinMax, setLocalStorage } from '../utils/helper';
+import { randomFromMinMax, setLocalStorage, drawText } from '../utils/helper';
 
 
-import { addMapReturnType, PlayerDataType } from '../utils/types';
+import { AddMapReturnType, PlayerDataType } from '../utils/types';
 
 export class Game {
-  player: Player;
-  loader: Loader;
-  map!: Map;
-  avatar!: Avatar;
-  camera!: Camera;
+  private player = new Player();
+  private loader = new Loader();
+  private map!: Map;
+  private avatar!: Avatar;
+  private camera!: Camera;
 
-  tileAtlas!: HTMLCanvasElement;
-  starterAtlas!: HTMLCanvasElement;
-  gameCtx: CanvasRenderingContext2D;
-  overlayCtx: CanvasRenderingContext2D;
-  GAME_WIDTH: number;
-  GAME_HEIGHT: number;
+  private tileAtlas!: HTMLCanvasElement;
+  private starterAtlas!: HTMLCanvasElement;
+  private font!: HTMLCanvasElement;
+  private buildingAtlas!: HTMLCanvasElement;
 
-  _previousElapsed = 0;
-  dirx = 0;
-  diry = 0;
-  direction = 0;
-  animation = 0;
-  currentTileX = 0;
-  currentTileY = 0;
-  currentMap: string;
-  gameTriggers: {[trigger: string]: boolean};
-  gameStatus = 'game';
+  private gameCtx: CanvasRenderingContext2D;
+  private overlayCtx: CanvasRenderingContext2D;
+  public static GAME_WIDTH = constants.GAME_WIDTH;
+  public static GAME_HEIGHT = constants.GAME_HEIGHT;
 
-  selectedStarter = 1;
-  keyDown = false;
+  private _previousElapsed = 0;
+  private dirx = 0;
+  private diry = 0;
+  private direction = 0;
+  private animation = 0;
+  private currentTileX = 0;
+  private currentTileY = 0;
+  private currentMap: string;
+  private gameTriggers: {[trigger: string]: boolean};
+  private gameStatus = 'game';
+
+  private selectedStarter = 1;
+  private keyDown = false;
 
   constructor(gameCtx: CanvasRenderingContext2D, overlayCtx: CanvasRenderingContext2D) {
-    this.loader = new Loader();
-    this.player = new Player();
-
     this.gameCtx = gameCtx;
     this.overlayCtx = overlayCtx;
-    this.GAME_HEIGHT = constants.GAME_HEIGHT;
-    this.GAME_WIDTH = constants.GAME_WIDTH;
 
-    let playerData: PlayerDataType = this.player.getPlayerData('playerData');
-    let gameTriggers: {[trigger: string]: boolean} = this.player.getPlayerData('gameTriggers');
+    let playerData: PlayerDataType = this.player.getStoredPlayerData('playerData');
+    let gameTriggers: {[trigger: string]: boolean} = this.player.getStoredPlayerData('gameTriggers');
 
     if (!playerData.location) {
       playerData = this.player.createNewPlayer(true);
     }
 
-    // if (!gameTriggers.chooseStarter) {
+    if (!gameTriggers.chooseStarter) {
       gameTriggers = {
         chooseStarter: false,
       }
-    // }
+    }
     
     this.currentMap = playerData.location;
     this.gameTriggers = gameTriggers;
@@ -104,6 +103,7 @@ export class Game {
       this.loader.loadImage('pokemonGeneration2', pokemonGeneration2),
       this.loader.loadImage('pokemonGeneration3', pokemonGeneration3),
       this.loader.loadImage('font', font),
+      this.loader.loadImage('buildingAtlas', buildingAtlas),
     ];
   }
 
@@ -112,6 +112,8 @@ export class Game {
 
     this.tileAtlas = this.loader.loadImageToCanvas('tiles', constants.ASSETS_TILES_HEIGHT, constants.ASSETS_TILES_WIDTH);
     this.starterAtlas = this.loader.loadImageToCanvas('starterAssets', constants.ASSETS_STARTER_HEIGHT, constants.ASSETS_STARTER_WIDTH);
+    this.font = this.loader.loadImageToCanvas('font', constants.ASSETS_FONT_HEIGHT, constants.ASSETS_FONT_WIDTH);
+    this.buildingAtlas = this.loader.loadImageToCanvas('buildingAtlas', constants.ASSETS_BUILDING_TILES_HEIGHT, constants.ASSETS_BUILDING_TILES_WIDTH);
   }
 
   async tick(elapsed: number) {
@@ -127,8 +129,6 @@ export class Game {
       this.overlayCtx.clearRect(0, 0, constants.GAME_WIDTH, constants.GAME_HEIGHT);
       this.gameCtx.clearRect(0, 0, constants.GAME_WIDTH, constants.GAME_HEIGHT);
 
-  
-  
       this.update(delta);
       this.render(delta);
   
@@ -140,14 +140,8 @@ export class Game {
 
   updateSaveDataLoop() {
     if (this.avatar) {
-      const playerData = {
-        location: this.currentMap,
-        position: {
-          x: this.avatar.x,
-          y: this.avatar.y,
-        },
-        pokemon: {}
-      };
+      this.player.setPlayerPosition(this.currentMap, this.avatar.x, this.avatar.y);
+      const playerData = this.player.getPlayerData();
   
       setLocalStorage('playerData', playerData);
       setLocalStorage('gameTriggers', this.gameTriggers);
@@ -166,15 +160,12 @@ export class Game {
       const randomNumber = randomFromMinMax(0, 2879);
 
       if (tile === 2 && randomNumber < constants.GRASS_ENCOUNTER_NUMBER) {
-        const pokemonBattle = new PokemonBattle(this.overlayCtx, this.loader, this.currentMap, 0);
-        const pokemon = pokemonBattle.getPokemon();
-
-        console.log(pokemon.pokemonName + ' found!');
+        const pokemonBattle = new PokemonBattle(this.overlayCtx, this.loader, this.player, this.currentMap, 0);
 
         const battleResult = await pokemonBattle.battle();
         
         if (battleResult) {
-          console.log('battle with ' + pokemon.pokemonName + ' won!')
+          console.log('battle with ' + battleResult.pokemon.pokemonName + ' won!')
           // this.player.addPokemon(foundPokemon);
         }
       }
@@ -269,6 +260,113 @@ export class Game {
       27,
     );
 
+    if (this.selectedStarter === 0) {
+      this.overlayCtx.globalAlpha = 0.4;
+      this.overlayCtx.beginPath();
+      this.overlayCtx.rect(0, 72, 108, 32);
+      this.overlayCtx.fill();
+      this.overlayCtx.globalAlpha = 1;
+
+      this.overlayCtx.drawImage(
+        this.starterAtlas,
+        0,
+        224,
+        86,
+        10,
+        6,
+        76,
+        86,
+        10,
+      );
+
+      this.overlayCtx.drawImage(
+        this.starterAtlas,
+        0,
+        234,
+        42,
+        10,
+        31,
+        92,
+        42,
+        10,
+      );
+    } else if (this.selectedStarter === 1) {
+      this.overlayCtx.globalAlpha = 0.4;
+      this.overlayCtx.beginPath();
+      this.overlayCtx.rect(132, 80, 104, 32);
+      this.overlayCtx.fill();
+      this.overlayCtx.globalAlpha = 1;
+
+      this.overlayCtx.drawImage(
+        this.starterAtlas,
+        86,
+        224,
+        62,
+        10,
+        140,
+        82,
+        62,
+        10,
+      );
+
+      this.overlayCtx.drawImage(
+        this.starterAtlas,
+        86,
+        234,
+        42,
+        10,
+        186,
+        98,
+        42,
+        10,
+      );
+    } else {
+      this.overlayCtx.globalAlpha = 0.4;
+      this.overlayCtx.beginPath();
+      this.overlayCtx.rect(60, 32, 112, 32);
+      this.overlayCtx.fill();
+      this.overlayCtx.globalAlpha = 1;
+
+      this.overlayCtx.drawImage(
+        this.starterAtlas,
+        148,
+        224,
+        75,
+        10,
+        78,
+        36,
+        75,
+        10,
+      );
+
+      this.overlayCtx.drawImage(
+        this.starterAtlas,
+        148,
+        234,
+        42,
+        10,
+        98,
+        52,
+        42,
+        10,
+      );
+    }
+
+    this.overlayCtx.drawImage(
+      this.starterAtlas,
+      0,
+      244,
+      206,
+      46,
+      17,
+      114,
+      206,
+      46,
+    );
+
+    drawText(this.overlayCtx, this.font, 'PROF. BIRCH is in trouble!', 0, 0, 24, 121);
+    drawText(this.overlayCtx, this.font, 'Release a POKéMON and rescue him!', 0, 0, 24, 137);
+
     if (!this.keyDown) {
       if (keyboard.isDown(keyboard.LEFT) && this.selectedStarter !== 0) {
         this.selectedStarter--;
@@ -284,46 +382,17 @@ export class Game {
     }
 
     if (keyboard.isDown(keyboard.ENTER)) {
+      const chosenPokemonId = (this.selectedStarter === 0) ? 252 : (this.selectedStarter === 1) ? 255 : 258;
+      this.player.addPlayerPokemon(chosenPokemonId, [5, -1]);
+
       this.gameTriggers.chooseStarter = true;
       this.gameStatus = 'game';
     }
   }
 
-  update(delta: number) {
-    this.dirx = 0;
-    this.diry = 0;
-
-    if (keyboard.isDown(keyboard.LEFT)) { this.dirx = -1; }
-    else if (keyboard.isDown(keyboard.RIGHT)) { this.dirx = 1; }
-    else if (keyboard.isDown(keyboard.UP)) { this.diry = -1; }
-    else if (keyboard.isDown(keyboard.DOWN)) {this.diry = 1; }
-
-    const isNextMap = this.map.isNextMap(this.avatar.x, this.avatar.y);
-
-    if (typeof isNextMap !== 'boolean') {      
-      this.currentMap = isNextMap[0];
-      console.log('Entered new area: ' + this.currentMap);
-      
-      this.map.updateMap(this.currentMap)
-      const addedTiles = this.loadAdjacentMaps(isNextMap[1]);
-
-      if (addedTiles) {
-        this.avatar.newAreaMapUpdate(this.map, addedTiles);
-      }
-
-      if (this.currentMap === 'route 101' && this.gameTriggers.chooseStarter === false) {
-        this.gameStatus = 'chooseStarter';
-        // await this.chooseStarter();
-      }
-    }
-
-    this.avatar.move(delta, this.dirx, this.diry);
-    this.camera.update();
-  }
-
   loadAdjacentMaps(fromDirection: string | boolean = false) {
     const Adjacent = this.map.getAjacent(this.currentMap);
-    let updatedData: addMapReturnType | undefined;
+    let updatedData: AddMapReturnType | undefined;
     const addedAreas = Adjacent.map(a => a.position)
 
     for (const adjacentMap of Object.values(Adjacent)) {
@@ -356,6 +425,42 @@ export class Game {
     }
   }
 
+  update(delta: number) {
+    this.dirx = 0;
+    this.diry = 0;
+
+    if (keyboard.isDown(keyboard.LEFT)) { this.dirx = -1; }
+    else if (keyboard.isDown(keyboard.RIGHT)) { this.dirx = 1; }
+    else if (keyboard.isDown(keyboard.UP)) { this.diry = -1; }
+    else if (keyboard.isDown(keyboard.DOWN)) {this.diry = 1; }
+
+    const isNextMap = this.map.isNextMap(this.avatar.x, this.avatar.y);
+
+    if (typeof isNextMap !== 'boolean') {      
+      this.currentMap = isNextMap[0];
+      console.log('Entered new area: ' + this.currentMap);
+
+      // const fileName = this.currentMap.replace(' ', '_');
+      // console.log(fileName)
+      // this.buildingTiles = this.loader.loadImageToCanvas(fileName, constants.ASSETS_LOCATION_TILES[fileName].height, constants.ASSETS_LOCATION_TILES[fileName].width);
+      
+      this.map.updateMap(this.currentMap)
+      const addedTiles = this.loadAdjacentMaps(isNextMap[1]);
+
+      if (addedTiles) {
+        this.avatar.newAreaMapUpdate(this.map, addedTiles);
+      }
+
+      if (this.currentMap === 'route 101' && this.gameTriggers.chooseStarter === false) {
+        this.gameStatus = 'chooseStarter';
+        // await this.chooseStarter();
+      }
+    }
+
+    this.avatar.move(delta, this.dirx, this.diry);
+    this.camera.update();
+  }
+
   render(delta: number): void {
     this.drawLayer(0);
 
@@ -364,6 +469,8 @@ export class Game {
     this.drawLayer(1);
 
     this.drawPlayer(delta, true);
+
+    this.drawLayer(2);
   }
 
   drawLayer(layer: number): void {
@@ -374,16 +481,29 @@ export class Game {
     const offsetX = -this.camera.x + startCol * constants.MAP_TSIZE;
     const offsetY = -this.camera.y + startRow * constants.MAP_TSIZE;
 
+    // tiles 0-499 for general tiles
+    // tiles 500- for building tiles
+
     for (let c = startCol; c <= endCol; c++) {
       for (let r = startRow; r <= endRow; r++) {
-        const tile = this.map.getTile(layer, c, r);
+        let tile = this.map.getTile(layer, c, r);
         if (tile === -1) break; 
         const x = (c - startCol) * constants.MAP_TSIZE + offsetX;
         const y = (r - startRow) * constants.MAP_TSIZE + offsetY;
 
-        if (tile !== 0 && this.tileAtlas) {
+        let atlas: HTMLCanvasElement;
+
+        if (500 <= tile) {
+          atlas = this.buildingAtlas;
+          tile = tile - 500;
+        } else {
+          atlas = this.tileAtlas;
+        }
+
+
+        if (tile !== 0 && atlas) {
           this.gameCtx.drawImage(
-            this.tileAtlas,
+            atlas,
             (tile - 1) % 16 * constants.MAP_TSIZE,
             Math.floor((tile - 1) / 16) * constants.MAP_TSIZE,
             constants.MAP_TSIZE,

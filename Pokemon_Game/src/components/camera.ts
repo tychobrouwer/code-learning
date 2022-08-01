@@ -5,13 +5,13 @@ import { MapType } from '../utils/types';
 import { constants } from '../utils/constants';
 
 export class Camera {
-  x = 0;
-  y = 0;
-  width: number;
-  height: number;
-  maxX: number;
-  maxY: number;
-  following?: Avatar;
+  public x = 0;
+  public y = 0;
+  public width: number;
+  public height: number;
+  private maxX: number;
+  private maxY: number;
+  private following?: Avatar;
 
   constructor(map: MapType, width: number, height: number) {
     this.width = width;

@@ -181,7 +181,7 @@ export class Game {
   }
 
   chooseStarter(delta: number) {
-    this.animation = this.animation * delta < 9.94 * delta ? this.animation + 0.18 * delta : 0;
+    this.animation = this.animation < 9.94 * delta ? this.animation + 0.18 * delta : 0;
 
     let pokeballSource0 = 110;
     let pokeballSource1 = 110;

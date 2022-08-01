@@ -95,13 +95,13 @@ class Game {
         return __awaiter(this, void 0, void 0, function* () {
             let delta = (elapsed - this._previousElapsed) / 1000.0;
             delta = Math.min(delta, 0.25); // maximum delta of 250 ms
+            this._previousElapsed = elapsed;
             if (this.gameStatus === 'chooseStarter') {
                 this.chooseStarter(delta);
             }
             else {
                 this.overlayCtx.clearRect(0, 0, constants_1.constants.GAME_WIDTH, constants_1.constants.GAME_HEIGHT);
                 this.gameCtx.clearRect(0, 0, constants_1.constants.GAME_WIDTH, constants_1.constants.GAME_HEIGHT);
-                this._previousElapsed = elapsed;
                 this.update(delta);
                 this.render();
                 yield this.findPokemon();
@@ -146,7 +146,7 @@ class Game {
         });
     }
     chooseStarter(delta) {
-        this.animation = this.animation < 9.94 * delta ? this.animation + 0.18 * delta : 0;
+        this.animation = this.animation < 9.94 ? this.animation + 10 * delta : 0;
         let pokeballSource0 = 110;
         let pokeballSource1 = 110;
         let pokeballSource2 = 110;

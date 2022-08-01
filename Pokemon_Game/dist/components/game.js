@@ -103,7 +103,7 @@ class Game {
                 this.overlayCtx.clearRect(0, 0, constants_1.constants.GAME_WIDTH, constants_1.constants.GAME_HEIGHT);
                 this.gameCtx.clearRect(0, 0, constants_1.constants.GAME_WIDTH, constants_1.constants.GAME_HEIGHT);
                 this.update(delta);
-                this.render();
+                this.render(delta);
                 yield this.findPokemon();
             }
             window.requestAnimationFrame(this.tick.bind(this));
@@ -244,11 +244,11 @@ class Game {
             return addedTiles;
         }
     }
-    render() {
+    render(delta) {
         this.drawLayer(0);
-        this.drawPlayer(false);
+        this.drawPlayer(delta, false);
         this.drawLayer(1);
-        this.drawPlayer(true);
+        this.drawPlayer(delta, true);
     }
     drawLayer(layer) {
         const startCol = Math.floor(this.camera.x / constants_1.constants.MAP_TSIZE);
@@ -270,14 +270,14 @@ class Game {
             }
         }
     }
-    drawPlayer(onlyDrawTop) {
+    drawPlayer(delta, onlyDrawTop) {
         if (!onlyDrawTop) {
             this.direction = this.diry === 1 ? 0 : this.dirx === -1 ? 1 : this.diry === -1 ? 2 : this.dirx === 1 ? 3 : this.direction;
             if (this.diry === 0 && this.dirx === 0) {
                 this.animation = 0;
             }
             else {
-                this.animation = this.animation < 3.95 ? this.animation + 0.05 : 0;
+                this.animation = this.animation < 3.95 ? this.animation + 6 * delta : 0;
             }
         }
         const pixelHeight = onlyDrawTop ? 0.75 * constants_1.constants.AVATAR_HEIGHT : constants_1.constants.AVATAR_HEIGHT;

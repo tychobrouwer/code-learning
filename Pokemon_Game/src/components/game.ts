@@ -130,7 +130,7 @@ export class Game {
   
   
       this.update(delta);
-      this.render();
+      this.render(delta);
   
       await this.findPokemon();
     }
@@ -356,14 +356,14 @@ export class Game {
     }
   }
 
-  render(): void {
+  render(delta: number): void {
     this.drawLayer(0);
 
-    this.drawPlayer(false);
+    this.drawPlayer(delta, false);
 
     this.drawLayer(1);
 
-    this.drawPlayer(true);
+    this.drawPlayer(delta, true);
   }
 
   drawLayer(layer: number): void {
@@ -398,13 +398,13 @@ export class Game {
     }
   }
 
-  drawPlayer(onlyDrawTop: boolean): void {
+  drawPlayer(delta: number, onlyDrawTop: boolean): void {
     if (!onlyDrawTop) {
       this.direction = this.diry === 1 ? 0 : this.dirx === -1 ? 1 : this.diry === -1 ? 2 : this.dirx === 1 ? 3 : this.direction;
       if (this.diry === 0 && this.dirx === 0) {
         this.animation = 0;
       } else {
-        this.animation = this.animation < 3.95 ? this.animation + 0.05 : 0;
+        this.animation = this.animation < 3.95 ? this.animation + 6 * delta : 0;
       }
     }
 

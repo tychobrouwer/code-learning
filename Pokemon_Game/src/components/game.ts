@@ -115,15 +115,16 @@ export class Game {
   }
 
   async tick(elapsed: number) {
+    let delta = (elapsed - this._previousElapsed) / 1000.0;
+    delta = Math.min(delta, 0.25); // maximum delta of 250 ms
+
     if (this.gameStatus === 'chooseStarter') {
 
-      this.chooseStarter();
+      this.chooseStarter(delta);
     } else {
       this.overlayCtx.clearRect(0, 0, constants.GAME_WIDTH, constants.GAME_HEIGHT);
       this.gameCtx.clearRect(0, 0, constants.GAME_WIDTH, constants.GAME_HEIGHT);
 
-      let delta = (elapsed - this._previousElapsed) / 1000.0;
-      delta = Math.min(delta, 0.25); // maximum delta of 250 ms
   
       this._previousElapsed = elapsed;
   
@@ -179,8 +180,8 @@ export class Game {
     }
   }
 
-  chooseStarter() {
-    this.animation = this.animation < 8.85 ? this.animation + 0.15 : 0;
+  chooseStarter(delta: number) {
+    this.animation = this.animation * delta < 9.94 * delta ? this.animation + 0.18 * delta : 0;
 
     let pokeballSource0 = 110;
     let pokeballSource1 = 110;
@@ -402,7 +403,7 @@ export class Game {
       if (this.diry === 0 && this.dirx === 0) {
         this.animation = 0;
       } else {
-        this.animation = this.animation < 3.93 ? this.animation + 0.07 : 0;
+        this.animation = this.animation < 3.95 ? this.animation + 0.05 : 0;
       }
     }
 

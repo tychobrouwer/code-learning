@@ -93,14 +93,14 @@ class Game {
     }
     tick(elapsed) {
         return __awaiter(this, void 0, void 0, function* () {
+            let delta = (elapsed - this._previousElapsed) / 1000.0;
+            delta = Math.min(delta, 0.25); // maximum delta of 250 ms
             if (this.gameStatus === 'chooseStarter') {
-                this.chooseStarter();
+                this.chooseStarter(delta);
             }
             else {
                 this.overlayCtx.clearRect(0, 0, constants_1.constants.GAME_WIDTH, constants_1.constants.GAME_HEIGHT);
                 this.gameCtx.clearRect(0, 0, constants_1.constants.GAME_WIDTH, constants_1.constants.GAME_HEIGHT);
-                let delta = (elapsed - this._previousElapsed) / 1000.0;
-                delta = Math.min(delta, 0.25); // maximum delta of 250 ms
                 this._previousElapsed = elapsed;
                 this.update(delta);
                 this.render();
@@ -145,8 +145,8 @@ class Game {
             }
         });
     }
-    chooseStarter() {
-        this.animation = this.animation < 8.85 ? this.animation + 0.15 : 0;
+    chooseStarter(delta) {
+        this.animation = this.animation * delta < 9.94 * delta ? this.animation + 0.18 * delta : 0;
         let pokeballSource0 = 110;
         let pokeballSource1 = 110;
         let pokeballSource2 = 110;
@@ -277,7 +277,7 @@ class Game {
                 this.animation = 0;
             }
             else {
-                this.animation = this.animation < 3.93 ? this.animation + 0.07 : 0;
+                this.animation = this.animation < 3.95 ? this.animation + 0.05 : 0;
             }
         }
         const pixelHeight = onlyDrawTop ? 0.75 * constants_1.constants.AVATAR_HEIGHT : constants_1.constants.AVATAR_HEIGHT;
